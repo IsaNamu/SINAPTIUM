@@ -17,7 +17,7 @@ unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
     <link rel="stylesheet" href="../css/estilos.css">
     <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="../css/register.css">
-    <link rel="icon" href="../logo/cerebrso.svg" type="image/x-icon">
+    <link rel="icon" href="../logo/cerebro.svg" type="image/x-icon">
 </head>
 <body>
     <div class="neuronal-background"></div>
