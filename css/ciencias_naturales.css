@@ -1,0 +1,396 @@
+/* ciencias_naturales.css - Versión Final Premium */
+
+/* Variables de Color */
+:root {
+    --neuro-blue: #3498db;
+    --neuro-purple: #8e44ad;
+    --neuro-green: #2ecc71;
+    --neuro-orange: #e67e22;
+    --neuro-yellow: #ffcc00;
+    --synaptica-dark: #0a0a1a;
+    --synaptica-darker: #050510;
+    --synaptica-card-bg: rgba(22, 22, 42, 0.85);
+    --synaptica-border: rgba(142, 68, 173, 0.4);
+    --text-light: #e0e0e0;
+    --text-white: #ffffff;
+    --text-muted: #9a9a9a;
+}
+
+/* Estilos Base */
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--synaptica-dark);
+    color: var(--text-white);
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    line-height: 1.7;
+}
+
+/* Fondo neuronal */
+.neuronal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--synaptica-dark), var(--synaptica-darker));
+    z-index: -1;
+    opacity: 0.9;
+    animation: pulseBackground 20s infinite ease-in-out;
+}
+
+@keyframes pulseBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Navegación */
+.navbar {
+    background-color: rgba(10, 10, 26, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(142, 68, 173, 0.2);
+    transition: all 0.5s ease;
+    z-index: 1000;
+}
+.navbar-logo {
+    transition: transform 0.3s ease;
+}
+.navbar-logo:hover {
+    transform: scale(1.05);
+}
+.nav-link {
+    color: var(--text-white) !important;
+    font-weight: 500;
+    padding: 10px 15px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--neuro-purple);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+.nav-link.active {
+    color: var(--neuro-purple) !important;
+    font-weight: 600;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0;
+    background: linear-gradient(rgba(10, 10, 26, 0.8), rgba(5, 5, 16, 0.8)), url('https://images.unsplash.com/photo-1518105779198-444a5e0b9b3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1920&h=1080'); /* Imagen de fondo para el área */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: var(--text-white);
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(142, 68, 173, 0.2);
+}
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.hero-content .lead {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 300;
+}
+
+/* Botones con efecto de brillo */
+.btn-glow {
+    background: linear-gradient(45deg, var(--neuro-purple), var(--neuro-blue));
+    border: none;
+    color: var(--text-white);
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 20px rgba(142, 68, 173, 0.4);
+}
+.btn-glow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(142, 68, 173, 0.6);
+}
+.btn-glow span {
+    position: relative;
+    z-index: 2;
+}
+.btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.4s ease;
+}
+.btn-glow:hover::before {
+    left: 0;
+}
+
+/* Secciones de contenido */
+.section-padding {
+    padding: 5rem 0;
+}
+.content-card {
+    background-color: var(--synaptica-card-bg);
+    border: 1px solid var(--synaptica-border);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.content-card h2 {
+    font-weight: 700;
+    color: var(--neuro-blue);
+    position: relative;
+}
+.content-card h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--neuro-purple);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+.content-card .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+.resource-card {
+    height: 100%;
+    background: rgba(22, 22, 42, 0.85);
+    border: 1px solid rgba(142, 68, 173, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.resource-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+.resource-card.visual-card:hover { border-color: var(--neuro-blue); }
+.resource-card.auditivo-card:hover { border-color: var(--neuro-green); }
+.resource-card.kinestesico-card:hover { border-color: var(--neuro-orange); }
+
+.resource-card .card-title {
+    font-weight: 600;
+    color: var(--neuro-yellow);
+}
+.resource-card .card-text {
+    color: var(--text-light);
+}
+.resource-card .btn-outline-light {
+    border-color: var(--text-light);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+}
+.resource-card.visual-card .btn-outline-light:hover {
+    background-color: var(--neuro-blue);
+    border-color: var(--neuro-blue);
+}
+.resource-card.auditivo-card .btn-outline-light:hover {
+    background-color: var(--neuro-green);
+    border-color: var(--neuro-green);
+}
+.resource-card.kinestesico-card .btn-outline-light:hover {
+    background-color: var(--neuro-orange);
+    border-color: var(--neuro-orange);
+}
+
+/* Test de Aprendizaje */
+.question-card {
+    background-color: rgba(22, 22, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.question-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--neuro-yellow);
+}
+.options-container {
+    display: flex;
+    flex-direction: column;
+}
+.custom-radio .form-check-label {
+    background-color: rgba(142, 68, 173, 0.1);
+    border: 1px solid rgba(142, 68, 173, 0.3);
+    color: var(--text-light);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.custom-radio .form-check-input:checked + .form-check-label {
+    background-color: var(--neuro-purple);
+    border-color: var(--neuro-purple);
+    box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
+    transform: translateY(-3px);
+}
+.custom-radio .form-check-input {
+    display: none;
+}
+.result-card {
+    background-color: rgba(22, 22, 42, 0.85);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.result-title {
+    color: var(--neuro-green);
+    font-weight: 600;
+}
+.style-badge {
+    display: inline-block;
+    background: linear-gradient(45deg, var(--neuro-purple), var(--neuro-blue));
+    color: var(--text-white);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(142, 68, 173, 0.5);
+    animation: bounceIn 1s ease-in-out;
+}
+@keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* Footer */
+footer {
+    background-color: var(--synaptica-darker);
+    border-top: 1px solid rgba(142, 68, 173, 0.1);
+}
+.footer-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* Estilos de las páginas de recursos específicos */
+.visual-color { color: var(--neuro-blue); }
+.auditivo-color { color: var(--neuro-green); }
+.kinestesico-color { color: var(--neuro-orange); }
+
+.link-list {
+    list-style: none;
+    padding-left: 0;
+    text-align: center;
+}
+.visual-card .link-list a {
+    color: var(--neuro-blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.visual-card .link-list a:hover {
+    color: var(--neuro-yellow);
+    text-decoration: underline;
+}
+.auditivo-card .link-list a {
+    color: var(--neuro-green);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.auditivo-card .link-list a:hover {
+    color: var(--neuro-yellow);
+    text-decoration: underline;
+}
+.kinestesico-card .link-list a {
+    color: var(--neuro-orange);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.kinestesico-card .link-list a:hover {
+    color: var(--neuro-yellow);
+    text-decoration: underline;
+}
+.card-icon {
+    width: 4rem;
+    height: 4rem;
+    color: var(--neuro-blue);
+    margin-bottom: 1rem;
+}
+.visual-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(22, 22, 42, 0.85);
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.visual-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+.auditivo-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(22, 22, 42, 0.85);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.auditivo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+.kinestesico-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(22, 22, 42, 0.85);
+    border: 1px solid rgba(230, 126, 34, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.kinestesico-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}

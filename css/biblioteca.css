@@ -1,0 +1,404 @@
+/* biblioteca.css - Estilos específicos para la página de biblioteca */
+
+/* Estilos para el hero de biblioteca */
+.hero-biblioteca {
+    padding: 120px 0 80px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.1), rgba(156, 39, 176, 0.1));
+}
+
+.hero-biblioteca h1 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor de búsqueda */
+.search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.search-input {
+    background-color: rgba(22, 22, 42, 0.7);
+    border: 2px solid var(--Sinaptium-border);
+    color: var(--text-primary);
+    padding: 15px 25px;
+    border-radius: 50px;
+    width: 100%;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+    border-color: var(--neuro-blue);
+    background-color: rgba(22, 22, 42, 0.9);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Etiquetas de categoría */
+.category-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.category-tag {
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--Sinaptium-border);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.category-tag:hover {
+    background-color: rgba(79, 195, 247, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(79, 195, 247, 0.2);
+}
+
+.category-tag.active {
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(79, 195, 247, 0.3);
+}
+
+/* Grid de libros */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Tarjetas de libros */
+.book-card {
+    background: var(--Sinaptium-card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    height: 100%;
+    border: 1px solid var(--Sinaptium-border);
+    position: relative;
+}
+
+.book-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--neuro-blue);
+}
+
+.book-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.1), rgba(156, 39, 176, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.book-card:hover::before {
+    opacity: 1;
+}
+
+.book-cover {
+    height: 280px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(22, 22, 42, 0.5), rgba(42, 42, 90, 0.5));
+    position: relative;
+}
+
+.book-cover img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.book-card:hover .book-cover img {
+    transform: scale(1.1);
+}
+
+.book-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(22, 22, 42, 0.9), transparent);
+}
+
+.book-info {
+    padding: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.book-info h5 {
+    margin-bottom: 10px;
+}
+
+.book-info h5 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: block;
+}
+
+.book-info h5 a:hover {
+    color: var(--neuro-blue);
+    text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+}
+
+.book-author {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* Badges de categoría */
+.book-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Footer específico para biblioteca */
+.biblioteca-footer {
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-dark) 100%);
+    border-top: 1px solid var(--Sinaptium-border);
+    margin-top: 80px;
+}
+
+.biblioteca-footer h5 {
+    color: var(--neuro-blue);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.footer-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.footer-link:hover {
+    color: var(--neuro-blue);
+    transform: translateX(5px);
+}
+
+.footer-divider {
+    border-color: var(--Sinaptium-border);
+    margin: 30px 0;
+}
+
+/* Animaciones */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.book-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efecto de carga para imágenes */
+.book-cover {
+    position: relative;
+}
+
+.book-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.book-cover img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.book-cover img.loaded {
+    opacity: 1;
+}
+
+.book-cover::before {
+    display: none;
+}
+
+.book-cover img.loaded ~ ::before {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .hero-biblioteca h1 {
+        font-size: 2.8rem;
+    }
+    
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-biblioteca {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-biblioteca h1 {
+        font-size: 2.4rem;
+    }
+    
+    .search-input {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .category-tags {
+        gap: 8px;
+    }
+    
+    .category-tag {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    
+    .book-cover {
+        height: 240px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-biblioteca h1 {
+        font-size: 2rem;
+    }
+    
+    .category-tags {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .category-tag {
+        width: 200px;
+        text-align: center;
+    }
+    
+    .book-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .book-info {
+        padding: 20px;
+    }
+    
+    .book-info h5 a {
+        font-size: 1.1rem;
+    }
+}
+
+/* Efectos especiales */
+.glow-effect {
+    position: relative;
+}
+
+.glow-effect::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--neuro-blue), var(--neuro-purple), var(--neuro-blue));
+    border-radius: inherit;
+    z-index: -1;
+    animation: glowing 2s infinite;
+    filter: blur(10px);
+    opacity: 0.7;
+}
+
+@keyframes glowing {
+    0% { opacity: 0.7; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.7; }
+}
+
+/* Scroll personalizado */
+.book-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.book-grid::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+    border-radius: 10px;
+}
+
+.book-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, var(--neuro-blue), var(--neuro-purple));
+    border-radius: 10px;
+}
+
+.book-grid::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, var(--neuro-purple), var(--neuro-blue));
+}
