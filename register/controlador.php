@@ -1,7 +1,10 @@
 <?php
+session_start();
 // controlador_registro.php
 if (empty($_POST["usuario"]) OR empty($_POST["correo"]) OR empty($_POST["password"])) {
-    echo '<div class="alert alert-danger">TODOS LOS CAMPOS SON OBLIGATORIOS</div>';
+    $_SESSION['mensaje'] = '<div class="alert alert-danger">TODOS LOS CAMPOS SON OBLIGATORIOS</div>';
+    header("location:./register.php");
+    exit;
 } else {
     include ("../cx/conexion_bd.php");
     
@@ -12,14 +15,17 @@ if (empty($_POST["usuario"]) OR empty($_POST["correo"]) OR empty($_POST["passwor
     
     // Validar formato de correo
     if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        echo '<div class="alert alert-danger">EL FORMATO DEL CORREO NO ES VÁLIDO</div>';
+        $_SESSION['mensaje'] = '<div class="alert alert-danger">EL FORMATO DEL CORREO NO ES VÁLIDO</div>';
+        header("location:./register.php");
         exit;
     }
     
     // Verificar si el usuario ya existe
     $sql_verificar = $conexion->query("SELECT * FROM usuario WHERE usuario='$usuario' OR correo='$correo'");
     if ($sql_verificar->num_rows > 0) {
-        echo '<div class="alert alert-danger">EL USUARIO O CORREO YA EXISTE</div>';
+        $_SESSION['mensaje'] = '<div class="alert alert-danger">EL USUARIO O CORREO YA EXISTE</div>';
+        header("location:./register.php");
+        exit;
     } else {
         // Asignar rol por defecto
         $rol = (isset($_POST["rol"])) ? $conexion->real_escape_string($_POST["rol"]) : 'estudiante';
@@ -65,9 +71,9 @@ if (empty($_POST["usuario"]) OR empty($_POST["correo"]) OR empty($_POST["passwor
                 // Asignar el permiso al rol
                 $conexion->query("INSERT INTO roles_x_permiso (permiso_id, rol_id) VALUES ($id_permiso_lectura, $id_rol)");
                 
-                echo '<div class="alert alert-info">NUEVO ROL CREADO AUTOMÁTICAMENTE CON PERMISOS DE LECTURA</div>';
+                $_SESSION['mensaje'] = '<div class="alert alert-info">NUEVO ROL CREADO AUTOMÁTICAMENTE CON PERMISOS DE LECTURA</div>';
             } else {
-                echo '<div class="alert alert-warning">SE CREÓ EL ROL PERO NO SE PUDO ASIGNAR EL PERMISO DE LECTURA</div>';
+                $_SESSION['mensaje'] = '<div class="alert alert-warning">SE CREÓ EL ROL PERO NO SE PUDO ASIGNAR EL PERMISO DE LECTURA</div>';
             }
         }
         
@@ -79,14 +85,16 @@ if (empty($_POST["usuario"]) OR empty($_POST["correo"]) OR empty($_POST["passwor
         $stmt->bind_param("sssi", $usuario, $correo, $clave_hash, $id_rol);
         
         if ($stmt->execute()) {
-            echo '<div class="alert alert-success">USUARIO REGISTRADO CORRECTAMENTE. <a href="../login/login.php">INICIAR SESIÓN</a></div>';
+           $_SESSION['mensaje'] = '<div class="alert alert-success">USUARIO REGISTRADO EXITOSAMENTE</div>'; 
         } else {
-            echo '<div class="alert alert-danger">ERROR AL REGISTRAR USUARIO: ' . $conexion->error . '</div>';
+           $_SESSION['mensaje'] = '<div class="alert alert-danger">ERROR AL REGISTRAR USUARIO: ' . $conexion->error . '</div>';
         }
         
         $stmt->close();
     }
     
     $conexion->close();
+    header("location:./register.php");
+    exit;
 }
 ?>
