@@ -55,7 +55,7 @@ session_start();
                     <div class="area-icon">🍀</div>
                     <h3 class="area-title">Ciencias Naturales</h3>
                     <p class="mb-0">Explora y aprende sobre física, química y blogía con enfoques neuroeducativos.</p>
-                    <a href="ciencias/ciencias_naturales.html" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                 </div>
             </div>
             </div>

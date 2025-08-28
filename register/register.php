@@ -1,3 +1,10 @@
+<?php
+// Al inicio del archivo register.php
+session_start();
+$mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
+unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
+?>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -18,8 +25,8 @@
     <!-- Navegación mínima -->
     <nav class="navbar-minimal">
         <div class="container">
-            <a href="../index.php" class="back-home">
-                <span>←</span> Volver al Inicio
+            <a href="../login/login.php" class="back-home">
+                <span>←</span> Volver al login
             </a>
         </div>
     </nav>
@@ -28,6 +35,13 @@
     <div class="register-container">
         <div class="registerbox" data-aos="fade-up">
             <img src="../logo/logo.svg" class="avatar" alt="Sinaptium Logo" style="display: block; margin: 0 auto 20px; max-width: 120px;">
+            <div class="alert-container">
+                <?php
+                if (!empty($mensaje)) {
+                    echo $mensaje;
+                }
+                ?>
+            </div>
             <h1>Crear Cuenta</h1>
             
             <form method="POST" action="../register/controlador.php">
@@ -56,7 +70,7 @@
 
             <div class="login-link">
                 <p>¿Ya tienes una cuenta?</p>
-                <a href="../login/login.php">Iniciar Sesión</a>
+                <a href="login.html">Iniciar Sesión</a>
             </div>
         </div>
     </div>
