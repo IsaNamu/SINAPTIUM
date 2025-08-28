@@ -70,7 +70,7 @@ unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
 
             <div class="login-link">
                 <p>¿Ya tienes una cuenta?</p>
-                <a href="login.html">Iniciar Sesión</a>
+                <a href="../login/login.php">Iniciar Sesión</a>
             </div>
         </div>
     </div>
@@ -121,7 +121,24 @@ unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
             
             if (password !== confirmPassword) {
                 e.preventDefault();
-                alert('Las contraseñas no coinciden');
+                
+                // Crear y mostrar el mensaje de error en el alert-container
+                const alertContainer = document.querySelector('.alert-container');
+                alertContainer.innerHTML = '<div class="alert alert-danger">Las contraseñas no coinciden</div>';
+                alertContainer.style.display = 'block';
+                
+                // Animación para que desaparezca después de 5 segundos
+                setTimeout(() => {
+                    const alert = alertContainer.querySelector('.alert');
+                    if (alert) {
+                        alert.style.animation = 'fadeOut 0.5s forwards';
+                        setTimeout(() => {
+                            alert.remove();
+                            alertContainer.style.display = 'none';
+                        }, 500);
+                    }
+                }, 2000);
+                
                 return;
             }
             
