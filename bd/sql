@@ -1,0 +1,40 @@
+-- Tabla permisos
+CREATE TABLE permisos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT NULL
+);
+
+-- Tabla roles
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT NULL
+);
+
+-- Tabla intermedia roles_x_permiso (relación muchos a muchos)
+CREATE TABLE roles_x_permiso (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    permiso_id INT NOT NULL,
+    rol_id INT NOT NULL,
+    FOREIGN KEY (permiso_id) REFERENCES permisos(id) ON DELETE CASCADE,
+    FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_permiso_rol (permiso_id, rol_id)
+);
+
+-- Tabla usuario
+CREATE TABLE usuario (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    correo VARCHAR(255) NOT NULL UNIQUE,
+    passwd VARCHAR(255) NOT NULL,
+    rol_id INT NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE RESTRICT
+);
+
+-- Índices adicionales para mejorar el rendimiento
+CREATE INDEX idx_usuario_correo ON usuario(correo);
+CREATE INDEX idx_roles_x_permiso_permiso ON roles_x_permiso(permiso_id);
+CREATE INDEX idx_roles_x_permiso_rol ON roles_x_permiso(rol_id);
+CREATE INDEX idx_usuario_rol ON usuario(rol_id);

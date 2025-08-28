@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  php-app:
+    build: .
+    container_name: ana_php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html  # Monta tu código aquí
+    environment:
+      - DB_HOST=sql_ana
+      - DB_NAME=sinaptium
+      - DB_USER=root
+      - DB_PASSWORD=1234
+
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

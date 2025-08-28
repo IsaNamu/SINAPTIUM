@@ -1,0 +1,757 @@
+/* estilos.css - Estilos globales para Sinaptium */
+
+:root {
+    --neuro-blue: #4fc3f7;
+    --neuro-purple: #9c27b0;
+    --neuro-green: #4caf50;
+    --neuro-orange: #ff9800;
+    --Sinaptium-card-bg: rgba(22, 22, 42, 0.8);
+    --Sinaptium-border: rgba(142, 68, 173, 0.3);
+    --text-primary: white;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --bg-primary: #16162a;
+    --bg-secondary: #2a2a5a;
+    --bg-dark: rgba(22, 22, 42, 0.9);
+}
+
+/* Estilos base */
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    position: relative;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Fondo neuronal */
+.neuronal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+    z-index: -1;
+}
+
+/* Barra de navegación */
+.navbar {
+    background-color: var(--bg-dark);
+    backdrop-filter: blur(10px);
+    padding: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand img {
+    transition: transform 0.3s ease;
+    width: 200px;
+    height: auto;
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: var(--text-primary) !important;
+    margin: 0 10px;
+    padding: 8px 15px !important;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+    font-weight: 500;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(142, 68, 173, 0.2);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: 2px;
+    background-color: var(--neuro-purple);
+}
+
+/* Secciones comunes */
+.section-padding {
+    padding: 80px 0;
+}
+
+.bg-dark {
+    background-color: var(--bg-dark) !important;
+}
+
+.hero {
+    padding: 100px 0;
+    position: relative;
+}
+
+.hero-areas {
+    padding: 120px 0 80px;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.content-card {
+    background: var(--Sinaptium-card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--Sinaptium-border);
+    margin-bottom: 30px;
+}
+
+/* Tarjetas de áreas académicas */
+.area-card {
+    background: var(--Sinaptium-card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--Sinaptium-border);
+    margin-bottom: 30px;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.area-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(142, 68, 173, 0.2);
+}
+
+.area-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.area-title {
+    color: var(--neuro-blue);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Estilos para biblioteca */
+.search-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--Sinaptium-border);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 50px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.category-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-tag {
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--Sinaptium-border);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.category-tag:hover {
+    background-color: rgba(79, 195, 247, 0.2);
+    transform: translateY(-2px);
+}
+
+.category-tag.active {
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    border-color: transparent;
+}
+
+.book-card {
+    background: var(--Sinaptium-card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--Sinaptium-border);
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.book-cover {
+    height: 250px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.book-cover img {
+    object-fit: cover;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+}
+
+.book-info {
+    padding: 20px;
+}
+
+.book-info h5 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.book-info h5 a:hover {
+    color: var(--neuro-blue);
+}
+
+.book-author {
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+/* Botones */
+.btn-glow {
+    position: relative;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    color: white;
+    font-weight: 600;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--neuro-purple), var(--neuro-blue));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.btn-glow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+    color: white;
+}
+
+.btn-glow:hover::before {
+    opacity: 1;
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: white;
+    color: var(--bg-primary);
+}
+
+/* Pasos del proceso - Para funcionamiento.php */
+.step-box {
+    background: var(--Sinaptium-card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    transition: all 0.4s ease;
+    height: 100%;
+    border: 1px solid var(--Sinaptium-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.step-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+}
+
+.step-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(79, 195, 247, 0.3);
+}
+
+.step-icon {
+    font-size: 3rem;
+    background: linear-gradient(135deg, var(--neuro-blue), var(--neuro-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 15px;
+    display: inline-block;
+    transition: all 0.5s ease;
+}
+
+.step-box:hover .step-icon {
+    transform: scale(1.2);
+}
+
+.step-title {
+    color: var(--neuro-blue);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.step-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--neuro-purple);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.step-box:hover .step-title::after {
+    transform: scaleX(1);
+}
+
+.process-diagram {
+    position: relative;
+    margin: 50px auto;
+    max-width: 800px;
+}
+
+.process-line {
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+/* Características - Para funcionamiento.php */
+.feature-box {
+    background: var(--Sinaptium-card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    border-left: 4px solid var(--neuro-blue);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.1), rgba(156, 39, 176, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(79, 195, 247, 0.2);
+}
+
+.feature-box:hover::before {
+    opacity: 1;
+}
+
+.feature-box h3 {
+    color: var(--neuro-green);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.feature-box h3::before {
+    content: '✓';
+    color: var(--neuro-green);
+    margin-right: 10px;
+}
+
+.feature-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.feature-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+
+.feature-list li::before {
+    content: '•';
+    color: var(--neuro-blue);
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    top: -3px;
+}
+
+/* Elementos interactivos */
+.interactive-brain {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.brain-path {
+    stroke: var(--neuro-blue);
+    stroke-width: 2;
+    fill: none;
+    animation: draw 3s infinite ease-in-out alternate;
+}
+
+@keyframes draw {
+    0% {
+        stroke-dasharray: 0, 200;
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dasharray: 200, 0;
+        stroke-dashoffset: -200;
+    }
+}
+
+/* Tarjetas de características */
+.feature-item, .info-box {
+    background: var(--Sinaptium-card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--Sinaptium-border);
+}
+
+.feature-item:hover, .info-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(142, 68, 173, 0.2);
+}
+
+.feature-item h3, .info-box h3 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Línea de tiempo */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 4px;
+    background: var(--neuro-purple);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.timeline-content {
+    background: var(--Sinaptium-card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 45%;
+    position: relative;
+    border: 1px solid var(--Sinaptium-border);
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-left: auto;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+    margin-right: auto;
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--neuro-blue);
+    border-radius: 50%;
+    top: 20px;
+}
+
+.timeline-item:nth-child(odd) .timeline-content::before {
+    left: -60px;
+}
+
+.timeline-item:nth-child(even) .timeline-content::before {
+    right: -60px;
+}
+
+.timeline-year {
+    position: absolute;
+    top: 15px;
+    font-weight: bold;
+    color: var(--neuro-green);
+}
+
+.timeline-item:nth-child(odd) .timeline-year {
+    left: -90px;
+}
+
+.timeline-item:nth-child(even) .timeline-year {
+    right: -90px;
+}
+
+/* Equipo */
+.team-member {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.team-member .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--neuro-blue), var(--neuro-purple));
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: white;
+}
+
+.team-member h4 {
+    color: var(--neuro-green);
+    margin-bottom: 5px;
+}
+
+/* Testimonios */
+.testimonials {
+    padding: 50px 0;
+    background: rgba(22, 22, 42, 0.7);
+}
+
+.testimonials h2 {
+    margin-bottom: 30px;
+    color: white;
+}
+
+.carousel-item p {
+    font-size: 1.2rem;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Pie de página */
+footer {
+    background-color: var(--bg-dark);
+    padding: 20px 0;
+}
+
+.footer-text {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.footer-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--neuro-blue);
+}
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Colores temáticos */
+.purple {
+    color: var(--neuro-purple) !important;
+}
+
+.blue {
+    color: var(--neuro-blue) !important;
+}
+
+.green {
+    color: var(--neuro-green) !important;
+}
+
+.orange {
+    color: var(--neuro-orange) !important;
+}
+
+.bg-purple {
+    background-color: var(--neuro-purple) !important;
+}
+
+.bg-blue {
+    background-color: var(--neuro-blue) !important;
+}
+
+.bg-green {
+    background-color: var(--neuro-green) !important;
+}
+
+.bg-orange {
+    background-color: var(--neuro-orange) !important;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .interactive-brain {
+        width: 60%;
+    }
+    
+    .process-line {
+        display: none;
+    }
+    
+    .step-box {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 70px 0;
+    }
+    
+    .hero-areas {
+        padding: 100px 0 60px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-content {
+        width: 90%;
+        margin-left: 60px !important;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-content::before,
+    .timeline-item:nth-child(even) .timeline-content::before {
+        left: -50px;
+    }
+    
+    .timeline-item:nth-child(odd) .timeline-year,
+    .timeline-item:nth-child(even) .timeline-year {
+        left: -85px;
+    }
+    
+    .navbar-brand img {
+        width: 150px;
+    }
+    
+    .feature-box {
+        margin-bottom: 15px;
+    }
+    
+    .category-tags {
+        gap: 5px;
+    }
+    
+    .category-tag {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-padding {
+        padding: 50px 0;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .interactive-brain {
+        width: 80%;
+    }
+    
+    .btn-glow, .btn-outline-light {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .book-cover {
+        height: 200px;
+    }
+}

@@ -1,0 +1,218 @@
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .loginbox {
+            background: var(--Sinaptium-card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--Sinaptium-border);
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .loginbox::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+        }
+
+        .avatar {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .loginbox h1 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .loginbox form {
+            text-align: left;
+        }
+
+        .loginbox label {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .loginbox input[type="text"],
+        .loginbox input[type="password"] {
+            background-color: rgba(42, 42, 90, 0.3);
+            border: 1px solid var(--Sinaptium-border);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .loginbox input[type="text"]:focus,
+        .loginbox input[type="password"]:focus {
+            background-color: rgba(42, 42, 90, 0.5);
+            border-color: var(--neuro-blue);
+            box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+            outline: none;
+        }
+
+        .loginbox input[type="text"]::placeholder,
+        .loginbox input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .loginbox input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .loginbox input[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neuro-purple), var(--neuro-blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loginbox input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(142, 68, 173, 0.4);
+        }
+
+        .loginbox input[type="submit"]:hover::before {
+            opacity: 1;
+        }
+
+        .loginbox input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .loginbox a {
+            color: var(--neuro-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .loginbox a:hover {
+            color: var(--neuro-purple);
+            text-decoration: underline;
+        }
+
+        .navbar-minimal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: transparent;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .back-home {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home:hover {
+            color: var(--neuro-blue);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--Sinaptium-border);
+        }
+
+        .register-link p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .register-link a {
+            color: var(--neuro-green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .register-link a:hover {
+            color: var(--neuro-blue);
+            text-decoration: underline;
+        }
+
+        /* Efectos de animación en inputs */
+        .input-wrapper {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 576px) {
+            .loginbox {
+                margin: 20px;
+                padding: 30px 25px;
+            }
+            
+            .loginbox h1 {
+                font-size: 1.5rem;
+            }
+
+            .avatar {
+                width: 100px;
+            }
+        }
