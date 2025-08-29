@@ -1,17 +1,19 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sobre Nosotros - Sinaptium</title>
-    <link rel="icon" href="logo/cerebro.svg" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="css/estilos.css" rel="stylesheet">
+    <?php renderHead('Sobre Nosotros - Sinaptium'); ?>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
     <div class="neuronal-background"></div>

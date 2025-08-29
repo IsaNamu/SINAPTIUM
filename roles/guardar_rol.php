@@ -38,8 +38,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($mode === 'edit' && !empty($id)) {
         // Modo edición
-        $resultado = actualizarRegistro('roles', $id, $datos);
-        $accion = 'actualizado';
+        $datos_actuales_array = listarRegistros('roles', $id);
+        
+        // Extraer el primer registro (si es un array de arrays)
+        $datos_actuales = $datos_actuales_array[0] ?? $datos_actuales_array;
+
+        $hay_cambios = false;
+        if ($datos_actuales['nombre'] !== $nombre || $datos_actuales['descripcion'] !== $descripcion) {
+            $hay_cambios = true;
+        }
+        
+        if ($hay_cambios) {
+            $resultado = actualizarRegistro('roles', $id, $datos);
+            $accion = 'actualizado';
+        } else {
+            // No hay cambios en los datos del rol, pero igual procesamos los permisos
+            $resultado = ['success' => true];
+            $accion = 'actualizado';
+        }
         $rol_id = $id;
     } else {
         // Modo creación

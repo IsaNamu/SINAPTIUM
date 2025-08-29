@@ -44,3 +44,43 @@ CREATE INDEX idx_usuario_rol ON usuario(rol_id);
 ALTER TABLE usuario 
 ADD estado ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Activo',
 ADD fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Insertar roles predeterminados
+INSERT INTO roles (nombre, descripcion) VALUES
+('Administrador', 'Usuario con todos los permisos'),
+('Editor', 'Usuario con permisos para editar contenido'),
+('Visualizador', 'Usuario con permisos solo para ver contenido');
+
+-- Insertar permisos predeterminados
+INSERT INTO permisos (nombre, descripcion) VALUES
+('usuario:Actualiza', 'Permiso para editar usuarios existentes'),
+('usuario:Crea', 'Permiso para crear nuevos usuarios'),
+('usuario:Elimina', 'Permiso para eliminar usuarios'),
+('usuario:Lee', 'Permiso para ver detalles de usuarios'),
+('rol:Crea', 'Permiso para crear nuevos roles'),
+('rol:Actualiza', 'Permiso para editar roles existentes'),
+('rol:Elimina', 'Permiso para eliminar roles'),
+('rol:Lee', 'Permiso para ver detalles de roles');
+
+-- Asignar permisos a roles
+-- Administrador tiene todos los permisos
+INSERT INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Administrador';
+
+-- Editor tiene permisos de usuario:Lee, usuario:Actualiza, rol:Lee
+INSERT INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Editor' AND p.nombre IN ('usuario:Lee', 'usuario:Actualiza', 'rol:Lee');
+
+-- Visualizador tiene solo permiso de usuario:Lee
+INSERT INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Visualizador' AND p.nombre = 'usuario:Lee';
+
+-- Insertar usuario administrador predeterminado
+INSERT INTO usuario (usuario, correo, passwd, rol_id) VALUES
+('admin', 'admin@gmail.com', SHA2('admin123', 256), (SELECT id FROM roles WHERE nombre = 'Administrador'));
