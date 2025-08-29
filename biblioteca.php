@@ -84,7 +84,7 @@ session_start();
                             <img src="https://www.tornamesa.co/imagenes/9789588/978958888621.GIF" alt="Portada Cien años de soledad" class="img-fluid">
                         </div>
                         <div class="book-info">
-                            <h5><a href="pdfs/GABRIEL GARCÍA MARQUEZ - Cien años de soledad.pdf" target="_blank">Cien años de soledad</a></h5>
+                            <h5><a href="pdfs/gabo.pdf" target="_blank">Cien años de soledad</a></h5>
                             <p class="book-author">Gabriel García Márquez</p>
                             <span class="badge book-badge bg-purple">Literatura</span>
                         </div>

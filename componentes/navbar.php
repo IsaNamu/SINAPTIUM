@@ -50,7 +50,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php else: ?>
                     <!-- Mostrar cuando no hay sesión activa -->
                     <li class="nav-item">
-                        <a class="btn btn-glow btn-lg me-3" href="login/login.php">Logina</a>
+                        <a class="btn btn-glow btn-lg me-3" href="login/login.php">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>

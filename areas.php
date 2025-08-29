@@ -46,16 +46,16 @@ session_start();
                         <div class="area-icon">🏛️</div>
                         <h3 class="area-title">Sociales</h3>
                         <p class="mb-0">Comprende la historia, geografía y sociedad a través de experiencias inmersivas.</p>
-                        <a href="sociales/sociales.html" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="sociales/sociales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>     
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="400">
                 <div class="area-card text-center">
                     <div class="area-icon">🍀</div>
-                    <h3 class="area-title">Ciencias Naturales</h3>
+                    <h3 class="area-title">ciencias_naturales Naturales</h3>
                     <p class="mb-0">Explora y aprende sobre física, química y blogía con enfoques neuroeducativos.</p>
-                    <a href="ciencias/ciencias_naturales.html" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                 </div>
             </div>
             </div>
