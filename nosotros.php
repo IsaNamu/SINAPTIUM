@@ -12,6 +12,63 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="css/estilos.css" rel="stylesheet">
+    <style>
+/* ======= Timeline 2025 ======= */
+.timeline-2025 {
+    position: relative;
+    max-width: 840px;
+    margin: 0 auto;
+}
+.timeline-2025::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--neuro-blue), var(--neuro-purple));
+    transform: translateX(-50%);
+}
+.timeline-card {
+    position: relative;
+    width: 46%;
+    padding: 25px;
+    margin-bottom: 40px;
+    border-radius: 20px;
+    background: rgba(22,22,42,.85);
+    border: 1px solid var(--Sinaptium-border);
+    box-shadow: 0 8px 20px rgba(0,0,0,.3);
+    backdrop-filter: blur(6px);
+    transition: transform .4s ease, box-shadow .4s ease;
+}
+.timeline-card:nth-child(odd) { margin-right: auto; }
+.timeline-card:nth-child(even) { margin-left: auto; }
+.timeline-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px var(--neuro-purple);
+}
+.timeline-date {
+    display: inline-block;
+    font-size: .9rem;
+    font-weight: 700;
+    background: linear-gradient(90deg,var(--neuro-blue),var(--neuro-purple));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.timeline-icon {
+    position: absolute;
+    top: 20px;
+    font-size: 2rem;
+    line-height: 1;
+}
+.timeline-card:nth-child(odd) .timeline-icon { right: -55px; }
+.timeline-card:nth-child(even) .timeline-icon { left: -55px; }
+@media (max-width: 768px) {
+    .timeline-2025::before { left: 30px; }
+    .timeline-card { width: calc(100% - 60px); margin-left: 60px !important; }
+    .timeline-icon { left: -55px !important; right: auto !important; }
+}
+</style>
 </head>
 <body>
     <div class="neuronal-background"></div>
@@ -53,35 +110,47 @@ session_start();
 
     <section class="section-padding bg-dark">
         <div class="container">
-            <h2 class="text-center mb-5 blue">Nuestra Historia</h2>
-            <div class="timeline">
-                <div class="timeline-item" data-aos="fade-right">
-                    <div class="timeline-content">
-                        <span class="timeline-year">2024</span>
-                        <h4 class="green">La idea inicial</h4>
-                        <p>Tres estudiantes de grado décimo recién iniciando su técnico en programación se reunieron con una misión común: transformar la educación mediante la personalización.</p>
-                    </div>
+            <h2 class="text-center mb-5 blue">Nuestra travesía</h2>
+
+            <div class="timeline-2025">
+                <!-- Febrero -->
+                <div class="timeline-card" data-aos="fade-right">
+                    <span class="timeline-icon">🌱</span>
+                    <span class="timeline-date">Febrero 2025</span>
+                    <h4 class="green">La semilla en casa</h4>
+                    <p>Con PHP y mucho esfuerzo, empezamos a codificar Sinaptium en nuestros cuartos, soñando con una manera de estudiar, aprender y enseñar distinto y único.</p>
                 </div>
-                <div class="timeline-item" data-aos="fade-left">
-                    <div class="timeline-content">
-                        <span class="timeline-year">2024-2025</span>
-                        <h4 class="green">Investigación</h4>
-                        <p>Desarrollamos los primeros prototipos (en casa) basados en investigaciones sobre estilos de aprendizaje y sistemas adaptativos.</p>
-                    </div>
+
+                <!-- Abril -->
+                <div class="timeline-card" data-aos="fade-left">
+                    <span class="timeline-icon">🔍</span>
+                    <span class="timeline-date">Abril 2025</span>
+                    <h4 class="green">Observar para entender</h4>
+                    <p>Investigamos muucho sobre la neurociencia, para así poder mostrar que solo hay un tipo de aprendizaje, sino que cada persona tiene su manera de aprender, la cual es muy distinta dependiendo de como aprendamos las cosas, ya que cada persona tiene habilidades distintas.</p>
                 </div>
-                <div class="timeline-item" data-aos="fade-right">
-                    <div class="timeline-content">
-                        <span class="timeline-year">2024</span>
-                        <h4 class="green">Lanzamiento beta</h4>
-                        <p>Lanzamos nuestro primer producto con un grupo selecto de estudiantes, observando una mejora del 40% en la retención del conocimiento.</p>
-                    </div>
+
+                <!-- Junio -->
+                <div class="timeline-card" data-aos="fade-right">
+                    <span class="timeline-icon">⚙️</span>
+                    <span class="timeline-date">Junio 2025</span>
+                    <h4 class="green">Código con cariño</h4>
+                    <p>Convertimos ciclos y condicionales en rutas visuales, auditivas y kinestésicas: ¡Sinaptium tomaba mucha más forma e identidad!</p>
                 </div>
-                <div class="timeline-item" data-aos="fade-left">
-                    <div class="timeline-content">
-                        <span class="timeline-year">2025</span>
-                        <h4 class="green">Expansión global</h4>
-                        <p>Actualmente estamos expandiendo Sinaptium a más instituciones educativas y adaptando nuestro sistema a diferentes culturas y metodologías.</p>
-                    </div>
+
+                <!-- Agosto -->
+                <div class="timeline-card" data-aos="fade-left">
+                    <span class="timeline-icon">🧪</span>
+                    <span class="timeline-date">Agosto 2025</span>
+                    <h4 class="green">Pruebas llenas de emociones</h4>
+                    <p>Siempre moestrandole nuestros avances a los docentes, los cuales siempre nos guiaban.</p>
+                </div>
+
+                <!-- Octubre -->
+                <div class="timeline-card" data-aos="fade-right">
+                    <span class="timeline-icon">🚀</span>
+                    <span class="timeline-date">Octubre 2025</span>
+                    <h4 class="green">Llegamos para quedarnos</h4>
+                    <p>Con corazón y código abierto, lanzamos Sinaptium al mundo para que cada estudiante encuentre su camino y así poderselo a el SENA, quien siempre nos brindo nuestros conocimientos para poder crear Sinaptium.</p>
                 </div>
             </div>
         </div>

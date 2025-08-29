@@ -51,9 +51,9 @@
     display: block;
     font-size: 1rem;
 }
-
 .input-wrapper input[type="text"],
-.input-wrapper input[type="password"] {
+.input-wrapper input[type="password"],
+.input-wrapper input[type="email"] {
     background-color: rgba(42, 42, 90, 0.3);
     border: 1px solid var(--Sinaptium-border);
     border-radius: 8px;
@@ -67,7 +67,8 @@
 }
 
 .input-wrapper input[type="text"]:focus,
-.input-wrapper input[type="password"]:focus {
+.input-wrapper input[type="password"]:focus,
+.input-wrapper input[type="email"]:focus {
     background-color: rgba(42, 42, 90, 0.5);
     border-color: var(--neuro-blue);
     box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
@@ -75,7 +76,8 @@
 }
 
 .input-wrapper input[type="text"]::placeholder,
-.input-wrapper input[type="password"]::placeholder {
+.input-wrapper input[type="password"]::placeholder
+.input-wrapper input[type="email"]::placeholder {
     color: rgba(255, 255, 255, 0.4);
 }
 

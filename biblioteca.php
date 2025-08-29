@@ -34,15 +34,6 @@ session_start();
                 <div class="search-container">
                     <input type="text" id="searchBooks" placeholder="Buscar libros por título o autor..." class="search-input">
                 </div>
-                
-                <div class="category-tags">
-                    <div class="category-tag active" data-category="all">Todos</div>
-                    <div class="category-tag" data-category="literatura">Literatura</div>
-                    <div class="category-tag" data-category="autoayuda">Autoayuda</div>
-                    <div class="category-tag" data-category="ciencia">Ciencia</div>
-                    <div class="category-tag" data-category="filosofia">Filosofía</div>
-                    <div class="category-tag" data-category="historia">Historia</div>
-                </div>
 
                 <div class="book-grid" id="bookGrid">
                     <!-- Libro 1 -->
