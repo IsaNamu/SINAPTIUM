@@ -1,5 +1,9 @@
 <?php
-include_once './cx/peticiones.php';
+define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+
+// Includes (para el servidor)
+include_once HOME_PATH . 'cx/peticiones.php';
 
 // Iniciar sesión para manejar mensajes
 if (session_status() === PHP_SESSION_NONE) {
@@ -50,12 +54,12 @@ if (isset($_GET['editar'])) {
     <title>Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="estilos_bo/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>estilos_bo/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="icon" href="logo/cerebro.svg" type="image/x-icon">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard.css">
+    <link rel="icon" href="<?php echo BASE_URL; ?>logo/cerebro.svg" type="image/x-icon">
 </head>
 <body>
 <!-- Users Table -->
@@ -179,7 +183,7 @@ if (isset($_GET['editar'])) {
                 <h5 class="modal-title" id="modalUsuarioTitle">Crear Nuevo Usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="guardar_usuario.php" method="POST" id="formUsuario">
+            <form action="<?php echo BASE_URL; ?>usuarios/guardar_usuario.php" method="POST" id="formUsuario">
                 <input type="hidden" id="usuarioId" name="id">
                 <input type="hidden" id="formMode" name="mode" value="create">
                 <div class="modal-body">
@@ -236,7 +240,8 @@ if (isset($_GET['editar'])) {
                 <h5 class="modal-title">Desactivar Usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="eliminar_usuario.php" method="POST">
+
+            <form action="<?php echo BASE_URL; ?>usuarios/eliminar_usuario.php" method="POST">
                 <input type="hidden" id="eliminarId" name="id">
                 <div class="modal-body">
                     <p>¿Está seguro que desea desactivar el usuario <strong id="usuarioEliminar"></strong>?</p>

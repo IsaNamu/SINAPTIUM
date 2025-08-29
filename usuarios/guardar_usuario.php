@@ -1,7 +1,7 @@
 <?php
 // guardar_usuario.php
 session_start();
-include_once './cx/peticiones.php';
+include_once '../cx/peticiones.php';
 
 // Verificar que es una solicitud POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

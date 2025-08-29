@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once './cx/peticiones.php';
+include_once '../cx/peticiones.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id']);
