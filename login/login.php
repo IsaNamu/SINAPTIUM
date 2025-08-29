@@ -16,6 +16,13 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     header("Location: " . BASE_URL . "index.php");
     exit;
 }
+if (isset($_SESSION['mensaje'])) {
+    if (is_array($_SESSION['mensaje'])) {
+        $mensaje = $_SESSION['mensaje'];
+    } else {
+        echo $_SESSION['mensaje'];
+    }
+}
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
@@ -41,6 +48,24 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <!-- Contenedor del Login -->
     <div class="login-container">
         <div class="loginbox" data-aos="fade-up">
+            <div class="alert-container">
+                <?php
+                // Mostrar el mensaje que asignamos al principio
+                if (isset($mensaje)) {
+                    if (is_array($mensaje)) {
+                        echo "<div class='alert alert-{$mensaje['tipo']} alert-dismissible fade show' role='alert'>
+                                {$mensaje['texto']}
+                                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                            </div>";
+                    } else {
+                        // Si es string, mostrarlo directamente
+                        echo $mensaje;
+                    }
+                    // FINALMENTE limpiar la variable de sesión
+                    unset($_SESSION['mensaje']);
+                }
+                ?>
+            </div>
             <img src="<?php echo BASE_URL; ?>logo/logo.svg" class="avatar" alt="Sinaptium Logo">
             <h1>Iniciar Sesión</h1>
             
@@ -122,6 +147,28 @@ include_once HOME_PATH . 'componentes/head_component.php';
             submitBtn.value = 'Iniciando sesión...';
             submitBtn.style.opacity = '0.8';
         });
+
+        const alertContainer = document.querySelector('.alert-container');
+        const alert = alertContainer.querySelector('.alert');
+        
+        if (alert) {
+            // Mostrar el contenedor si hay alerta
+            alertContainer.style.display = 'block';
+            
+            // Ocultar automáticamente después de 2 segundos
+            setTimeout(() => {
+                if (alert) {
+                    alert.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => {
+                        alert.remove();
+                        alertContainer.style.display = 'none';
+                    }, 500);
+                }
+            }, 2000);
+        } else {
+            // Ocultar el contenedor si no hay alerta
+            alertContainer.style.display = 'none';
+        }
     </script>
 </body>
 </html>

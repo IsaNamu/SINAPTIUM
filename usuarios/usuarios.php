@@ -61,8 +61,8 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard.css">
 </head>
 <body>
-<!-- Users Table -->
-<div class="card">
+    <!-- Users Table -->
+    <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>Lista de Usuarios</span>
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario" data-mode="create">
@@ -172,10 +172,10 @@ include_once HOME_PATH . 'componentes/head_component.php';
             </div>
         <?php endif; ?>
     </div>
-</div>
+    </div>
 
-<!-- Modal único para Crear/Editar Usuario -->
-<div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+    <!-- Modal único para Crear/Editar Usuario -->
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -229,10 +229,10 @@ include_once HOME_PATH . 'componentes/head_component.php';
             </form>
         </div>
     </div>
-</div>
+    </div>
 
-<!-- Modal para Eliminar Usuario -->
-<div class="modal fade" id="modalEliminarUsuario" tabindex="-1" aria-hidden="true">
+    <!-- Modal para Eliminar Usuario -->
+    <div class="modal fade" id="modalEliminarUsuario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -253,87 +253,108 @@ include_once HOME_PATH . 'componentes/head_component.php';
             </form>
         </div>
     </div>
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Script para manejar los modales -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Modal único para crear/editar
-    const modalUsuario = document.getElementById('modalUsuario');
-    if (modalUsuario) {
-        modalUsuario.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const mode = button.getAttribute('data-mode');
-            const form = document.getElementById('formUsuario');
-            const title = document.getElementById('modalUsuarioTitle');
-            const submitButton = document.getElementById('submitButton');
-            const passwordInput = document.getElementById('inputPassword');
-            const passwordHelp = document.getElementById('passwordHelp');
-            const estadoContainer = document.getElementById('estadoContainer');
-            
-            if (mode === 'edit') {
-                // Modo edición
+    <!-- Script para manejar los modales -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modal único para crear/editar
+        const modalUsuario = document.getElementById('modalUsuario');
+        if (modalUsuario) {
+            modalUsuario.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const mode = button.getAttribute('data-mode');
+                const form = document.getElementById('formUsuario');
+                const title = document.getElementById('modalUsuarioTitle');
+                const submitButton = document.getElementById('submitButton');
+                const passwordInput = document.getElementById('inputPassword');
+                const passwordHelp = document.getElementById('passwordHelp');
+                const estadoContainer = document.getElementById('estadoContainer');
+                
+                if (mode === 'edit') {
+                    // Modo edición
+                    const id = button.getAttribute('data-id');
+                    const usuario = button.getAttribute('data-usuario');
+                    const correo = button.getAttribute('data-correo');
+                    const rol = button.getAttribute('data-rol');
+                    const estado = button.getAttribute('data-estado');  
+                    
+                    document.getElementById('usuarioId').value = id;
+                    document.getElementById('inputUsuario').value = usuario;
+                    document.getElementById('inputCorreo').value = correo;
+                    document.getElementById('selectRol').value = rol;
+                    document.getElementById('formMode').value = 'edit';
+                    
+                    // Seleccionar el estado correcto
+                    if (estado === 'Activo') {
+                        document.getElementById('estadoActivo').checked = true;
+                    } else {
+                        document.getElementById('estadoInactivo').checked = true;
+                    }
+                    
+                    // Cambiar textos
+                    title.textContent = 'Editar Usuario';
+                    submitButton.textContent = 'Guardar Cambios';
+                    passwordInput.required = false;
+                    passwordHelp.textContent = 'Dejar vacío para mantener la contraseña actual';
+                    estadoContainer.style.display = 'block';
+                    
+                    // Cambiar acción del formulario si es necesario
+                    document.getElementById('formMode').value = 'edit';
+                } else {
+                    // Modo creación
+                    document.getElementById('formMode').value = 'create';
+                    form.reset();
+                    document.getElementById('usuarioId').value = '';
+                    
+                    // Cambiar textos
+                    title.textContent = 'Crear Nuevo Usuario';
+                    submitButton.textContent = 'Crear Usuario';
+                    passwordInput.required = true;
+                    passwordHelp.textContent = 'Requerida para nuevos usuarios';
+                    estadoContainer.style.display = 'none';
+                    
+                    // Asegurar que el formulario apunte a la acción correcta
+                    document.getElementById('formMode').value = 'create';
+                }
+            });
+        }
+        
+        // Modal de eliminación
+        const modalEliminar = document.getElementById('modalEliminarUsuario');
+        if (modalEliminar) {
+            modalEliminar.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
                 const id = button.getAttribute('data-id');
                 const usuario = button.getAttribute('data-usuario');
-                const correo = button.getAttribute('data-correo');
-                const rol = button.getAttribute('data-rol');
-                const estado = button.getAttribute('data-estado');  
                 
-                document.getElementById('usuarioId').value = id;
-                document.getElementById('inputUsuario').value = usuario;
-                document.getElementById('inputCorreo').value = correo;
-                document.getElementById('selectRol').value = rol;
-                document.getElementById('formMode').value = 'edit';
-                
-                // Seleccionar el estado correcto
-                if (estado === 'Activo') {
-                    document.getElementById('estadoActivo').checked = true;
-                } else {
-                    document.getElementById('estadoInactivo').checked = true;
-                }
-                
-                // Cambiar textos
-                title.textContent = 'Editar Usuario';
-                submitButton.textContent = 'Guardar Cambios';
-                passwordInput.required = false;
-                passwordHelp.textContent = 'Dejar vacío para mantener la contraseña actual';
-                estadoContainer.style.display = 'block';
-                
-                // Cambiar acción del formulario si es necesario
-                document.getElementById('formMode').value = 'edit';
-            } else {
-                // Modo creación
-                document.getElementById('formMode').value = 'create';
-                form.reset();
-                document.getElementById('usuarioId').value = '';
-                
-                // Cambiar textos
-                title.textContent = 'Crear Nuevo Usuario';
-                submitButton.textContent = 'Crear Usuario';
-                passwordInput.required = true;
-                passwordHelp.textContent = 'Requerida para nuevos usuarios';
-                estadoContainer.style.display = 'none';
-                
-                // Asegurar que el formulario apunte a la acción correcta
-                document.getElementById('formMode').value = 'create';
-            }
-        });
-    }
-    
-    // Modal de eliminación
-    const modalEliminar = document.getElementById('modalEliminarUsuario');
-    if (modalEliminar) {
-        modalEliminar.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            const usuario = button.getAttribute('data-usuario');
+                modalEliminar.querySelector('#eliminarId').value = id;
+                modalEliminar.querySelector('#usuarioEliminar').textContent = usuario;
+            });
+        }
+        const alertContainer = document.querySelector('.alert-container');
+        const alert = alertContainer.querySelector('.alert');
+        
+        if (alert) {
+            // Mostrar el contenedor si hay alerta
+            alertContainer.style.display = 'block';
             
-            modalEliminar.querySelector('#eliminarId').value = id;
-            modalEliminar.querySelector('#usuarioEliminar').textContent = usuario;
-        });
-    }
-});
-</script>
+            // Ocultar automáticamente después de 2 segundos
+            setTimeout(() => {
+                if (alert) {
+                    alert.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => {
+                        alert.remove();
+                        alertContainer.style.display = 'none';
+                    }, 500);
+                }
+            }, 2000);
+        } else {
+            // Ocultar el contenedor si no hay alerta
+            alertContainer.style.display = 'none';
+        }
+    });
+    </script>
 </body>

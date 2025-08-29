@@ -214,6 +214,28 @@ document.addEventListener('DOMContentLoaded', function() {
             modalEliminar.querySelector('#permisoEliminar').textContent = nombre;
         });
     }
+
+    const alertContainer = document.querySelector('.alert-container');
+    const alert = alertContainer.querySelector('.alert');
+    
+    if (alert) {
+        // Mostrar el contenedor si hay alerta
+        alertContainer.style.display = 'block';
+        
+        // Ocultar automáticamente después de 2 segundos
+        setTimeout(() => {
+            if (alert) {
+                alert.style.animation = 'fadeOut 0.5s forwards';
+                setTimeout(() => {
+                    alert.remove();
+                    alertContainer.style.display = 'none';
+                }, 500);
+            }
+        }, 2000);
+    } else {
+        // Ocultar el contenedor si no hay alerta
+        alertContainer.style.display = 'none';
+    }
 });
 </script>
 </body>
