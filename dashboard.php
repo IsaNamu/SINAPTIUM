@@ -47,7 +47,7 @@ foreach ($usuarios as $usuario) {
             <div class="col-md-2 sidebar p-0">
                 <div class="text-center mb-4">
                     <img src="../logo/logo.svg" alt="Logo" class="img-fluid" style="max-width: 120px;">
-                    <h5 class="mt-2">Panel de Administración</h5>
+                    <h5 class="mt-2">Panel de Administración</h5>  
                 </div>
                 
                 <ul class="nav flex-column">
@@ -57,12 +57,14 @@ foreach ($usuarios as $usuario) {
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $seccion == 'usuarios' ? 'active' : ''; ?>" href="?seccion=usuarios">
-                            <i class="fas fa-users"></i>
-                            <span>Usuarios</span>
-                        </a>
-                    </li>
+                    <?php if (isset($_SESSION['permisos']) && in_array('usuario:Lee', $_SESSION['permisos'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $seccion == 'usuarios' ? 'active' : ''; ?>" href="?seccion=usuarios">
+                                <i class="fas fa-users"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link <?php echo $seccion == 'roles' ? 'active' : ''; ?>" href="?seccion=roles">
                             <i class="fas fa-user-tag"></i>
