@@ -1,6 +1,21 @@
 <?php
 include_once './cx/peticiones.php';
 
+// Iniciar sesión para manejar mensajes
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Mostrar mensajes si existen
+if (isset($_SESSION['mensaje'])) {
+    $mensaje = $_SESSION['mensaje'];
+    echo "<div class='alert alert-{$mensaje['tipo']} alert-dismissible fade show' role='alert'>
+            {$mensaje['texto']}
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+          </div>";
+    unset($_SESSION['mensaje']);
+}
+
 // Obtener todos los usuarios
 $usuarios = listarRegistros('usuario');
 
@@ -27,8 +42,6 @@ $modoEdicion = false;
 $usuarioEditar = null;
 if (isset($_GET['editar'])) {
     $modoEdicion = true;
-    // Aquí iría la lógica para obtener los datos del usuario a editar
-    // $usuarioEditar = obtenerUsuarioPorId($_GET['editar']);
 }
 ?>
 <head>
@@ -138,7 +151,7 @@ if (isset($_GET['editar'])) {
                                             data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>"
                                             data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
                                             data-rol="<?php echo $usuario['rol_id']; ?>"
-                                            data-activo="<?php echo isset($usuario['activo']) ? $usuario['activo'] : 1; ?>">
+                                            data-estado="<?php echo isset($usuario['estado']) ? $usuario['estado'] : 'Activo'; ?>">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger action-btn" 
@@ -220,13 +233,13 @@ if (isset($_GET['editar'])) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Eliminar Usuario</h5>
+                <h5 class="modal-title">Desactivar Usuario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="eliminar_usuario.php" method="POST">
                 <input type="hidden" id="eliminarId" name="id">
                 <div class="modal-body">
-                    <p>¿Está seguro que desea eliminar al usuario <strong id="usuarioEliminar"></strong>?</p>
+                    <p>¿Está seguro que desea desactivar el usuario <strong id="usuarioEliminar"></strong>?</p>
                     <p class="text-danger">Esta acción no se puede deshacer.</p>
                 </div>
                 <div class="modal-footer">
@@ -262,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const usuario = button.getAttribute('data-usuario');
                 const correo = button.getAttribute('data-correo');
                 const rol = button.getAttribute('data-rol');
-                const activo = button.getAttribute('data-activo');
+                const estado = button.getAttribute('data-estado');  
                 
                 document.getElementById('usuarioId').value = id;
                 document.getElementById('inputUsuario').value = usuario;
@@ -271,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('formMode').value = 'edit';
                 
                 // Seleccionar el estado correcto
-                if (activo === '1') {
+                if (estado === 'Activo') {
                     document.getElementById('estadoActivo').checked = true;
                 } else {
                     document.getElementById('estadoInactivo').checked = true;
@@ -285,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 estadoContainer.style.display = 'block';
                 
                 // Cambiar acción del formulario si es necesario
-                form.action = 'actualizar_usuario.php';
+                document.getElementById('formMode').value = 'edit';
             } else {
                 // Modo creación
                 document.getElementById('formMode').value = 'create';
@@ -300,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 estadoContainer.style.display = 'none';
                 
                 // Asegurar que el formulario apunte a la acción correcta
-                form.action = 'guardar_usuario.php';
+                document.getElementById('formMode').value = 'create';
             }
         });
     }

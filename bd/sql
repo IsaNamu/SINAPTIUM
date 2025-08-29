@@ -38,3 +38,9 @@ CREATE INDEX idx_usuario_correo ON usuario(correo);
 CREATE INDEX idx_roles_x_permiso_permiso ON roles_x_permiso(permiso_id);
 CREATE INDEX idx_roles_x_permiso_rol ON roles_x_permiso(rol_id);
 CREATE INDEX idx_usuario_rol ON usuario(rol_id);
+
+
+-- Editar tabla usuario para agregar columna estado y fecha_modificacion
+ALTER TABLE usuario 
+ADD estado ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Activo',
+ADD fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
