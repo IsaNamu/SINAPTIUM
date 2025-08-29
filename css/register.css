@@ -1,4 +1,4 @@
-.register-container {
+   .register-container {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -6,7 +6,6 @@
     padding: 20px 0;
 }
 
-/* Caja de registro (sustituye a .loginbox) */
 .registerbox {
     background: var(--Sinaptium-card-bg);
     border-radius: 15px;
@@ -20,7 +19,6 @@
     text-align: center;
 }
 
-/* Línea decorativa superior */
 .registerbox::before {
     content: '';
     position: absolute;
@@ -31,15 +29,6 @@
     background: linear-gradient(90deg, var(--neuro-blue), var(--neuro-purple));
 }
 
-/* Avatar (si lo quieres en registro) */
-.avatar {
-    width: 120px;
-    height: auto;
-    margin-bottom: 20px;
-    border-radius: 10px;
-}
-
-/* Título del formulario */
 .registerbox h1 {
     color: var(--text-primary);
     font-size: 1.8rem;
@@ -51,12 +40,10 @@
     color: transparent;
 }
 
-/* Formulario alineado a la izquierda */
 .registerbox form {
     text-align: left;
 }
 
-/* Etiquetas de campo */
 .input-wrapper label {
     color: var(--text-primary);
     font-weight: 500;
@@ -65,7 +52,6 @@
     font-size: 1rem;
 }
 
-/* Campos de texto y contraseña */
 .input-wrapper input[type="text"],
 .input-wrapper input[type="password"] {
     background-color: rgba(42, 42, 90, 0.3);
@@ -93,7 +79,6 @@
     color: rgba(255, 255, 255, 0.4);
 }
 
-/* Botón enviar */
 .registerbox input[type="submit"] {
     width: 100%;
     padding: 15px;
@@ -135,49 +120,6 @@
     transform: translateY(0);
 }
 
-/* Enlaces dentro de la caja */
-.registerbox a {
-    color: var(--neuro-blue);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.registerbox a:hover {
-    color: var(--neuro-purple);
-    text-decoration: underline;
-}
-
-/* Barra superior minimalista */
-.navbar-minimal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: transparent;
-    padding: 20px 0;
-    z-index: 1000;
-}
-
-/* Enlace “Volver al inicio” */
-.back-home {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.back-home:hover {
-    color: var(--neuro-blue);
-}
-
-/* Bloque “¿Ya tienes cuenta?” debajo del botón */
 .login-link {
     text-align: center;
     margin-top: 30px;
@@ -204,7 +146,6 @@
     text-decoration: underline;
 }
 
-/* Efecto de escala al hacer foco en .input-wrapper */
 .input-wrapper {
     position: relative;
     transition: transform 0.3s ease;
@@ -214,7 +155,30 @@
     transform: scale(1.02);
 }
 
-/* Responsive móvil */
+.navbar-minimal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    padding: 20px 0;
+    z-index: 1000;
+}
+
+.back-home {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-home:hover {
+    color: var(--neuro-blue);
+}
+
 @media (max-width: 576px) {
     .registerbox {
         margin: 20px;
@@ -223,9 +187,5 @@
 
     .registerbox h1 {
         font-size: 1.5rem;
-    }
-
-    .avatar {
-        width: 100px;
     }
 }
