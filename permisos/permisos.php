@@ -13,6 +13,7 @@ if (!defined('HOME_PATH')) {
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
+include_once HOME_PATH . 'componentes/head_component.php';
 
 // Mostrar mensajes si existen
 if (isset($_SESSION['mensaje'])) {
@@ -43,17 +44,8 @@ if (isset($_GET['editar'])) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permisos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="<?php echo BASE_URL; ?>estilos_bo/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <?php renderHead('Permisos'); ?>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard.css">
-    <link rel="icon" href="<?php echo BASE_URL; ?>logo/cerebro.svg" type="image/x-icon">
 </head>
 <body>
 <!-- Permisos Table -->

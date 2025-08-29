@@ -12,6 +12,7 @@ if (!defined('HOME_PATH')) {
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'cx/peticiones.php';
+include_once HOME_PATH . 'componentes/head_component.php';
 $permisos = listarRegistros('permisos');
 $usuarios = listarRegistros('usuario');
 $roles = listarRegistros('roles');
@@ -49,17 +50,8 @@ function obtenerColorRol($nombreRol) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Administración - Sinaptium</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="./estilos_bo/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="./css/dashboard.css">
-    <link rel="icon" href="./logo/cerebro.svg" type="image/x-icon">
+    <?php renderHead('Dashboard de Administración - Sinaptium'); ?>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard.css">
 </head>
 <body>
     <div class="row">

@@ -1,17 +1,21 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sinaptium - Áreas Académicas</title>
-    <link href="estilos_bo/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <?php renderHead('Sinaptium - Áreas Académicas'); ?>
     <link rel="stylesheet" href="css/estilos.css">
-    <link rel="icon" href="logo/cerebro.svg" type="image/x-icon">
 </head>
 <body>
     <div class="neuronal-background"></div>
