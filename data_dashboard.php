@@ -40,8 +40,6 @@ function obtenerColorRol($nombreRol) {
             return 'info';
         case 'instructor':
             return 'warning';
-        case 'estudiante':
-            return 'success';
         default:
             return 'secondary';
     }

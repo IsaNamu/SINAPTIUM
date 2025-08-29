@@ -99,7 +99,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                     $rolBadgeClass = 'bg-primary';
                                 } elseif (strpos($rolNombre, 'editor') !== false) {
                                     $rolBadgeClass = 'bg-info';
-                                } elseif (strpos($rolNombre, 'estudiante') !== false) {
+                                } elseif (strpos($rolNombre, 'Visualizador') !== false) {
                                     $rolBadgeClass = 'bg-success';
                                 } elseif (strpos($rolNombre, 'instructor') !== false) {
                                     $rolBadgeClass = 'bg-warning';

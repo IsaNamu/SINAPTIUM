@@ -28,7 +28,7 @@ if (empty($_POST["usuario"]) OR empty($_POST["correo"]) OR empty($_POST["passwor
         exit;
     } else {
         // Asignar rol por defecto
-        $rol = (isset($_POST["rol"])) ? $conexion->real_escape_string($_POST["rol"]) : 'estudiante';
+        $rol = (isset($_POST["rol"])) ? $conexion->real_escape_string($_POST["rol"]) : 'Visualizador';
         
         // Obtener ID del rol
         $resultado_rol = $conexion->query("SELECT id FROM roles WHERE nombre='$rol'");
