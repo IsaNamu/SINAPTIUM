@@ -1,11 +1,6 @@
 <?php
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'cx/peticiones.php';

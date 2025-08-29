@@ -1,5 +1,45 @@
 <?php
 session_start();
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+// Includes (para el servidor)
+include_once HOME_PATH . 'cx/peticiones.php';
+$permisos = listarRegistros('permisos');
+$usuarios = listarRegistros('usuario');
+$roles = listarRegistros('roles');
+
+// Contar usuarios por rol - FORMA CORRECTA
+$conteoPorRol = [];
+foreach ($roles as $rol) {
+    $conteoPorRol[$rol['id']] = 0; // Usamos el ID real del rol como clave
+}
+
+foreach ($usuarios as $usuario) {
+    if (isset($usuario['rol_id']) && isset($conteoPorRol[$usuario['rol_id']])) {
+        $conteoPorRol[$usuario['rol_id']]++;
+    }
+}
+
+function obtenerColorRol($nombreRol) {
+    switch (strtolower($nombreRol)) {
+        case 'administrador':
+            return 'primary';
+        case 'editor':
+            return 'info';
+        case 'instructor':
+            return 'warning';
+        case 'estudiante':
+            return 'success';
+        default:
+            return 'secondary';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -84,32 +124,25 @@ session_start();
 
                 <!-- Stats Cards -->
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <i class="fas fa-users"></i>
-                            <h2>142</h2>
-                            <p>Usuarios Totales</p>
+                        <div class="col-md-3">
+                            <div class="card stats-card">
+                                <i class="fas fa-users"></i>
+                                <h2><?php echo count($usuarios); ?></h2>
+                                <p>Usuarios Totales</p>
+                            </div>
                         </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="card stats-card">
                             <i class="fas fa-user-tag"></i>
-                            <h2>6</h2>
+                            <h2><?php echo count($roles); ?></h2>
                             <p>Roles</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="card stats-card">
                             <i class="fas fa-key"></i>
-                            <h2>18</h2>
+                            <h2><?php echo count($permisos); ?></h2>
                             <p>Permisos</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <i class="fas fa-clock"></i>
-                            <h2>3</h2>
-                            <p>Usuarios Nuevos (7d)</p>
                         </div>
                     </div>
                 </div>
@@ -123,28 +156,19 @@ session_start();
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <span>Roles del Sistema</span>
-                                <button class="btn btn-primary btn-sm">
-                                    <i class="fas fa-plus me-1"></i> Nuevo Rol
-                                </button>
                             </div>
                             <div class="card-body">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Administrador
-                                        <span class="badge bg-primary rounded-pill">5 usuarios</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Editor
-                                        <span class="badge bg-info rounded-pill">8 usuarios</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Instructor
-                                        <span class="badge bg-warning rounded-pill">12 usuarios</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Estudiante
-                                        <span class="badge bg-success rounded-pill">117 usuarios</span>
-                                    </li>
+                                    <?php foreach ($roles as $rol): ?>
+                                        <?php if (isset($conteoPorRol[$rol['id']]) && $conteoPorRol[$rol['id']] > 0): ?>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <?php echo htmlspecialchars($rol['nombre']); ?>
+                                                <span class="badge bg-<?php echo obtenerColorRol($rol['nombre']); ?> rounded-pill">
+                                                    <?php echo $conteoPorRol[$rol['id']]; ?> usuarios
+                                                </span>
+                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>
@@ -153,20 +177,12 @@ session_start();
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <span>Permisos</span>
-                                <button class="btn btn-primary btn-sm">
-                                    <i class="fas fa-plus me-1"></i> Nuevo Permiso
-                                </button>
                             </div>
                             <div class="card-body">
                                 <div class="d-flex flex-wrap gap-2">
-                                    <span class="badge bg-secondary p-2">lectura</span>
-                                    <span class="badge bg-secondary p-2">escritura</span>
-                                    <span class="badge bg-secondary p-2">eliminación</span>
-                                    <span class="badge bg-secondary p-2">administración</span>
-                                    <span class="badge bg-secondary p-2">crear_usuarios</span>
-                                    <span class="badge bg-secondary p-2">editar_usuarios</span>
-                                    <span class="badge bg-secondary p-2">eliminar_usuarios</span>
-                                    <span class="badge bg-secondary p-2">ver_reportes</span>
+                                    <?php foreach ($permisos as $permiso): ?>
+                                        <span class="badge bg-secondary"><?php echo htmlspecialchars($permiso['nombre']); ?></span>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
