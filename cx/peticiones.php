@@ -242,4 +242,88 @@ function buscarRegistros($tabla, $condiciones = [], $operador = 'AND') {
     
     return $datos;
 }
+
+/** 
+ * Metodo para ejecutar consultas SQL personalizadas
+ * @param string $sql Consulta SQL a ejecutar
+ * @param array $params Parámetros para consultas preparadas (opcional)
+ * @param bool $returnResult Si debe retornar resultados para SELECT (true) o solo éxito/error (false)
+ * @return array|bool Resultados de la consulta o éxito/error
+ */
+function peticionSQL($sql, $params = [], $returnResult = true) {
+    global $conexion;
+
+    // Si hay parámetros, usar consulta preparada
+    if (!empty($params)) {
+        $stmt = $conexion->prepare($sql);
+        
+        if (!$stmt) {
+            return ['error' => 'Error al preparar la consulta: ' . $conexion->error];
+        }
+        
+        // Construir tipos de parámetros
+        $types = '';
+        $bindParams = [];
+        
+        foreach ($params as $param) {
+            if (is_int($param)) {
+                $types .= 'i';
+            } elseif (is_double($param)) {
+                $types .= 'd';
+            } else {
+                $types .= 's';
+            }
+            $bindParams[] = $param;
+        }
+        
+        // Vincular parámetros
+        $stmt->bind_param($types, ...$bindParams);
+        
+        // Ejecutar consulta
+        $success = $stmt->execute();
+        
+        if (!$success) {
+            return ['error' => 'Error al ejecutar la consulta: ' . $stmt->error];
+        }
+        
+        // Si es una consulta SELECT y se requieren resultados
+        if ($returnResult && stripos(trim($sql), 'SELECT') === 0) {
+            $result = $stmt->get_result();
+            $datos = [];
+            
+            while ($fila = $result->fetch_assoc()) {
+                $datos[] = $fila;
+            }
+            
+            $stmt->close();
+            return $datos;
+        }
+        
+        // Para INSERT, UPDATE, DELETE
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+        
+        return $affectedRows > 0;
+    } 
+    else {
+        // Consulta sin parámetros (comportamiento original)
+        $resultado = $conexion->query($sql);
+
+        if (!$resultado) {
+            return ['error' => 'Error en la consulta: ' . $conexion->error];
+        }
+
+        // Si es una consulta SELECT
+        if ($returnResult && stripos(trim($sql), 'SELECT') === 0) {
+            $datos = [];
+            while ($fila = $resultado->fetch_assoc()) {
+                $datos[] = $fila;
+            }
+            return $datos;
+        }
+        
+        // Para INSERT, UPDATE, DELETE
+        return $conexion->affected_rows > 0;
+    }
+}
 ?>

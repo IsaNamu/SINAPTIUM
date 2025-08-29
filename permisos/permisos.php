@@ -1,4 +1,7 @@
 <?php   
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
 }
@@ -8,12 +11,8 @@ if (!defined('HOME_PATH')) {
 }
 
 // Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
-
-// Iniciar sesión para manejar mensajes
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 // Mostrar mensajes si existen
 if (isset($_SESSION['mensaje'])) {

@@ -1,6 +1,18 @@
 <?php
-session_start();
-include_once '../cx/peticiones.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+// Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
+include_once HOME_PATH . 'cx/peticiones.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id']);

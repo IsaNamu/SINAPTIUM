@@ -8,6 +8,7 @@ if (!defined('HOME_PATH')) {
 }
 
 // Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 
 // Iniciar sesión para manejar mensajes
@@ -254,7 +255,7 @@ if (isset($_GET['editar'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                    <button type="submit" class="btn btn-danger">Desactivar Usuario</button>
                 </div>
             </form>
         </div>

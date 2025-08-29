@@ -1,14 +1,18 @@
 <?php
-define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-
-// Includes (para el servidor)
-include_once HOME_PATH . 'cx/peticiones.php';
-
-// Iniciar sesión para manejar mensajes
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+// Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
+include_once HOME_PATH . 'cx/peticiones.php';
 
 // Mostrar mensajes si existen
 if (isset($_SESSION['mensaje'])) {
@@ -20,38 +24,41 @@ if (isset($_SESSION['mensaje'])) {
     unset($_SESSION['mensaje']);
 }
 
-// Obtener todos los usuarios
-$usuarios = listarRegistros('usuario');
+// Obtener todos los roles
+$roles = listarRegistros('roles');
 
 // Si hay error, mostrarlo
-if (isset($usuarios['error'])) {
-    echo '<div class="alert alert-danger">Error: ' . $usuarios['error'] . '</div>';
-    $usuarios = [];
+if (isset($roles['error'])) {
+    echo '<div class="alert alert-danger">Error: ' . $roles['error'] . '</div>';
+    $roles = [];
 }
 
-// Obtener los roles para mostrar los nombres en lugar de IDs
-$roles = listarRegistros('roles');
-$rolesMap = [];
-if (!isset($roles['error'])) {
-    foreach ($roles as $rol) {
-        $rolesMap[$rol['id']] = $rol['nombre'];
+// Obtener todos los permisos para usar en el modal
+$permisos = listarRegistros('permisos');
+if (isset($permisos['error'])) {
+    $permisos = [];
+}
+
+// Función para obtener los permisos de un rol específico
+function obtenerPermisosRol($rol_id) {
+    $query = "SELECT permiso_id FROM roles_x_permiso WHERE rol_id = ?";
+    $resultado = peticionSQL($query, [$rol_id], true);
+    
+    $permisos = [];
+    if (!isset($resultado['error']) && is_array($resultado)) {
+        foreach ($resultado as $fila) {
+            $permisos[] = $fila['permiso_id'];
+        }
     }
-} else {
-    // Si hay error al obtener roles, usar un mapa vacío
-    $rolesMap = [];
-}
-
-// Determinar si estamos en modo edición
-$modoEdicion = false;
-$usuarioEditar = null;
-if (isset($_GET['editar'])) {
-    $modoEdicion = true;
+    return $permisos;
 }
 ?>
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
+    <title>Roles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="<?php echo BASE_URL; ?>estilos_bo/css/bootstrap.min.css" rel="stylesheet">
@@ -62,18 +69,18 @@ if (isset($_GET['editar'])) {
     <link rel="icon" href="<?php echo BASE_URL; ?>logo/cerebro.svg" type="image/x-icon">
 </head>
 <body>
-<!-- Users Table -->
+<!-- Roles Table -->
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <span>Lista de Usuarios</span>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario" data-mode="create">
-            <i class="fas fa-plus me-1"></i> Nuevo Usuario
+        <span>Lista de Roles</span>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRol" data-mode="create">
+            <i class="fas fa-plus me-1"></i> Nuevo Rol
         </button>
     </div>
     <div class="card-body">
-        <?php if (empty($usuarios)): ?>
+        <?php if (empty($roles)): ?>
             <div class="alert alert-info">
-                No hay usuarios registrados en el sistema.
+                No hay roles registrados en el sistema.
             </div>
         <?php else: ?>
             <div class="table-responsive">
@@ -81,88 +88,43 @@ if (isset($_GET['editar'])) {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Correo</th>
-                            <th>Rol</th>
-                            <th>Estado</th>
-                            <th>Registro</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Permisos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($usuarios as $usuario): ?>
-                            <?php
-                            // Determinar clase del badge según el rol
-                            $rolBadgeClass = 'bg-secondary'; // Por defecto
-                            if (isset($rolesMap[$usuario['rol_id']])) {
-                                $rolNombre = strtolower($rolesMap[$usuario['rol_id']]);
-                                if (strpos($rolNombre, 'admin') !== false) {
-                                    $rolBadgeClass = 'bg-primary';
-                                } elseif (strpos($rolNombre, 'editor') !== false) {
-                                    $rolBadgeClass = 'bg-info';
-                                } elseif (strpos($rolNombre, 'estudiante') !== false) {
-                                    $rolBadgeClass = 'bg-success';
-                                } elseif (strpos($rolNombre, 'instructor') !== false) {
-                                    $rolBadgeClass = 'bg-warning';
-                                }
-                            }
-                            
-                            // Determinar estado (asumiendo que hay un campo 'activo' o 'estado')
-                            $estado = 'Activo';
-                            $estadoBadgeClass = 'badge-success';
-                            
-                            if (isset($usuario['activo']) && $usuario['activo'] == 0) {
-                                $estado = 'Inactivo';
-                                $estadoBadgeClass = 'badge-warning';
-                            } elseif (isset($usuario['estado'])) {
-                                $estado = $usuario['estado'];
-                                if ($estado == 'Inactivo') {
-                                    $estadoBadgeClass = 'badge-warning';
-                                } elseif ($estado == 'Bloqueado') {
-                                    $estadoBadgeClass = 'badge-danger';
-                                }
-                            }
-                            
-                            // Formatear fecha de registro
-                            $fechaRegistro = '';
-                            if (isset($usuario['fecha_creacion'])) {
-                                $fechaRegistro = date('Y-m-d', strtotime($usuario['fecha_creacion']));
-                            } elseif (isset($usuario['created_at'])) {
-                                $fechaRegistro = date('Y-m-d', strtotime($usuario['created_at']));
-                            }
-                            ?>
+                        <?php foreach ($roles as $rol): 
+                            $permisosRol = obtenerPermisosRol($rol['id']);
+                        ?>
                             <tr>
-                                <td><?php echo $usuario['id']; ?></td>
-                                <td><?php echo htmlspecialchars($usuario['usuario']); ?></td>
-                                <td><?php echo htmlspecialchars($usuario['correo']); ?></td>
+                                <td><?php echo $rol['id']; ?></td>
+                                <td><?php echo htmlspecialchars($rol['nombre']); ?></td>
+                                <td><?php echo htmlspecialchars($rol['descripcion'] ?? 'Sin descripción'); ?></td>
                                 <td>
-                                    <span class="badge <?php echo $rolBadgeClass; ?>">
-                                        <?php 
-                                        echo isset($rolesMap[$usuario['rol_id']]) 
-                                            ? htmlspecialchars($rolesMap[$usuario['rol_id']]) 
-                                            : 'Rol ' . $usuario['rol_id'];
-                                        ?>
-                                    </span>
+                                    <?php if (!empty($permisosRol)): ?>
+                                        <span class="badge bg-info"><?php echo count($permisosRol); ?> permisos</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-warning">Sin permisos</span>
+                                    <?php endif; ?>
                                 </td>
-                                <td><span class="badge <?php echo $estadoBadgeClass; ?>"><?php echo $estado; ?></span></td>
-                                <td><?php echo $fechaRegistro; ?></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary action-btn" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalUsuario"
+                                            data-bs-target="#modalRol"
                                             data-mode="edit"
-                                            data-id="<?php echo $usuario['id']; ?>"
-                                            data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-                                            data-rol="<?php echo $usuario['rol_id']; ?>"
-                                            data-estado="<?php echo isset($usuario['estado']) ? $usuario['estado'] : 'Activo'; ?>">
+                                            data-id="<?php echo $rol['id']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($rol['nombre']); ?>"
+                                            data-descripcion="<?php echo htmlspecialchars($rol['descripcion'] ?? ''); ?>"
+                                            data-permisos="<?php echo htmlspecialchars(implode(',', $permisosRol)); ?>">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger action-btn" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalEliminarUsuario"
-                                            data-id="<?php echo $usuario['id']; ?>"
-                                            data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>">
+                                            data-bs-target="#modalEliminarRol"
+                                            data-id="<?php echo $rol['id']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($rol['nombre']); ?>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -175,81 +137,84 @@ if (isset($_GET['editar'])) {
     </div>
 </div>
 
-<!-- Modal único para Crear/Editar Usuario -->
-<div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal único para Crear/Editar Rol -->
+<div class="modal fade" id="modalRol" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalUsuarioTitle">Crear Nuevo Usuario</h5>
+                <h5 class="modal-title" id="modalRolTitle">Crear Nuevo Rol</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?php echo BASE_URL; ?>usuarios/guardar_usuario.php" method="POST" id="formUsuario">
-                <input type="hidden" id="usuarioId" name="id">
+            <form action="<?php echo BASE_URL; ?>roles/guardar_rol.php" method="POST" id="formRol">
+                <input type="hidden" id="rolId" name="id">
                 <input type="hidden" id="formMode" name="mode" value="create">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="inputUsuario" class="form-label">Usuario</label>
-                        <input type="text" class="form-control" id="inputUsuario" name="usuario" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputCorreo" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control" id="inputCorreo" name="correo" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputPassword" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="inputPassword" name="password">
-                        <div class="form-text" id="passwordHelp">Requerida para nuevos usuarios</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="selectRol" class="form-label">Rol</label>
-                        <select class="form-select" id="selectRol" name="rol_id" required>
-                            <option value="">Seleccionar rol</option>
-                            <?php foreach ($roles as $rol): ?>
-                                <option value="<?php echo $rol['id']; ?>"><?php echo htmlspecialchars($rol['nombre']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3" id="estadoContainer">
-                        <label class="form-label">Estado</label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="activo" id="estadoActivo" value="1" checked>
-                                <label class="form-check-label" for="estadoActivo">Activo</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="inputNombre" class="form-label">Nombre del Rol</label>
+                                <input type="text" class="form-control" id="inputNombre" name="nombre" required>
+                                <div class="form-text">El nombre debe ser único (ej: Administrador, Editor, Usuario)</div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="activo" id="estadoInactivo" value="0">
-                                <label class="form-check-label" for="estadoInactivo">Inactivo</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="inputDescripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="inputDescripcion" name="descripcion" rows="3"></textarea>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Permisos</label>
+                        <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                            <?php if (!empty($permisos)): ?>
+                                <?php foreach ($permisos as $permiso): ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input permiso-checkbox" type="checkbox" 
+                                               name="permisos[]" value="<?php echo $permiso['id']; ?>" 
+                                               id="permiso-<?php echo $permiso['id']; ?>">
+                                        <label class="form-check-label" for="permiso-<?php echo $permiso['id']; ?>">
+                                            <?php echo htmlspecialchars($permiso['nombre']); ?>
+                                            <?php if (!empty($permiso['descripcion'])): ?>
+                                                <small class="text-muted">- <?php echo htmlspecialchars($permiso['descripcion']); ?></small>
+                                            <?php endif; ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="alert alert-warning">No hay permisos disponibles</div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" id="submitButton">Crear Usuario</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton">Crear Rol</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Modal para Eliminar Usuario -->
-<div class="modal fade" id="modalEliminarUsuario" tabindex="-1" aria-hidden="true">
+<!-- Modal para Eliminar Rol -->
+<div class="modal fade" id="modalEliminarRol" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Desactivar Usuario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Eliminar Rol</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label='Close'></button>
             </div>
 
-            <form action="<?php echo BASE_URL; ?>usuarios/eliminar_usuario.php" method="POST">
+            <form action="<?php echo BASE_URL; ?>roles/eliminar_rol.php" method="POST">
                 <input type="hidden" id="eliminarId" name="id">
                 <div class="modal-body">
-                    <p>¿Está seguro que desea desactivar el usuario <strong id="usuarioEliminar"></strong>?</p>
-                    <p class="text-danger">Esta acción no se puede deshacer.</p>
+                    <p>¿Está seguro que desea eliminar el rol <strong id="rolEliminar"></strong>?</p>
+                    <p class="text-danger">Esta acción eliminará también todas las asignaciones de permisos asociadas a este rol.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                    <button type="submit" class="btn btn-danger">Eliminar Rol</button>
                 </div>
             </form>
         </div>
@@ -262,79 +227,71 @@ if (isset($_GET['editar'])) {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Modal único para crear/editar
-    const modalUsuario = document.getElementById('modalUsuario');
-    if (modalUsuario) {
-        modalUsuario.addEventListener('show.bs.modal', function(event) {
+    const modalRol = document.getElementById('modalRol');
+    if (modalRol) {
+        modalRol.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             const mode = button.getAttribute('data-mode');
-            const form = document.getElementById('formUsuario');
-            const title = document.getElementById('modalUsuarioTitle');
+            const form = document.getElementById('formRol');
+            const title = document.getElementById('modalRolTitle');
             const submitButton = document.getElementById('submitButton');
-            const passwordInput = document.getElementById('inputPassword');
-            const passwordHelp = document.getElementById('passwordHelp');
-            const estadoContainer = document.getElementById('estadoContainer');
+            
+            // Desmarcar todos los checkboxes primero
+            document.querySelectorAll('.permiso-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
             
             if (mode === 'edit') {
                 // Modo edición
                 const id = button.getAttribute('data-id');
-                const usuario = button.getAttribute('data-usuario');
-                const correo = button.getAttribute('data-correo');
-                const rol = button.getAttribute('data-rol');
-                const estado = button.getAttribute('data-estado');  
+                const nombre = button.getAttribute('data-nombre');
+                const descripcion = button.getAttribute('data-descripcion');
+                const permisos = button.getAttribute('data-permisos').split(',');
                 
-                document.getElementById('usuarioId').value = id;
-                document.getElementById('inputUsuario').value = usuario;
-                document.getElementById('inputCorreo').value = correo;
-                document.getElementById('selectRol').value = rol;
+                document.getElementById('rolId').value = id;
+                document.getElementById('inputNombre').value = nombre;
+                document.getElementById('inputDescripcion').value = descripcion;
                 document.getElementById('formMode').value = 'edit';
                 
-                // Seleccionar el estado correcto
-                if (estado === 'Activo') {
-                    document.getElementById('estadoActivo').checked = true;
-                } else {
-                    document.getElementById('estadoInactivo').checked = true;
+                // Marcar los checkboxes de permisos
+                if (permisos.length > 0 && permisos[0] !== '') {
+                    permisos.forEach(permisoId => {
+                        const checkbox = document.getElementById('permiso-' + permisoId);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
                 }
                 
                 // Cambiar textos
-                title.textContent = 'Editar Usuario';
+                title.textContent = 'Editar Rol';
                 submitButton.textContent = 'Guardar Cambios';
-                passwordInput.required = false;
-                passwordHelp.textContent = 'Dejar vacío para mantener la contraseña actual';
-                estadoContainer.style.display = 'block';
-                
-                // Cambiar acción del formulario si es necesario
-                document.getElementById('formMode').value = 'edit';
             } else {
                 // Modo creación
                 document.getElementById('formMode').value = 'create';
                 form.reset();
-                document.getElementById('usuarioId').value = '';
+                document.getElementById('rolId').value = '';
                 
                 // Cambiar textos
-                title.textContent = 'Crear Nuevo Usuario';
-                submitButton.textContent = 'Crear Usuario';
-                passwordInput.required = true;
-                passwordHelp.textContent = 'Requerida para nuevos usuarios';
-                estadoContainer.style.display = 'none';
-                
-                // Asegurar que el formulario apunte a la acción correcta
-                document.getElementById('formMode').value = 'create';
+                title.textContent = 'Crear Nuevo Rol';
+                submitButton.textContent = 'Crear Rol';
             }
         });
     }
     
     // Modal de eliminación
-    const modalEliminar = document.getElementById('modalEliminarUsuario');
+    const modalEliminar = document.getElementById('modalEliminarRol');
     if (modalEliminar) {
         modalEliminar.addEventListener('show.bs.modal', function(event) {
             const button = event.relatedTarget;
             const id = button.getAttribute('data-id');
-            const usuario = button.getAttribute('data-usuario');
+            const nombre = button.getAttribute('data-nombre');
             
             modalEliminar.querySelector('#eliminarId').value = id;
-            modalEliminar.querySelector('#usuarioEliminar').textContent = usuario;
+            modalEliminar.querySelector('#rolEliminar').textContent = nombre;
         });
     }
 });
 </script>
 </body>
+</html>
