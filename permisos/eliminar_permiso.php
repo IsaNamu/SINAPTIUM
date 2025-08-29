@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'tipo' => 'danger',
             'texto' => 'ID de permiso no válido.'
         ];
-        header('Location: ' . BASE_URL . 'permisos/');
+        header('Location: ' . BASE_URL . 'dashboard.php?seccion=permisos');
         exit;
     }
     
@@ -35,5 +35,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-header('Location: ' . BASE_URL . 'permisos/');
+header('Location: ' . BASE_URL . 'dashboard.php?seccion=permisos');
 exit;

@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
 }
@@ -9,10 +11,14 @@ if (!defined('HOME_PATH')) {
 }
 
 // Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 $permisos = listarRegistros('permisos');
 $usuarios = listarRegistros('usuario');
 $roles = listarRegistros('roles');
+
+// Determinar la sección activa
+$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 
 // Contar usuarios por rol - FORMA CORRECTA
 $conteoPorRol = [];
@@ -26,20 +32,6 @@ foreach ($usuarios as $usuario) {
     }
 }
 
-function obtenerColorRol($nombreRol) {
-    switch (strtolower($nombreRol)) {
-        case 'administrador':
-            return 'primary';
-        case 'editor':
-            return 'info';
-        case 'instructor':
-            return 'warning';
-        case 'estudiante':
-            return 'success';
-        default:
-            return 'secondary';
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -68,33 +60,27 @@ function obtenerColorRol($nombreRol) {
                 
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link <?php echo $seccion == 'dashboard' ? 'active' : ''; ?>" href="?seccion=dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link <?php echo $seccion == 'usuarios' ? 'active' : ''; ?>" href="?seccion=usuarios">
                             <i class="fas fa-users"></i>
                             <span>Usuarios</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link <?php echo $seccion == 'roles' ? 'active' : ''; ?>" href="?seccion=roles">
                             <i class="fas fa-user-tag"></i>
                             <span>Roles</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link <?php echo $seccion == 'permisos' ? 'active' : ''; ?>" href="?seccion=permisos">
                             <i class="fas fa-key"></i>
                             <span>Permisos</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-cog"></i>
-                            <span>Configuración</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -115,79 +101,42 @@ function obtenerColorRol($nombreRol) {
             <!-- Main Content -->
             <div class="col-md-10 main-content">
                 <div class="header">
-                    <h4>Dashboard de Administración</h4>
+                    <h4>
+                        <?php 
+                        switch($seccion) {
+                            case 'dashboard': echo 'Dashboard de Administración'; break;
+                            case 'usuarios': echo 'Gestión de Usuarios'; break;
+                            case 'roles': echo 'Gestión de Roles'; break;
+                            case 'permisos': echo 'Gestión de Permisos'; break;
+                            default: echo 'Dashboard de Administración';
+                        }
+                        ?>
+                    </h4>
                     <div>
                         <span class="me-3">Hola, <?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
                         <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" class="rounded-circle" width="40" alt="Avatar">
                     </div>
                 </div>
 
-                <!-- Stats Cards -->
-                <div class="row">
-                        <div class="col-md-3">
-                            <div class="card stats-card">
-                                <i class="fas fa-users"></i>
-                                <h2><?php echo count($usuarios); ?></h2>
-                                <p>Usuarios Totales</p>
-                            </div>
-                        </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <i class="fas fa-user-tag"></i>
-                            <h2><?php echo count($roles); ?></h2>
-                            <p>Roles</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <i class="fas fa-key"></i>
-                            <h2><?php echo count($permisos); ?></h2>
-                            <p>Permisos</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Users Table -->
-                <?php include_once './usuarios/usuarios.php';?>
-
-                <!-- Roles and Permissions -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span>Roles del Sistema</span>
-                            </div>
-                            <div class="card-body">
-                                <ul class="list-group list-group-flush">
-                                    <?php foreach ($roles as $rol): ?>
-                                        <?php if (isset($conteoPorRol[$rol['id']]) && $conteoPorRol[$rol['id']] > 0): ?>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <?php echo htmlspecialchars($rol['nombre']); ?>
-                                                <span class="badge bg-<?php echo obtenerColorRol($rol['nombre']); ?> rounded-pill">
-                                                    <?php echo $conteoPorRol[$rol['id']]; ?> usuarios
-                                                </span>
-                                            </li>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <span>Permisos</span>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <?php foreach ($permisos as $permiso): ?>
-                                        <span class="badge bg-secondary"><?php echo htmlspecialchars($permiso['nombre']); ?></span>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                // Renderizar la sección correspondiente
+                switch($seccion) {
+                    case 'dashboard':
+                        include './data_dashboard.php';
+                        break;
+                    case 'usuarios':
+                        include './usuarios/usuarios.php';
+                        break;
+                    case 'roles':
+                        include './roles/roles.php';
+                        break;
+                    case 'permisos':
+                        include './permisos/permisos.php';
+                        break;
+                    default:
+                        include './data_dashboard.php';
+                }
+                ?>
             </div>
         </div>
     </div>

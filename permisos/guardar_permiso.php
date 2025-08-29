@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'tipo' => 'danger',
             'texto' => 'El nombre del permiso es obligatorio.'
         ];
-        header('Location: ' . BASE_URL . 'permisos/');
+        header('Location: ' . BASE_URL . 'dashboard.php?seccion=permisos');
         exit;
     }
     
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $accion = 'actualizado';
     } else {
         // Modo creación
-        $resultado = crearRegistro('permisos', $datos);
+        $resultado = insertarRegistro('permisos', $datos);
         $accion = 'creado';
     }
     
@@ -53,5 +53,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-header('Location: ' . BASE_URL . 'permisos/');
+header('Location: ' . BASE_URL . 'dashboard.php?seccion=permisos');
 exit;
