@@ -69,7 +69,7 @@ session_start();
                         <div class="area-icon">🏫</div>
                         <h3 class="area-title">Orientación Vocacional</h3>
                         <p class="mb-0">A través de un test, conoce que clase de carreras estudiantiles searian las mejores para usted.</p>
-                        <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="orientacion_vocacional/orientacion_vocacional.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>
             </div>
