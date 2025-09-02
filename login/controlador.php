@@ -1,9 +1,24 @@
 <?php
-// Iniciar sesión al principio del script
-session_start();
+// Iniciar sesión y configurar constantes
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
 
 if (empty($_POST["usuario"]) || empty($_POST["password"])) {
-    echo '<div class="alert alert-danger">LOS CAMPOS ESTÁN VACÍOS</div>';
+    $_SESSION['mensaje'] = [
+        'tipo' => 'danger',
+        'texto' => 'TODOS LOS CAMPOS SON OBLIGATORIOS'
+    ];
+    header("Location: " . BASE_URL . "login/login.php");
+    exit;
+
 } else {
     $usuario = trim($_POST["usuario"]);
     $clave_ingresada = $_POST["password"];
@@ -39,7 +54,7 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             $_SESSION['rol_id'] = $datos->rol_id;
             $_SESSION['rol_nombre'] = $datos->rol_nombre;
             $_SESSION['rol_descripcion'] = $datos->rol_descripcion;
-            $_SESSION['permisos'] = explode(',', $datos->permisos); // Convertir a array
+            $_SESSION['permisos'] = !empty($datos->permisos) ? explode(',', $datos->permisos) : [];
             $_SESSION['fecha_creacion'] = $datos->fecha_creacion;
             $_SESSION['logged_in'] = true;
             $_SESSION['last_activity'] = time(); // Para control de tiempo de sesión
@@ -48,10 +63,20 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             header("location:../index.php");
             exit;
         } else {
-            echo '<div class="alert alert-danger">CONTRASEÑA INCORRECTA</div>';
+            $_SESSION['mensaje'] = [
+                'tipo' => 'danger',
+                'texto' => 'CONTRASEÑA INCORRECTA'
+            ];
+            header("Location: " . BASE_URL . "login/login.php");
+            exit;
         }
     } else {
-        echo '<div class="alert alert-danger">USUARIO NO ENCONTRADO</div>';
+        $_SESSION['mensaje'] = [
+            'tipo' => 'danger',
+            'texto' => 'USUARIO NO ENCONTRADO'
+        ];
+        header("Location: " . BASE_URL . "login/login.php");
+        exit;
     }
     
     $stmt->close();

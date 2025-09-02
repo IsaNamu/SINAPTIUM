@@ -1,24 +1,26 @@
 <?php
 // Al inicio del archivo register.php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
 $mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
 unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
+include_once HOME_PATH . 'componentes/head_component.php';
 ?>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sinaptium - Registro</title>
-    <link href="../estilos_bo/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/estilos.css">
-    <link rel="stylesheet" href="../css/login.css">
-    <link rel="icon" href="../logo/cerebro.svg" type="image/x-icon">
-    <link rel="stylesheet" href="../css/register.css">
-    <link rel="icon" href="../logo/cerebrso.svg" type="image/x-icon">
+    <?php renderHead('Sinaptium - Registro'); ?>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/register.css">
+
 </head>
 <body>
     <div class="neuronal-background"></div>

@@ -1,9 +1,19 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
 <html lang="es">
 <head>
+    <?php renderHead('Sobre Nosotros - Sinaptium'); ?>
+    <link rel="stylesheet" href="css/estilos.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sobre Nosotros - Sinaptium</title>
@@ -69,7 +79,8 @@ session_start();
     .timeline-icon { left: -55px !important; right: auto !important; }
 }
 </style>
-</head>
+
+ </head>
 <body>
     <div class="neuronal-background"></div>
 

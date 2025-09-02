@@ -1,9 +1,21 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
+if (!defined('HOME_PATH')) {
+    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
+
+// Includes (para el servidor)
+include_once HOME_PATH . 'cx/peticiones.php';
 
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: ./login/login.php");
+    header("Location: " . BASE_URL . "login/login.php");
     exit;
 }
 
@@ -13,7 +25,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     // Cerrar sesión por inactividad
     session_unset();
     session_destroy();
-    header("Location: ./login/login.php?reason=inactivity");
+    header("Location: " . BASE_URL . "login/login.php?reason=inactivity");
     exit;
 }
 
