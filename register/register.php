@@ -20,6 +20,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
 <head>
     <?php renderHead('Sinaptium - Registro'); ?>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/register.css">
+
 </head>
 <body>
     <div class="neuronal-background"></div>
@@ -51,7 +52,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                     <label for="usuario">Usuario</label>
                     <input type="text" name="usuario" id="usuario" placeholder="Ingrese su usuario" required>
                 </div>
-                
+
                 <div class="input-wrapper">
                     <label for="correo">Correo Electrónico</label>
                     <input type="email" name="correo" id="correo" placeholder="Ingrese su correo electrónico" required>

@@ -1,0 +1,32 @@
+-- Tabla para preguntas del test
+CREATE TABLE preguntas_test (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pregunta TEXT NOT NULL,
+    opcion_visual VARCHAR(255) NOT NULL,
+    opcion_auditivo VARCHAR(255) NOT NULL,
+    opcion_kinestesico VARCHAR(255) NOT NULL
+);
+
+-- Tabla para recursos de ciencias naturales
+CREATE TABLE recursos_ciencias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(255) NOT NULL,
+    descripcion TEXT NOT NULL,
+    tipo ENUM('visual', 'auditivo', 'kinestesico') NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    imagen_url VARCHAR(255) NULL
+);
+
+-- Insertar algunas preguntas de ejemplo
+INSERT INTO preguntas_test (pregunta, opcion_visual, opcion_auditivo, opcion_kinestesico) VALUES
+('Cuando estudio, prefiero:', 'Ver diagramas y gráficos', 'Escuchar explicaciones', 'Hacer ejercicios prácticos'),
+('En mi tiempo libre, disfruto:', 'Ver películas o leer', 'Escuchar música o podcasts', 'Hacer deporte o manualidades'),
+('Para recordar información, me resulta más fácil:', 'Visualizarla en mi mente', 'Repetirla en voz alta', 'Escribirla o hacer algo con ella'),
+('En una conferencia, prefiero:', 'Tener presentaciones visuales', 'Solo escuchar al expositor', 'Participar en actividades prácticas'),
+('Cuando tengo que aprender algo nuevo, primero:', 'Busco imágenes o videos', 'Pido que me lo expliquen', 'Intento hacerlo yo mismo');
+
+-- Insertar algunos recursos de ejemplo
+INSERT INTO recursos_ciencias (titulo, descripcion, tipo, url, imagen_url) VALUES
+('Anatomía Humana en 3D', 'Recorrido visual por los sistemas del cuerpo humano', 'visual', 'visual.php', '../img/anatomia.jpg'),
+('Podcast: El Origen de las Especies', 'Audio explicativo sobre la teoría de Darwin', 'auditivo', 'auditivo.php', '../img/origen_especies.jpg'),
+('Laboratorio Virtual de Química', 'Simulador interactivo de experimentos químicos', 'kinestesico', 'kinestesico.php', '../img/lab_quimica.jpg');
