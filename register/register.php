@@ -16,6 +16,7 @@ unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/estilos.css">
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="icon" href="../logo/cerebro.svg" type="image/x-icon">
     <link rel="stylesheet" href="../css/register.css">
     <link rel="icon" href="../logo/cerebrso.svg" type="image/x-icon">
 </head>
@@ -49,7 +50,7 @@ unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
                     <label for="usuario">Usuario</label>
                     <input type="text" name="usuario" id="usuario" placeholder="Ingrese su usuario" required>
                 </div>
-                
+
                 <div class="input-wrapper">
                     <label for="correo">Correo Electrónico</label>
                     <input type="email" name="correo" id="correo" placeholder="Ingrese su correo electrónico" required>

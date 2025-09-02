@@ -34,15 +34,6 @@ session_start();
                 <div class="search-container">
                     <input type="text" id="searchBooks" placeholder="Buscar libros por título o autor..." class="search-input">
                 </div>
-                
-                <div class="category-tags">
-                    <div class="category-tag active" data-category="all">Todos</div>
-                    <div class="category-tag" data-category="literatura">Literatura</div>
-                    <div class="category-tag" data-category="autoayuda">Autoayuda</div>
-                    <div class="category-tag" data-category="ciencia">Ciencia</div>
-                    <div class="category-tag" data-category="filosofia">Filosofía</div>
-                    <div class="category-tag" data-category="historia">Historia</div>
-                </div>
 
                 <div class="book-grid" id="bookGrid">
                     <!-- Libro 1 -->
@@ -84,7 +75,7 @@ session_start();
                             <img src="https://www.tornamesa.co/imagenes/9789588/978958888621.GIF" alt="Portada Cien años de soledad" class="img-fluid">
                         </div>
                         <div class="book-info">
-                            <h5><a href="pdfs/GABRIEL GARCÍA MARQUEZ - Cien años de soledad.pdf" target="_blank">Cien años de soledad</a></h5>
+                            <h5><a href="pdfs/gabo.pdf" target="_blank">Cien años de soledad</a></h5>
                             <p class="book-author">Gabriel García Márquez</p>
                             <span class="badge book-badge bg-purple">Literatura</span>
                         </div>

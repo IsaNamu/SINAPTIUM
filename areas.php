@@ -28,12 +28,13 @@ session_start();
             </div>
         </div>
     </header>
-
     <section class="section-padding">
         <div class="container">
+            <!-- Fila responsiva: 1 columna en móvil, 2 en tablet, 4 en escritorio -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                
+                <!-- Inglés -->
                 <div class="col" data-aos="fade-up" data-aos-delay="100">
-                <div class="col" data-aos="fade-up" data-aos-delay="200">
                     <div class="area-card text-center">
                         <div class="area-icon">🌎</div>
                         <h3 class="area-title">Inglés</h3>
@@ -41,12 +42,34 @@ session_start();
                         <a href="ingles/ingles.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>
-                <div class="col" data-aos="fade-up" data-aos-delay="300">
+
+                <!-- Sociales -->
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
                     <div class="area-card text-center">
                         <div class="area-icon">🏛️</div>
                         <h3 class="area-title">Sociales</h3>
                         <p class="mb-0">Comprende la historia, geografía y sociedad a través de experiencias inmersivas.</p>
-                        <a href="sociales/sociales.html" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="sociales/sociales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    </div>
+                </div>
+
+                <!-- Ciencias Naturales -->
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="area-card text-center">
+                        <div class="area-icon">🍀</div>
+                        <h3 class="area-title">Ciencias Naturales</h3>
+                        <p class="mb-0">Explora y aprende sobre física, química y biología con enfoques neuroeducativos.</p>
+                        <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    </div>
+                </div>
+
+                <!-- Orientación Vocacional -->
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="area-card text-center">
+                        <div class="area-icon">🏫</div>
+                        <h3 class="area-title">Orientación Vocacional</h3>
+                        <p class="mb-0">A través de un test, conoce que clase de carreras estudiantiles searian las mejores para usted.</p>
+                        <a href="orientacion_vocacional/orientacion_vocacional.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>     
             </div>
@@ -57,7 +80,6 @@ session_start();
                     <p class="mb-0">Explora y aprende sobre física, química y blogía con enfoques neuroeducativos.</p>
                     <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                 </div>
-            </div>
             </div>
         </div>
     </section>
