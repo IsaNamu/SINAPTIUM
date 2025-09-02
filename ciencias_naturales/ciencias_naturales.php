@@ -59,7 +59,7 @@
                     <div class="resource-card visual-card h-100">
                         <h4 class="card-title">Recursos Visuales</h4>
                         <p class="card-text">Si eres visual, aprende con diagramas, fotos y videos de experimentos.</p>
-                        <a href="ciencias_naturales_visual.html" class="btn btn-outline-light mt-auto">Descubre Más</a>
+                        <a href="ciencias_naturales_visual.php" class="btn btn-outline-light mt-auto">Descubre Más</a>
                     </div>
                 </div>
                 <div class="col-md-6">

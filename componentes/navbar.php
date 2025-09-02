@@ -44,7 +44,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <?php echo htmlspecialchars($_SESSION['usuario']); ?>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="./logout.php">Cerrar Sesión</a></li>
+                            <li><a class="dropdown-item" href="../logout.php">Cerrar Sesión</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
