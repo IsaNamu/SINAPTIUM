@@ -11,7 +11,6 @@ if (!defined('HOME_PATH')) {
 }
 
 // Includes (para el servidor)
-include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 
 // Verificar si el usuario ha iniciado sesión
