@@ -4,6 +4,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Resto del código...
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
+}
+
 if (!defined('HOME_PATH')) {
     define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
 }

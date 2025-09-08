@@ -12,7 +12,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link <?php echo ($current_page == 'index.php' || $current_page == '') ? 'active' : ''; ?>" href="index.php">
+                    <a class="nav-link <?php echo ($current_page == '/' || $current_page == '') ? 'active' : ''; ?>" href="/">
                         Inicio
                     </a>
                 </li>
@@ -50,7 +50,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php else: ?>
                     <!-- Mostrar cuando no hay sesión activa -->
                     <li class="nav-item">
-                        <a class="btn btn-glow btn-lg me-3" href="login/login.php">Login</a>
+                        <a class="btn btn-glow btn-lg me-3" href="login">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>

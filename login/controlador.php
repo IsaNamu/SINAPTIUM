@@ -16,7 +16,7 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
         'tipo' => 'danger',
         'texto' => 'TODOS LOS CAMPOS SON OBLIGATORIOS'
     ];
-    header("Location: " . BASE_URL . "login/login.php");
+    header("Location: " . BASE_URL . "login");
     exit;
 
 } else {
@@ -60,14 +60,14 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             $_SESSION['last_activity'] = time(); // Para control de tiempo de sesión
             
             // Redirigir al dashboard o página principal
-            header("location:../index.php");
+            header("location:/");
             exit;
         } else {
             $_SESSION['mensaje'] = [
                 'tipo' => 'danger',
                 'texto' => 'CONTRASEÑA INCORRECTA'
             ];
-            header("Location: " . BASE_URL . "login/login.php");
+            header("Location: " . BASE_URL . "login");
             exit;
         }
     } else {
@@ -75,7 +75,7 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             'tipo' => 'danger',
             'texto' => 'USUARIO NO ENCONTRADO'
         ];
-        header("Location: " . BASE_URL . "login/login.php");
+        header("Location: " . BASE_URL . "login");
         exit;
     }
     

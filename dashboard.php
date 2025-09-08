@@ -78,7 +78,7 @@ foreach ($usuarios as $usuario) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../index.php">
+                        <a class="nav-link" href="/">
                             <i class="fas fa-home"></i>
                             <span>Inicio</span>
                         </a>

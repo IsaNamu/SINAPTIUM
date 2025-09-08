@@ -28,7 +28,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <!-- Navegación mínima -->
     <nav class="navbar-minimal">
         <div class="container">
-            <a href="../login/login.php" class="back-home">
+            <a href="../login" class="back-home">
                 <span>←</span> Volver al login
             </a>
         </div>
@@ -73,7 +73,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
 
             <div class="login-link">
                 <p>¿Ya tienes una cuenta?</p>
-                <a href="../login/login.php">Iniciar Sesión</a>
+                <a href="../login">Iniciar Sesión</a>
             </div>
         </div>
     </div>

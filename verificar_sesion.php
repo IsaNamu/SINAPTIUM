@@ -15,7 +15,7 @@ include_once HOME_PATH . 'cx/peticiones.php';
 
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: " . BASE_URL . "login/login.php");
+    header("Location: " . BASE_URL . "login/");
     exit;
 }
 
@@ -25,7 +25,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
     // Cerrar sesión por inactividad
     session_unset();
     session_destroy();
-    header("Location: " . BASE_URL . "login/login.php?reason=inactivity");
+    header("Location: " . BASE_URL . "login?reason=inactivity");
     exit;
 }
 

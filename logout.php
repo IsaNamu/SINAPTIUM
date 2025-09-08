@@ -19,6 +19,6 @@ session_unset();
 session_destroy();
 
 // Redirigir al login
-header("Location: ./login/login.php");
+header("Location: ./login");
 exit;
 ?>

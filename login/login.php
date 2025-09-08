@@ -1,5 +1,4 @@
 <?php
-// login.php - Agregar esto al principio del archivo, antes de <!doctype html>
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,7 +12,7 @@ if (!defined('HOME_PATH')) {
 
 // Si el usuario ya está logueado, redirigirlo a la página principal
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header("Location: " . BASE_URL . "index.php");
+    header("Location: " . BASE_URL . "/");
     exit;
 }
 if (isset($_SESSION['mensaje'])) {
@@ -39,7 +38,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <!-- Navegación mínima -->
     <nav class="navbar-minimal">
         <div class="container">
-            <a href="<?php echo BASE_URL; ?>index.php" class="back-home">
+            <a href="<?php echo BASE_URL; ?>/" class="back-home">
                 <span>←</span> Volver al Inicio
             </a>
         </div>
