@@ -1,11 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>

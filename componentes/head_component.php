@@ -1,7 +1,5 @@
 <?php
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 function renderHead($title = 'Sinaptium') {
     ?>

@@ -1,17 +1,5 @@
-
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Resto del código...
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
@@ -202,7 +190,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 <!-- Botones renovados -->
                 <div class="text-center mt-5">
                     <a href="areas.php" class="btn-neuro me-3">Explora Áreas</a>
-                    <a href="biblioteca.php" class="btn-neuro btn-outline-neuro">Biblioteca</a>
+                    <a href="biblioteca/" class="btn-neuro btn-outline-neuro">Biblioteca</a>
                 </div>
             </div>
         </div>

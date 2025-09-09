@@ -39,6 +39,52 @@ CREATE INDEX idx_roles_x_permiso_permiso ON roles_x_permiso(permiso_id);
 CREATE INDEX idx_roles_x_permiso_rol ON roles_x_permiso(rol_id);
 CREATE INDEX idx_usuario_rol ON usuario(rol_id);
 
+-- 1. Tabla de categorías (para normalizar el campo categoría)
+CREATE TABLE IF NOT EXISTS categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Tabla de autores (para normalizar el campo autor)
+CREATE TABLE IF NOT EXISTS autores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100),
+    biografia TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Tabla principal de biblioteca (simplificada)
+CREATE TABLE IF NOT EXISTS biblioteca (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    enlace VARCHAR(500) NOT NULL,
+    imagen VARCHAR(500) NULL,
+    archivo_pdf VARCHAR(500) NULL,
+    categoria_id INT,
+    autor_id INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL,
+    FOREIGN KEY (autor_id) REFERENCES autores(id) ON DELETE SET NULL
+);
+
+-- 4. Insertar categorías predefinidas
+INSERT IGNORE INTO categorias (nombre) VALUES 
+('Filosofía'),
+('Autoayuda'),
+('Literatura'),
+('Ciencia'),
+('Historia');
+
+-- 5. Crear índices para mejor rendimiento
+CREATE INDEX IF NOT EXISTS idx_biblioteca_titulo ON biblioteca(titulo);
+CREATE INDEX IF NOT EXISTS idx_biblioteca_categoria ON biblioteca(categoria_id);
+CREATE INDEX IF NOT EXISTS idx_biblioteca_autor ON biblioteca(autor_id);
+CREATE INDEX IF NOT EXISTS idx_autores_nombre ON autores(nombre, apellido);
+
 
 -- Editar tabla usuario para agregar columna estado y fecha_modificacion
 ALTER TABLE usuario 

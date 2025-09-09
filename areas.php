@@ -1,14 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
@@ -63,7 +54,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                         <div class="area-icon">🍀</div>
                         <h3 class="area-title">Ciencias Naturales</h3>
                         <p class="mb-0">Explora y aprende sobre física, química y biología con enfoques neuroeducativos.</p>
-                        <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="ciencias_naturales" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>
 
@@ -82,7 +73,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                     <div class="area-icon">🍀</div>
                     <h3 class="area-title">Ciencias Naturales</h3>
                     <p class="mb-0">Explora y aprende sobre física, química y blogía con enfoques neuroeducativos.</p>
-                    <a href="ciencias_naturales/ciencias_naturales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    <a href="ciencias_naturales" class="btn btn-glow mt-3"><span>Explorar</span></a>
                 </div>
             </div>
         </div>
