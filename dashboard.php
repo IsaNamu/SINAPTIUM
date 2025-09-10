@@ -23,7 +23,6 @@ foreach ($usuarios as $usuario) {
         $conteoPorRol[$usuario['rol_id']]++;
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -48,6 +47,14 @@ foreach ($usuarios as $usuario) {
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    <?php if (isset($_SESSION['permisos']) && in_array('biblioteca:Lee', $_SESSION['permisos'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $seccion == 'biblioteca' ? 'active' : ''; ?>" href="?seccion=biblioteca">
+                                <i class="fas fa-book"></i>
+                                <span>Biblioteca</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <?php if (isset($_SESSION['permisos']) && in_array('usuario:Lee', $_SESSION['permisos'])): ?>
                         <li class="nav-item">
                             <a class="nav-link <?php echo $seccion == 'usuarios' ? 'active' : ''; ?>" href="?seccion=usuarios">
@@ -56,18 +63,22 @@ foreach ($usuarios as $usuario) {
                             </a>
                         </li>
                     <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $seccion == 'roles' ? 'active' : ''; ?>" href="?seccion=roles">
-                            <i class="fas fa-user-tag"></i>
-                            <span>Roles</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $seccion == 'permisos' ? 'active' : ''; ?>" href="?seccion=permisos">
-                            <i class="fas fa-key"></i>
-                            <span>Permisos</span>
-                        </a>
-                    </li>
+                    <?php if (isset($_SESSION['permisos']) && in_array('rol:Lee', $_SESSION['permisos'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $seccion == 'roles' ? 'active' : ''; ?>" href="?seccion=roles">
+                                <i class="fas fa-user-tag"></i>
+                                <span>Roles</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['permisos']) && in_array('permiso:Lee', $_SESSION['permisos'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $seccion == 'permisos' ? 'active' : ''; ?>" href="?seccion=permisos">
+                                <i class="fas fa-key"></i>
+                                <span>Permisos</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="/">
                             <i class="fas fa-home"></i>
@@ -93,6 +104,7 @@ foreach ($usuarios as $usuario) {
                             case 'usuarios': echo 'Gestión de Usuarios'; break;
                             case 'roles': echo 'Gestión de Roles'; break;
                             case 'permisos': echo 'Gestión de Permisos'; break;
+                            case 'biblioteca': echo 'Gestionar biblioteca'; break;
                             default: echo 'Dashboard de Administración';
                         }
                         ?>
@@ -117,6 +129,9 @@ foreach ($usuarios as $usuario) {
                         break;
                     case 'permisos':
                         include './permisos/permisos.php';
+                        break;
+                    case 'biblioteca':
+                        include './biblioteca/dashboard.php';
                         break;
                     default:
                         include './data_dashboard.php';
