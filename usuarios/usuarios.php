@@ -1,14 +1,12 @@
 <?php
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';
+if (!isset($_SESSION['permisos']) || !in_array('usuario:Lee', $_SESSION['permisos'])){
+    header("Location: " . BASE_URL);
+    exit;
+}
 include_once HOME_PATH . 'cx/peticiones.php';
 
 // Iniciar sesión para manejar mensajes
@@ -48,11 +46,8 @@ if (!isset($roles['error'])) {
 }
 
 // Determinar si estamos en modo edición
-$modoEdicion = false;
-$usuarioEditar = null;
-if (isset($_GET['editar'])) {
-    $modoEdicion = true;
-}
+
+$modoEdicion = (isset($_SESSION['permisos']) && in_array('usuario:Actualiza', $_SESSION['permisos']) && isset($_GET['editar'])); 
 
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
@@ -66,9 +61,11 @@ include_once HOME_PATH . 'componentes/head_component.php';
         <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Lista de Usuarios</span>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario" data-mode="create">
-                <i class="fas fa-plus me-1"></i> Nuevo Usuario
-            </button>
+            <?php if (isset($_SESSION['permisos']) && in_array('usuario:Crea', $_SESSION['permisos'])): ?>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario" data-mode="create">
+                    <i class="fas fa-plus me-1"></i> Nuevo Usuario
+                </button>
+            <?php endif; ?>
         </div>
         <div class="card-body">
             <?php if (empty($usuarios)): ?>
@@ -86,50 +83,52 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                 <th>Rol</th>
                                 <th>Estado</th>
                                 <th>Registro</th>
-                                <th>Acciones</th>
+                                <?php if (isset($_SESSION['permisos']) && in_array('usuario:Actualiza', $_SESSION['permisos']) || isset($_SESSION['permisos']) && in_array('usuario:Elimina', $_SESSION['permisos'])): ?>
+                                    <th>Acciones</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($usuarios as $usuario): ?>
                                 <?php
-                                // Determinar clase del badge según el rol
-                                $rolBadgeClass = 'bg-secondary'; // Por defecto
-                                if (isset($rolesMap[$usuario['rol_id']])) {
-                                    $rolNombre = strtolower($rolesMap[$usuario['rol_id']]);
-                                    if (strpos($rolNombre, 'admin') !== false) {
-                                        $rolBadgeClass = 'bg-primary';
-                                    } elseif (strpos($rolNombre, 'editor') !== false) {
-                                        $rolBadgeClass = 'bg-info';
-                                    } elseif (strpos($rolNombre, 'Visualizador') !== false) {
-                                        $rolBadgeClass = 'bg-success';
-                                    } elseif (strpos($rolNombre, 'instructor') !== false) {
-                                        $rolBadgeClass = 'bg-warning';
+                                    // Determinar clase del badge según el rol
+                                    $rolBadgeClass = 'bg-secondary'; // Por defecto
+                                    if (isset($rolesMap[$usuario['rol_id']])) {
+                                        $rolNombre = strtolower($rolesMap[$usuario['rol_id']]);
+                                        if (strpos($rolNombre, 'admin') !== false) {
+                                            $rolBadgeClass = 'bg-primary';
+                                        } elseif (strpos($rolNombre, 'editor') !== false) {
+                                            $rolBadgeClass = 'bg-info';
+                                        } elseif (strpos($rolNombre, 'Visualizador') !== false) {
+                                            $rolBadgeClass = 'bg-success';
+                                        } elseif (strpos($rolNombre, 'instructor') !== false) {
+                                            $rolBadgeClass = 'bg-warning';
+                                        }
                                     }
-                                }
-                                
-                                // Determinar estado (asumiendo que hay un campo 'activo' o 'estado')
-                                $estado = 'Activo';
-                                $estadoBadgeClass = 'badge-success';
-                                
-                                if (isset($usuario['activo']) && $usuario['activo'] == 0) {
-                                    $estado = 'Inactivo';
-                                    $estadoBadgeClass = 'badge-warning';
-                                } elseif (isset($usuario['estado'])) {
-                                    $estado = $usuario['estado'];
-                                    if ($estado == 'Inactivo') {
+                                    
+                                    // Determinar estado (asumiendo que hay un campo 'activo' o 'estado')
+                                    $estado = 'Activo';
+                                    $estadoBadgeClass = 'badge-success';
+                                    
+                                    if (isset($usuario['activo']) && $usuario['activo'] == 0) {
+                                        $estado = 'Inactivo';
                                         $estadoBadgeClass = 'badge-warning';
-                                    } elseif ($estado == 'Bloqueado') {
-                                        $estadoBadgeClass = 'badge-danger';
+                                    } elseif (isset($usuario['estado'])) {
+                                        $estado = $usuario['estado'];
+                                        if ($estado == 'Inactivo') {
+                                            $estadoBadgeClass = 'badge-warning';
+                                        } elseif ($estado == 'Bloqueado') {
+                                            $estadoBadgeClass = 'badge-danger';
+                                        }
                                     }
-                                }
-                                
-                                // Formatear fecha de registro
-                                $fechaRegistro = '';
-                                if (isset($usuario['fecha_creacion'])) {
-                                    $fechaRegistro = date('Y-m-d', strtotime($usuario['fecha_creacion']));
-                                } elseif (isset($usuario['created_at'])) {
-                                    $fechaRegistro = date('Y-m-d', strtotime($usuario['created_at']));
-                                }
+                                    
+                                    // Formatear fecha de registro
+                                    $fechaRegistro = '';
+                                    if (isset($usuario['fecha_creacion'])) {
+                                        $fechaRegistro = date('Y-m-d', strtotime($usuario['fecha_creacion']));
+                                    } elseif (isset($usuario['created_at'])) {
+                                        $fechaRegistro = date('Y-m-d', strtotime($usuario['created_at']));
+                                    }
                                 ?>
                                 <tr>
                                     <td><?php echo $usuario['id']; ?></td>
@@ -146,27 +145,35 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                     </td>
                                     <td><span class="badge <?php echo $estadoBadgeClass; ?>"><?php echo $estado; ?></span></td>
                                     <td><?php echo $fechaRegistro; ?></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary action-btn" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalUsuario"
-                                                data-mode="edit"
-                                                data-id="<?php echo $usuario['id']; ?>"
-                                                data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>"
-                                                data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-                                                data-rol="<?php echo $usuario['rol_id']; ?>"
-                                                data-estado="<?php echo isset($usuario['estado']) ? $usuario['estado'] : 'Activo'; ?>">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger action-btn" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalEliminarUsuario"
-                                                data-id="<?php echo $usuario['id']; ?>"
-                                                data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                    <?php if (isset($_SESSION['permisos']) && in_array('usuario:Actualiza', $_SESSION['permisos']) || isset($_SESSION['permisos']) && in_array('usuario:Elimina', $_SESSION['permisos'])): ?>
+                                        <td>
+                                            <?php if (isset($_SESSION['permisos']) && in_array('usuario:Actualiza', $_SESSION['permisos'])): ?>
+                                                <button class="btn btn-sm btn-outline-primary action-btn" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#modalUsuario"
+                                                        data-mode="edit"
+                                                        data-id="<?php echo $usuario['id']; ?>"
+                                                        data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>"
+                                                        data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
+                                                        data-rol="<?php echo $usuario['rol_id']; ?>"
+                                                        data-estado="<?php echo isset($usuario['estado']) ? $usuario['estado'] : 'Activo'; ?>">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                            <?php if (isset($_SESSION['permisos']) && in_array('usuario:Elimina', $_SESSION['permisos'])): ?>
+                                                <button class="btn btn-sm btn-outline-danger action-btn" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#modalEliminarUsuario"
+                                                        data-id="<?php echo $usuario['id']; ?>"
+                                                        data-usuario="<?php echo htmlspecialchars($usuario['usuario']); ?>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php else: ?>
+                                        <td></td>
+                                    </tr>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
