@@ -1,14 +1,8 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
-include_once HOME_PATH . 'verificar_sesion.php';
-
-if (!isset($_SESSION['permisos']) || !in_array('dashboard:Lee', $_SESSION['permisos'])){
-    header("Location: " . BASE_URL . "login/");
-    exit;
-}
-
 // Includes (para el servidor)
+include_once HOME_PATH . 'verificar_sesion.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 include_once HOME_PATH . 'componentes/head_component.php';
 $permisos = (isset($_SESSION['permisos']) && in_array('permiso:Lee', $_SESSION['permisos'])) 

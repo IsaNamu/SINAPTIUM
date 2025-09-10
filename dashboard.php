@@ -3,11 +3,23 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';
+if (!isset($_SESSION['permisos']) || !in_array('dashboard:Lee', $_SESSION['permisos'])){
+    header("Location: " . BASE_URL);
+    exit;
+}
+
 include_once HOME_PATH . 'cx/peticiones.php';
 include_once HOME_PATH . 'componentes/head_component.php';
-$permisos = listarRegistros('permisos');
-$usuarios = listarRegistros('usuario');
-$roles = listarRegistros('roles');
+$permisos = (isset($_SESSION['permisos']) && in_array('permiso:Lee', $_SESSION['permisos'])) 
+    ? listarRegistros('permisos') 
+    : [];
+$usuarios = (isset($_SESSION['permisos']) && in_array('usuario:Lee', $_SESSION['permisos'])) 
+    ? listarRegistros('usuario') 
+    : [];
+    
+$roles = (isset($_SESSION['permisos']) && in_array('rol:Lee', $_SESSION['permisos'])) 
+    ? listarRegistros('roles') 
+    : [];
 
 // Determinar la sección activa
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
