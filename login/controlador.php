@@ -1,15 +1,6 @@
 <?php
 // Iniciar sesión y configurar constantes
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 if (empty($_POST["usuario"]) || empty($_POST["password"])) {
     $_SESSION['mensaje'] = [
@@ -60,7 +51,22 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             $_SESSION['last_activity'] = time(); // Para control de tiempo de sesión
             
             // Redirigir al dashboard o página principal
-            header("location:/");
+            if ($_SESSION['rol_nombre'] === 'Administrador') {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'texto' => 'BIENVENIDO ADMINISTRADOR ' . $_SESSION['usuario']
+                ];
+                header("location:/Sinaptium/dashboard.php");
+                exit;
+            } else {
+                $_SESSION['mensaje'] = [
+                    'tipo' => 'success',
+                    'texto' => 'BIENVENIDO ' . $_SESSION['usuario']
+                ];
+                header("location:/Sinaptium/");
+                exit;
+            }
+            header("location:/Sinaptium/dashboard.php");
             exit;
         } else {
             $_SESSION['mensaje'] = [

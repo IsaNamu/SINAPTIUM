@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./:/var/www/html  # Monta tu código aquí
+      - ./:/var/www/html/Sinaptium  # Monta tu código aquí
     environment:
       - DB_HOST=sql_ana
       - DB_NAME=sinaptium

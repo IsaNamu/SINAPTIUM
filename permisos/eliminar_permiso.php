@@ -1,14 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';

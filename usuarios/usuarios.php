@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';

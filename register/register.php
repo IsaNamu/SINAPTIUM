@@ -1,15 +1,6 @@
 <?php
 // Al inicio del archivo register.php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-}
-
-if (!defined('HOME_PATH')) {
-    define('HOME_PATH', $_SERVER['DOCUMENT_ROOT'] . '/');
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 $mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : '';
 unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo

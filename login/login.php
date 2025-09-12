@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Si el usuario ya está logueado, redirigirlo a la página principal
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {

@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';
@@ -48,7 +48,7 @@ foreach ($usuarios as $usuario) {
             <!-- Sidebar -->
             <div class="col-md-2 sidebar p-0">
                 <div class="text-center mb-4">
-                    <img src="../logo/logo.svg" alt="Logo" class="img-fluid" style="max-width: 120px;">
+                    <img src="<?php echo BASE_URL; ?>logo/logo.svg" alt="Logo" class="img-fluid" style="max-width: 120px;">
                     <h5 class="mt-2">Panel de Administración</h5>  
                 </div>
                 
@@ -92,7 +92,7 @@ foreach ($usuarios as $usuario) {
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">
+                        <a class="nav-link" href="/Sinaptium">
                             <i class="fas fa-home"></i>
                             <span>Inicio</span>
                         </a>

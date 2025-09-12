@@ -106,7 +106,15 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('rol:Crea', 'Permiso para crear nuevos roles'),
 ('rol:Actualiza', 'Permiso para editar roles existentes'),
 ('rol:Elimina', 'Permiso para eliminar roles'),
-('rol:Lee', 'Permiso para ver detalles de roles');
+('rol:Lee', 'Permiso para ver detalles de roles'),
+('permiso:Actualiza', 'Permiso para editar permisos existentes'),
+('permiso:Crea', 'Permiso para crear nuevos permisos'),
+('permiso:Elimina', 'Permiso para eliminar permisos'),
+('permiso:Lee', 'Permiso para ver detalles de permisos'),
+('biblioteca:Crea', 'Permiso para crear nuevos biblioteca/libros'),
+('biblioteca:Actualiza', 'Permiso para editar biblioteca/libros existentes'),
+('biblioteca:Elimina', 'Permiso para eliminar biblioteca/libros'),
+('biblioteca:Lee', 'Permiso para ver detalles de biblioteca/libros');
 
 -- Asignar permisos a roles
 -- Administrador tiene todos los permisos
