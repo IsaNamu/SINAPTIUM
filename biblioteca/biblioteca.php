@@ -127,7 +127,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
             <p class="footer-text text-center mb-0">© 2025 Sinaptium. Todos los derechos reservados.</p>
         </div>
     </footer>
-    <script src="estilos_bo/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>estilos_bo/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
         AOS.init({

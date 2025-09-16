@@ -3,7 +3,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Includes (para el servidor)
 include_once HOME_PATH . 'verificar_sesion.php';
-if (!isset($_SESSION['permisos']) || !in_array('dashboard:Lee', $_SESSION['permisos'])){
+if (!isset($_SESSION['permisos']) || 
+    !in_array('dashboard:Lee', $_SESSION['permisos']) || 
+    strtolower($_SESSION['rol_nombre']) !== 'administrador') {
+    
+    $_SESSION['mensaje'] = [
+        'tipo' => 'danger',
+        'texto' => 'ACCESO DENEGADO: NO TIENES PERMISOS DE ADMINISTRADOR'
+    ];
     header("Location: " . BASE_URL);
     exit;
 }

@@ -1,6 +1,13 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
+if (isset($_SESSION['mensaje'])) {
+    if (is_array($_SESSION['mensaje'])) {
+        $mensaje = $_SESSION['mensaje'];
+    } else {
+        echo $_SESSION['mensaje'];
+    }
+}
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
@@ -13,10 +20,30 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <div class="neuronal-background"></div>
 
     <?php include 'componentes/navbar.php'; ?>  
-
+<div class="alert-container">
+                    <?php
+                    // Mostrar el mensaje que asignamos al principio
+                    if (isset($mensaje)) {
+                        if (is_array($mensaje)) {
+                            echo "<div class='alert alert-{$mensaje['tipo']} alert-dismissible fade show' role='alert'>
+                                    {$mensaje['texto']}
+                                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                </div>";
+                        } else {
+                            // Si es string, mostrarlo directamente
+                            echo $mensaje;
+                        }
+                        // FINALMENTE limpiar la variable de sesión
+                        unset($_SESSION['mensaje']);
+                    }
+                    ?>
+                </div>
     <header class="hero">
+        
         <div class="container">
+            
             <div class="row align-items-center">
+                
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h1>Bienvenido a Sinaptium</h1>
                     <p class="lead">Impulsando el aprendizaje mediante neurociencia e inteligencia artificial.</p>
@@ -101,6 +128,26 @@ include_once HOME_PATH . 'componentes/head_component.php';
             duration: 1000,
             offset: 50,
         });
+        const alertContainer = document.querySelector('.alert-container');
+        const alert = alertContainer.querySelector('.alert');
+        if (alert) {
+            // Mostrar el contenedor si hay alerta
+            alertContainer.style.display = 'block';
+            
+            // Ocultar automáticamente después de 2 segundos
+            setTimeout(() => {
+                if (alert) {
+                    alert.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => {
+                        alert.remove();
+                        alertContainer.style.display = 'none';
+                    }, 500);
+                }
+            }, 2000);
+        } else {
+            // Ocultar el contenedor si no hay alerta
+            alertContainer.style.display = 'none';
+        }
     </script>
 </body>
 </html>
