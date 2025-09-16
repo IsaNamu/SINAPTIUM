@@ -3,6 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 // Si el usuario está logueado, mostrar la vista completa de administración
 include_once HOME_PATH . 'cx/peticiones.php';
+include_once HOME_PATH . 'verificar_sesion.php';
 
 // Mostrar mensajes si existen
 if (isset($_SESSION['mensaje'])) {

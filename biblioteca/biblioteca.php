@@ -113,9 +113,9 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5 class="blue">Enlaces rápidos</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/" class="footer-link">Inicio</a></li>
-                        <li class="mb-2"><a href="nosotros.php" class="footer-link">Nosotros</a></li>
-                        <li class="mb-2"><a href="funcionamiento.php" class="footer-link">¿Cómo funciona?</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>" class="footer-link">Inicio</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>nosotros.php" class="footer-link">Nosotros</a></li>
+                        <li class="mb-2"><a href="<?php echo BASE_URL; ?>funcionamiento.php" class="footer-link">¿Cómo funciona?</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

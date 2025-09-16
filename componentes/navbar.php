@@ -5,7 +5,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand logo" href="dashboard.php">
+        <a class="navbar-brand logo" href="<?php echo BASE_URL; ?>dashboard.php">
             <img src="<?php echo BASE_URL; ?>logo/logo.svg" alt="Sinaptium Logo" class="navbar-logo" width="200" height="50">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

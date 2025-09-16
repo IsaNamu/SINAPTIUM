@@ -19,7 +19,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <!-- Navegación mínima -->
     <nav class="navbar-minimal">
         <div class="container">
-            <a href="../login" class="back-home">
+            <a href="<?php echo BASE_URL; ?>login" class="back-home">
                 <span>←</span> Volver al login
             </a>
         </div>
@@ -28,7 +28,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <!-- Contenedor del Registro -->
     <div class="register-container">
         <div class="registerbox" data-aos="fade-up">
-            <img src="../logo/logo.svg" class="avatar" alt="Sinaptium Logo" style="display: block; margin: 0 auto 20px; max-width: 120px;">
+            <img src="<?php echo BASE_URL; ?>logo/logo.svg" class="avatar" alt="Sinaptium Logo" style="display: block; margin: 0 auto 20px; max-width: 120px;">
             <div class="alert-container">
                 <?php
                 if (!empty($mensaje)) {
@@ -64,13 +64,13 @@ include_once HOME_PATH . 'componentes/head_component.php';
 
             <div class="login-link">
                 <p>¿Ya tienes una cuenta?</p>
-                <a href="../login">Iniciar Sesión</a>
+                <a href="<?php echo BASE_URL; ?>login">Iniciar Sesión</a>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="../estilos_bo/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo BASE_URL; ?>estilos_bo/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     
     <script>
