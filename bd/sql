@@ -85,6 +85,10 @@ CREATE INDEX IF NOT EXISTS idx_biblioteca_categoria ON biblioteca(categoria_id);
 CREATE INDEX IF NOT EXISTS idx_biblioteca_autor ON biblioteca(autor_id);
 CREATE INDEX IF NOT EXISTS idx_autores_nombre ON autores(nombre, apellido);
 
+ALTER TABLE biblioteca MODIFY COLUMN enlace VARCHAR(500) DEFAULT '';
+ALTER TABLE biblioteca MODIFY COLUMN imagen VARCHAR(500) DEFAULT '';
+ALTER TABLE biblioteca MODIFY COLUMN archivo_pdf VARCHAR(500) DEFAULT '';
+
 
 -- Editar tabla usuario para agregar columna estado y fecha_modificacion
 ALTER TABLE usuario 

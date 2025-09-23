@@ -53,9 +53,14 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Lista de Libros</span>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalLibro" data-mode="create">
-                <i class="fas fa-plus me-1"></i> Nuevo Libro
-            </button>
+            <div>
+                <a class="btn btn-secondary btn-sm" href="<?php echo BASE_URL; ?>biblioteca/biblioteca.php">
+                    <i class="fas fa-book me-1"></i> Ver libros
+                </a>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalLibro" data-mode="create">
+                    <i class="fas fa-plus me-1"></i> Nuevo Libro
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <?php if (empty($libros)): ?>
@@ -71,7 +76,6 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                 <th>Título</th>
                                 <th>Autor</th>
                                 <th>Categoría</th>
-                                <th>Enlace</th>
                                 <th>Archivo</th>
                                 <th>Fecha Creación</th>
                                 <th>Acciones</th>
@@ -95,11 +99,6 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                         <?php else: ?>
                                             <span class="badge bg-warning">Sin categoría</span>
                                         <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <a href="<?php echo htmlspecialchars($libro['enlace']); ?>" target="_blank" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-external-link-alt"></i> Ver
-                                        </a>
                                     </td>
                                     <td>
                                         <?php if (!empty($libro['archivo_pdf'])): ?>
@@ -154,64 +153,71 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 <input type="hidden" id="libroId" name="id">
                 <input type="hidden" id="formMode" name="mode" value="create">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="inputTitulo" class="form-label">Título del Libro</label>
-                                <input type="text" class="form-control" id="inputTitulo" name="titulo" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="selectCategoria" class="form-label">Categoría</label>
-                                <select class="form-select" id="selectCategoria" name="categoria_id">
-                                    <option value="">Seleccionar categoría</option>
-                                    <?php foreach ($categorias as $categoria): ?>
-                                        <option value="<?php echo $categoria['id']; ?>"><?php echo htmlspecialchars($categoria['nombre']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                    <!-- Primera fila: Título del libro (ocupa las 2 columnas) -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="inputTitulo" class="form-label">Título del Libro *</label>
+                            <input type="text" class="form-control" id="inputTitulo" name="titulo" required>
                         </div>
                     </div>
                     
-                    <div class="row">
+                    <!-- Segunda fila: Autor y Categoría (una columna cada uno) -->
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="selectAutor" class="form-label">Autor</label>
-                                <select class="form-select" id="selectAutor" name="autor_id" onchange="toggleAutorInput()">
-                                    <option value="">Seleccionar autor</option>
-                                    <?php foreach ($autores as $autor): ?>
-                                        <option value="<?php echo $autor['id']; ?>">
-                                            <?php echo htmlspecialchars($autor['nombre'] . ' ' . $autor['apellido']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                    <option value="otro">Otro (especificar nombre)</option>
-                                </select>
-                                
-                                <div id="nuevoAutorContainer" class="mt-2" style="display: none;">
-                                    <input type="text" class="form-control" id="nuevoAutorNombre" name="nuevo_autor_nombre" placeholder="Nombre del autor">
-                                </div>
+                            <label for="selectAutor" class="form-label">Autor</label>
+                            <select class="form-select" id="selectAutor" name="autor_id" onchange="toggleAutorInput()">
+                                <option value="">Seleccionar autor</option>
+                                <?php foreach ($autores as $autor): ?>
+                                    <option value="<?php echo $autor['id']; ?>">
+                                        <?php echo htmlspecialchars($autor['nombre'] . ' ' . $autor['apellido']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <option value="otro">Otro (especificar nombre)</option>
+                            </select>
+                            
+                            <div id="nuevoAutorContainer" class="mt-2" style="display: none;">
+                                <input type="text" class="form-control" id="nuevoAutorNombre" name="nuevo_autor_nombre" placeholder="Nombre del autor">
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="inputEnlace" class="form-label">Enlace (opcional si sube PDF)</label>
-                                <input type="url" class="form-control" id="inputEnlace" name="enlace" placeholder="https://...">
+                            <label for="selectCategoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="selectCategoria" name="categoria_id">
+                                <option value="">Seleccionar categoría</option>
+                                <?php foreach ($categorias as $categoria): ?>
+                                    <option value="<?php echo $categoria['id']; ?>"><?php echo htmlspecialchars($categoria['nombre']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Tercera fila: Imagen y PDF (agrupados con iconos) -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="inputImagen" class="form-label">Imagen del Libro</label>
+                            <div class="input-group">
+                                <input type="url" class="form-control" id="inputImagen" name="imagen_url" placeholder="https://...">
+                                <button type="button" class="btn btn-outline-secondary" title="Seleccionar imagen" onclick="seleccionarImagen()">
+                                    <i class="fa fa-file-image" aria-hidden="true"></i>
+                                </button>
+                                <input type="file" id="fileImagen" name="imagen_archivo" accept="image/*" style="display: none;" onchange="procesarImagenSeleccionada()">
+                            </div>
+                            <div class="form-text">Puede usar URL o subir imagen. Tamaño máximo: 5MB</div>
+                            
+                            <!-- Previsualización de imagen automática -->
+                            <div id="previewImagen" class="mt-2" style="display: none;">
+                                <img src="" alt="Vista previa" class="img-thumbnail" style="max-height: 150px;">
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="inputImagen" class="form-label">URL de Imagen (opcional)</label>
-                                <input type="url" class="form-control" id="inputImagen" name="imagen" placeholder="https://...">
-                                <div class="form-text">Si no se especifica, se usará una imagen por defecto</div>
+                            <label for="inputArchivoTexto" class="form-label">Archivo PDF</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputArchivoTexto" name="archivo_pdf_url" placeholder="https://...">
+                                <button type="button" class="btn btn-outline-secondary" title="Seleccionar pdf" onclick="seleccionarPDF()">
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                </button>
+                                <input type="file" id="inputArchivo" name="archivo_pdf" accept=".pdf" style="display: none;" onchange="actualizarNombrePDF()">
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="inputArchivo" class="form-label">Subir Archivo PDF (opcional)</label>
-                                <input type="file" class="form-control" id="inputArchivo" name="archivo_pdf" accept=".pdf">
-                                <div class="form-text">Tamaño máximo: 10MB</div>
-                            </div>
+                            <div class="form-text">Tamaño máximo: 10MB. Puede usar URL o subir archivo.</div>
                         </div>
                     </div>
                 </div>
@@ -252,17 +258,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
 
 <!-- Script para manejar los modales -->
 <script>
-    function toggleAutorInput() {
-        const selectAutor = document.getElementById('selectAutor');
-        const nuevoAutorContainer = document.getElementById('nuevoAutorContainer');
-        
-        if (selectAutor.value === 'otro') {
-            nuevoAutorContainer.style.display = 'block';
-        } else {
-            nuevoAutorContainer.style.display = 'none';
-        }
-    }
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Modal único para crear/editar
     const modalLibro = document.getElementById('modalLibro');
     if (modalLibro) {
@@ -278,35 +274,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 const id = button.getAttribute('data-id');
                 const titulo = button.getAttribute('data-titulo');
                 const enlace = button.getAttribute('data-enlace');
-                const archivo = document.getElementById('inputArchivo').files.length;
+                const imagen = button.getAttribute('data-imagen') || '';
+                const archivo_pdf = button.getAttribute('data-archivo_pdf') || '';
                 const autor_id = button.getAttribute('data-autor_id');
                 const categoria_id = button.getAttribute('data-categoria_id');
-                const imagen = button.getAttribute('data-imagen') || '';
+                console.log('Editar libro ID:', id);
+                console.log('Datos:', { titulo, enlace, imagen, archivo_pdf, autor_id, categoria_id });
                 
+                // Llenar los campos del formulario
                 document.getElementById('libroId').value = id;
                 document.getElementById('inputTitulo').value = titulo;
-                document.getElementById('inputEnlace').value = enlace;
                 document.getElementById('selectAutor').value = autor_id;
                 document.getElementById('selectCategoria').value = categoria_id;
                 document.getElementById('formMode').value = 'edit';
-                document.getElementById('inputImagen').value = imagen;
+                
+                // Manejar la imagen - verificar si es una URL o está vacía
+                if (imagen) {
+                    document.getElementById('inputImagen').value = imagen;
+                    // Mostrar previsualización de la imagen existente
+                    const previewDiv = document.getElementById('previewImagen');
+                    const previewImg = previewDiv.querySelector('img');
+                    previewImg.src = imagen;
+                    previewDiv.style.display = 'block';
+                } else {
+                    document.getElementById('inputImagen').value = '';
+                    document.getElementById('previewImagen').style.display = 'none';
+                }
+                
+                // Manejar el archivo PDF - mostrar la URL existente en el campo de texto
+                if (archivo_pdf) {
+                    // Extraer solo el nombre del archivo para mostrar
+                    const pdfFileName = archivo_pdf.split('/').pop();
+                    document.getElementById('inputArchivoTexto').value = pdfFileName;
+                    // También puedes mostrar la URL completa si prefieres:
+                    // document.getElementById('inputArchivoTexto').value = archivo_pdf;
+                } else {
+                    document.getElementById('inputArchivoTexto').value = '';
+                }
+                
+                // Limpiar file inputs al editar (para evitar conflictos)
+                document.getElementById('fileImagen').value = '';
+                document.getElementById('inputArchivo').value = '';
                 
                 // Cambiar textos
                 title.textContent = 'Editar Libro';
                 submitButton.textContent = 'Guardar Cambios';
             } else {
-                // Modo creación
+                // Modo creación - resetear todo
                 document.getElementById('formMode').value = 'create';
                 form.reset();
                 document.getElementById('libroId').value = '';
+                document.getElementById('previewImagen').style.display = 'none';
                 
                 // Cambiar textos
                 title.textContent = 'Crear Nuevo Libro';
                 submitButton.textContent = 'Crear Libro';
             }
+            
+            // Asegurarse de que el contenedor de autor se muestre/oculte correctamente
+            toggleAutorInput();
         });
     }
     
+    // El resto de tu código permanece igual...
     // Modal de eliminación
     const modalEliminar = document.getElementById('modalEliminarLibro');
     if (modalEliminar) {
@@ -320,10 +350,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Previsualización automática de imagen al escribir URL
+    document.getElementById('inputImagen').addEventListener('input', function() {
+        const imagenUrl = this.value;
+        const previewDiv = document.getElementById('previewImagen');
+        const previewImg = previewDiv.querySelector('img');
+        const fileInput = document.getElementById('fileImagen');
+        
+        if (imagenUrl) {
+            previewImg.src = imagenUrl;
+            previewDiv.style.display = 'block';
+            
+            // Limpiar el file input cuando se escribe una URL
+            fileInput.value = '';
+            
+            // Manejar error de carga de imagen
+            previewImg.onerror = function() {
+                previewDiv.innerHTML = '<div class="alert alert-warning p-2">No se puede cargar la imagen</div>';
+            };
+            
+            previewImg.onload = function() {
+                previewDiv.style.display = 'block';
+            };
+        } else {
+            previewDiv.style.display = 'none';
+        }
+    });
+
     const alertContainer = document.querySelector('.alert-container');
-    const alert = alertContainer.querySelector('.alert');
+    const alert = alertContainer?.querySelector('.alert');
     
-    if (alert) {
+    if (alert && alertContainer) {
         // Mostrar el contenedor si hay alerta
         alertContainer.style.display = 'block';
         
@@ -337,11 +394,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 500);
             }
         }, 2000);
-    } else {
+    } else if (alertContainer) {
         // Ocultar el contenedor si no hay alerta
         alertContainer.style.display = 'none';
     }
 });
+
+// Mover las funciones fuera del DOMContentLoaded para que sean globales
+function toggleAutorInput() {
+    const selectAutor = document.getElementById('selectAutor');
+    const nuevoAutorContainer = document.getElementById('nuevoAutorContainer');
+    nuevoAutorContainer.style.display = selectAutor.value === 'otro' ? 'block' : 'none';
+}
+
+function actualizarNombrePDF() {
+    const inputArchivo = document.getElementById('inputArchivo');
+    const inputArchivoTexto = document.getElementById('inputArchivoTexto');
+    
+    if (inputArchivo.files.length > 0) {
+        // Cuando se selecciona un archivo, limpiar la URL
+        inputArchivoTexto.value = inputArchivo.files[0].name;
+    }
+}
+
+function procesarImagenSeleccionada() {
+    const fileInput = document.getElementById('fileImagen');
+    const urlInput = document.getElementById('inputImagen');
+    const previewContainer = document.getElementById('previewImagen');
+    const previewImage = previewContainer.querySelector('img');
+    
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            
+            // Limpiar el campo de URL cuando se selecciona un archivo
+            urlInput.value = '';
+        }
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        previewImage.src = '';
+        previewContainer.style.display = 'none';
+    }
+}
+
+function seleccionarPDF() {
+    document.getElementById('inputArchivo').click();
+}
+
+function seleccionarImagen() {
+    document.getElementById('fileImagen').click();
+}
 </script>
 </body>
 </html>
