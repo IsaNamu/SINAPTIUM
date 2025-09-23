@@ -151,3 +151,6 @@ WHERE r.nombre = 'Visualizador' AND p.nombre = 'usuario:Lee';
 -- Insertar usuario administrador predeterminado (contraseña: ab)
 INSERT INTO usuario (usuario, correo, passwd, rol_id) VALUES
 ('admin', 'admin@gmail.com', '$2y$10$H1qB1GSD.eWp1.vPv9WggOv5bVH/Y0ymf579jF/VbKDyl6Nk2mVS6', (SELECT id FROM roles WHERE nombre = 'Administrador'));
+
+ALTER TABLE usuario 
+ADD COLUMN aprendizaje ENUM('kinestésico', 'auditivo', 'visual') NULL AFTER passwd;

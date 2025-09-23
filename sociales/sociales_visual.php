@@ -1,53 +1,26 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
+include_once HOME_PATH . 'cx/peticiones.php';
+
+include_once HOME_PATH . 'componentes/head_component.php';
+?>
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sinaptium - Sociales (Visual)</title>
-    <link rel="icon" href="../logo/cerebro.svg" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="../css/sociales.css" rel="stylesheet">
+    <?php renderHead('Sinaptium - Sociales (Visual)'); ?>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/sociales.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ingles.css" >
 </head>
-<body>
+<body>    
     <div class="neuronal-background"></div>
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand logo" href="/">
-                <img src="../logo/logo.svg" alt="Sinaptium Logo" class="navbar-logo" width="200" height="50">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../nosotros.php">Nosotros</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../funcionamiento.php">¿Cómo funciona?</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../biblioteca.php">Biblioteca</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="../areas.php">Áreas Académicas</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include HOME_PATH . 'componentes/navbar.php'; ?>
 
     <header class="hero text-center text-white py-5">
         <div class="container" data-aos="fade-up">
             <h1 class="visual-color">Sociales: Recursos para Aprendices Visuales</h1>
             <p class="lead">Si aprendes mejor viendo, estas herramientas visuales te ayudarán a comprender el mundo y su historia.</p>
-            <a href="sociales.html" class="btn btn-outline-light mt-3">Volver al Test de Sociales</a>
+            <a href="sociales.php" class="btn btn-outline-light mt-3">Volver al Test de Sociales</a>
         </div>
     </header>
 

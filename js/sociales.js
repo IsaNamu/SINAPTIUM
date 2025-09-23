@@ -47,17 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const learningStyleTestForm = document.getElementById('learningStyleTest');
     const testResultDiv = document.getElementById('testResult');
     const detectedStyleSpan = document.getElementById('detectedStyle');
-    const userNameInput = document.getElementById('userName');
 
     // Función para renderizar preguntas usando un ciclo 'for'
     function renderQuestions() {
-        testQuestionsDiv.innerHTML = ''; // Limpiar preguntas anteriores
+        testQuestionsDiv.innerphp = ''; // Limpiar preguntas anteriores
         for (let i = 0; i < questions.length; i++) {
             const q = questions[i];
-            let optionsHtml = '';
+            let optionsphp = '';
             // Usando un ciclo 'forEach' para las opciones
             q.options.forEach((option, optIndex) => {
-                optionsHtml += `
+                optionsphp += `
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="question${i}" id="q${i}o${optIndex}" value="${option.type}" required>
                         <label class="form-check-label" for="q${i}o${optIndex}">
@@ -66,13 +65,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
             });
-            const questionHtml = `
+            const questionphp = `
                 <div class="mb-4">
                     <p class="mb-2 text-white-75">${i + 1}. ${q.question}</p>
-                    ${optionsHtml}
+                    ${optionsphp}
                 </div>
             `;
-            testQuestionsDiv.innerHTML += questionHtml;
+            testQuestionsDiv.innerphp += questionphp;
         }
     }
 
@@ -108,7 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        const userName = userNameInput.value.trim();
+        let userName = '';
+
+        if (USER_NAME_PHP) {
+            userName = USER_NAME_PHP;
+        } else {
+            // Usuario no logueado - obtener del input
+            const userNameInput = document.getElementById('userName');
+            if (userNameInput) {
+                userName = userNameInput.value.trim();
+            }
+        }
         const area = "Sociales"; // Área actual
 
         if (!userName) {
@@ -133,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Respuesta del servidor:', data);
             // Redirigir a la página de recursos específica después de un breve retraso
             setTimeout(() => {
-                window.location.href = `../sociales/sociales_${detectedStyle}.html`;
+                window.location.href = `../sociales/sociales_${detectedStyle}.php`;
             }, 1000); // Redirigir después de 1.5 segundos
         })
         .catch(error => {
@@ -141,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Hubo un error al guardar tu estilo de aprendizaje. Por favor, inténtalo de nuevo.');
             // Incluso si hay un error, intentar redirigir para no dejar al usuario varado
             setTimeout(() => {
-                window.location.href = `../sociales/sociales_${detectedStyle}.html`;
+                window.location.href = `../sociales/sociales_${detectedStyle}.php`;
             }, 1000);
         });
     });

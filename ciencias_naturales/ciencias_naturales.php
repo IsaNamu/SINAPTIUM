@@ -77,9 +77,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
         </section>
     </main>
 
-    <footer class="text-center py-4 mt-5" data-aos="fade-up">
-        <p class="footer-text">© 2025 Sinaptium. Todos los derechos reservados.</p>
-    </footer>
+    <?php include HOME_PATH . 'componentes/footer_component.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
