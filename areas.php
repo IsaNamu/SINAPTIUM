@@ -70,10 +70,10 @@ include_once HOME_PATH . 'componentes/head_component.php';
             </div>
             <div class="col" data-aos="fade-up" data-aos-delay="400">
                 <div class="area-card text-center">
-                    <div class="area-icon">🍀</div>
-                    <h3 class="area-title">Ciencias Naturales</h3>
-                    <p class="mb-0">Explora y aprende sobre física, química y blogía con enfoques neuroeducativos.</p>
-                    <a href="ciencias_naturales" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                    <div class="area-icon">🏆</div>
+                    <h3 class="area-title">Reconocimientos</h3>
+                    <p class="mb-0">Un espacio para reconocer a todos nuestros docentes que nos han acompañado durante nuestro proceso de aprendizaje y auto-conocimiento.</p>
+                    <a href="reconocimiento/reco.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                 </div>
             </div>
         </div>

@@ -46,7 +46,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h1>Bienvenido a Sinaptium</h1>
-                    <p class="lead">Impulsando el aprendizaje mediante neurociencia e inteligencia artificial.</p>
+                    <p class="lead">Impulsando el aprendizaje mediante neurociencia y Programación.</p>
                     <a href="areas.php" class="btn btn-glow"><span>Explorar</span></a>
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
