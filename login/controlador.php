@@ -45,6 +45,7 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             $_SESSION['rol_id'] = $datos->rol_id;
             $_SESSION['rol_nombre'] = $datos->rol_nombre;
             $_SESSION['rol_descripcion'] = $datos->rol_descripcion;
+            $_SESSION['aprendizaje'] = $datos->aprendizaje;
             $_SESSION['permisos'] = !empty($datos->permisos) ? explode(',', $datos->permisos) : [];
             $_SESSION['fecha_creacion'] = $datos->fecha_creacion;
             $_SESSION['logged_in'] = true;
