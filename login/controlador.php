@@ -18,16 +18,19 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
     
     // Consulta para obtener usuario, rol y permisos
     $stmt = $conexion->prepare("SELECT 
-                u.*, 
-                r.nombre as rol_nombre, 
-                r.descripcion as rol_descripcion,
-                GROUP_CONCAT(p.nombre SEPARATOR ',') as permisos
-            FROM usuario u 
-            INNER JOIN roles r ON u.rol_id = r.id 
-            LEFT JOIN roles_x_permiso rp ON r.id = rp.rol_id
-            LEFT JOIN permisos p ON rp.permiso_id = p.id
-            WHERE u.usuario = ? OR u.correo = ?
-            GROUP BY u.id");
+            u.*, 
+            r.nombre as rol_nombre, 
+            r.descripcion as rol_descripcion,
+            ma.nombre as metodo_aprendizaje_nombre,
+            ma.descripcion as metodo_aprendizaje_descripcion,
+            GROUP_CONCAT(p.nombre SEPARATOR ',') as permisos
+        FROM usuario u 
+        INNER JOIN roles r ON u.rol_id = r.id 
+        LEFT JOIN roles_x_permiso rp ON r.id = rp.rol_id
+        LEFT JOIN permisos p ON rp.permiso_id = p.id
+        LEFT JOIN metodos_aprendizaje ma ON u.metodo_aprendizaje_id = ma.id
+        WHERE u.usuario = ? OR u.correo = ?
+        GROUP BY u.id");
     
     $stmt->bind_param("ss", $usuario, $usuario);
     $stmt->execute();
@@ -45,7 +48,7 @@ if (empty($_POST["usuario"]) || empty($_POST["password"])) {
             $_SESSION['rol_id'] = $datos->rol_id;
             $_SESSION['rol_nombre'] = $datos->rol_nombre;
             $_SESSION['rol_descripcion'] = $datos->rol_descripcion;
-            $_SESSION['aprendizaje'] = $datos->aprendizaje;
+            $_SESSION['aprendizaje'] = $datos->metodo_aprendizaje_nombre;
             $_SESSION['permisos'] = !empty($datos->permisos) ? explode(',', $datos->permisos) : [];
             $_SESSION['fecha_creacion'] = $datos->fecha_creacion;
             $_SESSION['logged_in'] = true;

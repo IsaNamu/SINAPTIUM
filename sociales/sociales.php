@@ -50,6 +50,27 @@ $questions = [
         ]
     ],
 ];
+if ($usuarioLogueado && !$tieneAprendizaje) {
+    $usuario_id = $_SESSION['usuario_id'];
+    $sql = "SELECT u.*, ma.nombre as metodo_aprendizaje 
+            FROM usuario u 
+            LEFT JOIN metodos_aprendizaje ma ON u.metodo_aprendizaje_id = ma.id 
+            WHERE u.id = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $usuario_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $usuario = $result->fetch_assoc();
+        if (!empty($usuario['metodo_aprendizaje'])) {
+            $_SESSION['aprendizaje'] = $usuario['metodo_aprendizaje'];
+            $_SESSION['metodo_aprendizaje_id'] = $usuario['metodo_aprendizaje_id'];
+            $tieneAprendizaje = true;
+            $aprendizajeActual = $_SESSION['aprendizaje'];
+        }
+    }
+}
 ?>
 <!doctype html>
 <html lang="es">

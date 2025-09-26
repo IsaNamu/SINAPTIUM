@@ -148,6 +148,76 @@ SELECT p.id, r.id
 FROM permisos p, roles r
 WHERE r.nombre = 'Visualizador' AND p.nombre = 'usuario:Lee';
 
+-- Tabla de métodos de aprendizaje (para normalizar el campo aprendizaje)
+CREATE TABLE metodos_aprendizaje (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insertar métodos de aprendizaje predefinidos
+INSERT IGNORE INTO metodos_aprendizaje (nombre, descripcion) VALUES 
+('kinestésico', 'Aprendizaje mediante movimiento y experiencia práctica'),
+('auditivo', 'Aprendizaje mediante escucha y sonidos'),
+('visual', 'Aprendizaje mediante imágenes, diagramas y observación');
+
+-- Actualizar la tabla usuario para usar la FK en lugar de ENUM
+ALTER TABLE usuario 
+MODIFY COLUMN aprendizaje INT NULL AFTER passwd,
+ADD FOREIGN KEY (aprendizaje) REFERENCES metodos_aprendizaje(id) ON DELETE SET NULL;
+
+-- Tabla de materias (áreas de estudio)
+CREATE TABLE materias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT,
+    color_codigo VARCHAR(7) COMMENT 'Código HEX para color representativo',
+    icono VARCHAR(50) COMMENT 'Nombre del ícono representativo',
+    activo BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla intermedia para relacionar materias con métodos de aprendizaje
+CREATE TABLE materia_metodo_aprendizaje (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    materia_id INT NOT NULL,
+    metodo_aprendizaje_id INT NOT NULL,
+    contenido TEXT NOT NULL COMMENT 'Contenido adaptado al método de aprendizaje',
+    recursos VARCHAR(500) COMMENT 'Enlaces o recursos específicos',
+    activo BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE,
+    FOREIGN KEY (metodo_aprendizaje_id) REFERENCES metodos_aprendizaje(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_materia_metodo (materia_id, metodo_aprendizaje_id)
+);
+
+-- Renombrar la columna para mayor claridad
+ALTER TABLE usuario CHANGE aprendizaje metodo_aprendizaje_id INT;
+
+-- Crear índices para mejor rendimiento
+CREATE INDEX idx_materias_activo ON materias(activo);
+CREATE INDEX idx_materias_titulo ON materias(titulo);
+CREATE INDEX idx_materia_metodo_materia ON materia_metodo_aprendizaje(materia_id);
+CREATE INDEX idx_materia_metodo_metodo ON materia_metodo_aprendizaje(metodo_aprendizaje_id);
+CREATE INDEX idx_materia_metodo_activo ON materia_metodo_aprendizaje(activo);
+
+-- Insertar permisos para la gestión de materias
+INSERT INTO permisos (nombre, descripcion) VALUES
+('materia:Crea', 'Permiso para crear nuevas materias/contenidos'),
+('materia:Actualiza', 'Permiso para editar materias existentes'),
+('materia:Elimina', 'Permiso para eliminar materias'),
+('materia:Lee', 'Permiso para ver detalles de materias');
+
+-- Asignar permisos de materias al rol Administrador
+INSERT INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Administrador' AND p.nombre LIKE 'materia:%';
+
+-- Insertar materias predefinidas
+INSERT IGNORE INTO materias (nombre, descripcion) VALUES  ('Soaciales', 'Estudio de la historia'), ('Ciencias', 'Estudio de la naturaleza y fenómenos naturales');
+
 -- Insertar usuario administrador predeterminado (contraseña: ab)
 INSERT INTO usuario (usuario, correo, passwd, rol_id) VALUES
 ('admin', 'admin@gmail.com', '$2y$10$H1qB1GSD.eWp1.vPv9WggOv5bVH/Y0ymf579jF/VbKDyl6Nk2mVS6', (SELECT id FROM roles WHERE nombre = 'Administrador'));
