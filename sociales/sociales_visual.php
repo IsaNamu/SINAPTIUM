@@ -2,6 +2,30 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 
+// Obtener los contenidos para el método visual de la materia Sociales
+$query = "SELECT mma.*, 
+                 m.nombre as materia_nombre,
+                 ma.nombre as metodo_aprendizaje_nombre,
+                 ma.descripcion as metodo_descripcion,
+                 (SELECT COUNT(*) 
+                  FROM materia_metodo_aprendizaje mma2 
+                  WHERE mma2.materia_id = mma.materia_id 
+                  AND mma2.metodo_aprendizaje_id = mma.metodo_aprendizaje_id 
+                  AND mma2.activo = TRUE) as total_contenidos
+          FROM materia_metodo_aprendizaje mma 
+          INNER JOIN materias m ON mma.materia_id = m.id 
+          INNER JOIN metodos_aprendizaje ma ON mma.metodo_aprendizaje_id = ma.id 
+          WHERE mma.activo = TRUE 
+          AND m.nombre LIKE '%Social%' 
+          AND ma.nombre LIKE '%Visual%'
+          ORDER BY m.nombre, ma.nombre, mma.fecha_creacion DESC";
+
+$contenidos = peticionSQL($query, [], true);
+
+if (isset($contenidos['error'])) {
+    $contenidos = [];
+}
+
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
@@ -11,7 +35,35 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/sociales.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ingles.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/biblioteca.css" >
 </head>
+<style>
+    .visual-color {
+    color: #00A8E8; /* Color azul para visual */
+}
+
+.visual-card {
+    background: rgba(0, 168, 232, 0.1);
+    border: 1px solid #00A8E8;
+    border-radius: 15px;
+    padding: 20px;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.visual-card:hover {
+    transform: translateY(-5px);
+}
+
+.badge-tipo {
+    background: #00A8E8;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+</style>
 <body>    
     <div class="neuronal-background"></div>
     <?php include HOME_PATH . 'componentes/navbar.php'; ?>
@@ -25,113 +77,107 @@ include_once HOME_PATH . 'componentes/head_component.php';
     </header>
 
     <main class="container my-5">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Sección de contenidos dinámicos desde la base de datos -->
+        <div class="content-section">
+            <h2 class="text-center mb-4 visual-color">Contenidos Disponibles</h2>
             
-            <!-- Tarjeta 1: Mapas Históricos y Geográficos Interactivos -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="100">
-                <div class="visual-card">
-                    <!-- Icono de mapa, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-                        <line x1="8" y1="2" x2="8" y2="18"></line>
-                        <line x1="16" y1="6" x2="16" y2="22"></line>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Visualiza el Mundo</h4>
-                        <p class="card-text">Ver cómo los imperios crecen y decaen en un mapa interactivo activa la corteza visual. El cerebro organiza esta información de forma espacial, facilitando la comprensión de las relaciones entre eventos y lugares.</p>
-                        <ul class="link-list">
-                            <li><a href="https://www.google.com/earth/versions/" target="_blank">Google Earth Pro</a></li>
-                            <li><a href="https://www.arcgis.com/home/index.php" target="_blank">ArcGIS Online (Map Viewer)</a></li>
-                            <li><a href="https://geacron.com/" target="_blank">GeaCron - Atlas Histórico Mundial</a></li>
-                        </ul>
-                    </div>
+            <?php if (empty($contenidos)): ?>
+                <div class="text-center">
+                    <p>No hay contenidos disponibles para Sociales - Visual en este momento.</p>
+                    <a href="<?php echo BASE_URL; ?>dashboard.php?seccion=aprendizaje" class="btn btn-primary">
+                        Agregar Contenido
+                    </a>
                 </div>
-            </div>
-
-            <!-- Tarjeta 2: Líneas de Tiempo y Diagramas -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="200">
-                <div class="visual-card">
-                    <!-- Icono de línea de tiempo, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Organiza las Ideas</h4>
-                        <p class="card-text">Las líneas de tiempo y los diagramas de flujo permiten que tu cerebro vea la "película" completa de un evento. La capacidad de percibir patrones y secuencias visualmente es clave para retener la información a largo plazo.</p>
-                        <ul class="link-list">
-                            <li><a href="https://time.graphics/" target="_blank">Time.Graphics</a></li>
-                            <li><a href="https://www.canva.com/templates/social-studies-infographics/" target="_blank">Infografías de Sociales en Canva</a></li>
-                            <li><a href="http://googleusercontent.com/youtube.com/11" target="_blank">Canales de YouTube como "Academia Play"</a></li>
-                        </ul>
-                    </div>
+            <?php else: ?>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <?php foreach ($contenidos as $index => $contenido): 
+                        // Determinar el tipo de contenido y el icono correspondiente
+                        $tipo = '';
+                        $icono = '';
+                        $clase_card = 'visual-card';
+                        $delay = ($index + 1) * 100;
+                        
+                        // Analizar el contenido para determinar el tipo (específico para visual)
+                        if (strpos(strtolower($contenido['contenido']), 'mapa') !== false || 
+                            strpos(strtolower($contenido['contenido']), 'geográfico') !== false ||
+                            strpos(strtolower($contenido['recursos']), 'google earth') !== false) {
+                            $tipo = 'Mapa';
+                            $icono = 'map';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'línea de tiempo') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'diagrama') !== false ||
+                                 strpos(strtolower($contenido['contenido']), 'infografía') !== false) {
+                            $tipo = 'Diagrama';
+                            $icono = 'timeline';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'documental') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'película') !== false ||
+                                 strpos(strtolower($contenido['recursos']), 'youtube') !== false) {
+                            $tipo = 'Video';
+                            $icono = 'video';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'virtual') !== false ||
+                                 strpos(strtolower($contenido['recursos']), 'arts') !== false) {
+                            $tipo = 'Museo Virtual';
+                            $icono = 'gallery';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'interactivo') !== false) {
+                            $tipo = 'Juego';
+                            $icono = 'game';
+                            $clase_card = 'visual-card game-card';
+                        } else {
+                            $tipo = 'Recurso Visual';
+                            $icono = 'visual';
+                        }
+                        
+                        // Usar la imagen del contenido o una por defecto
+                        $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
+                    ?>
+                        <div class="col" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
+                            <div class="<?php echo $clase_card; ?>">
+                                <!-- Mostrar la imagen del contenido -->
+                                <div class="card-image-container">
+                                    <img src="<?php echo htmlspecialchars($imagen); ?>" 
+                                         alt="<?php echo htmlspecialchars($contenido['contenido']); ?>" 
+                                         class="card-image">
+                                </div>
+                                
+                                <div class="card-body text-center">
+                                    <span class="badge badge-tipo"><?php echo $tipo; ?></span>
+                                    <h4 class="card-title"><?php echo htmlspecialchars($contenido['contenido']); ?></h4>
+                                    
+                                    <?php if (!empty($contenido['recursos'])): ?>
+                                        <div class="link-list">
+                                            <?php 
+                                            // Si hay múltiples recursos separados por |, mostrarlos como lista
+                                            $recursos = explode('|', $contenido['recursos']);
+                                            foreach ($recursos as $recurso):
+                                                if (!empty(trim($recurso))):
+                                            ?>
+                                                <a href="<?php echo htmlspecialchars(trim($recurso)); ?>" 
+                                                   target="_blank" 
+                                                   class="recurso-link">
+                                                    <?php echo htmlspecialchars(trim($recurso)); ?>
+                                                </a>
+                                            <?php 
+                                                endif;
+                                            endforeach; 
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <div class="card-meta">
+                                        <small class="text-muted">
+                                            Creado: <?php echo date('d/m/Y', strtotime($contenido['fecha_creacion'])); ?>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-
-            <!-- Tarjeta 3: Documentales y Películas Históricas -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="300">
-                <div class="visual-card">
-                    <!-- Icono de cámara de cine, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="18" rx="2" ry="2"></rect>
-                        <line x1="8" y1="2" x2="8" y2="22"></line>
-                        <line x1="16" y1="2" x2="16" y2="22"></line>
-                        <line x1="2" y1="8" x2="22" y2="8"></line>
-                        <line x1="2" y1="16" x2="22" y2="16"></line>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Revive el Pasado</h4>
-                        <p class="card-text">Los documentales y películas estimulan el hemisferio derecho, que está más orientado a la imaginería y las narrativas. Ver los eventos en acción, en lugar de solo leer sobre ellos, hace que la información sea mucho más memorable.</p>
-                        <ul class="link-list">
-                            <li><a href="https://www.netflix.com/browse/genre/6839" target="_blank">Documentales Históricos en Netflix</a></li>
-                            <li><a href="https://www.nationalgeographic.es/video" target="_blank">National Geographic (Videos)</a></li>
-                            <li><a href="http://googleusercontent.com/youtube.com/12" target="_blank">Historia en YouTube ("CrashCourse", "La Cuna de Halicarnaso")</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tarjeta 4: Museos Virtuales y Exposiciones Online -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="400">
-                <div class="visual-card">
-                    <!-- Icono de galería de arte, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Explora las Obras del Pasado</h4>
-                        <p class="card-text">Explorar museos virtualmente estimula la memoria visual. Observar artefactos y obras de arte te permite conectar el conocimiento histórico con objetos tangibles, haciendo que los detalles sean más vívidos y fáciles de recordar.</p>
-                        <ul class="link-list">
-                            <li><a href="https://artsandculture.google.com/" target="_blank">Google Arts & Culture</a></li>
-                            <li><a href="https://britishmuseum.withgoogle.com/" target="_blank">El Museo Británico Virtual</a></li>
-                            <li><a href="https://www.metmuseum.org/art/online-features" target="_blank">Metropolitan Museum of Art (Online Features)</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            
-            <!-- Tarjeta 5: Juego Interactivo "Mundo Sináptico" -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="500">
-                <div class="visual-card game-card">
-                    <!-- Icono de juego, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <path d="M15 2H9a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path>
-                        <path d="M12 10v4"></path>
-                        <path d="M10 12h4"></path>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Juego: Mundo Sináptico</h4>
-                        <p class="card-text">Una experiencia interactiva donde puedes construir, explorar y simular conceptos de ciencias sociales. El aprendizaje activo a través del juego crea "bucles de refuerzo" en el cerebro, consolidando la información de forma placentera y natural.</p>
-                        <a href="MundoSinaptico/game.html" target="_blank" class="btn btn-glow mt-auto">¡Explora y Crea!</a>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
     </main>
+
     <footer class="text-center py-4 mt-5">
         <p class="text-white-50">© 2025 Sinaptium. Todos los derechos reservados.</p>
     </footer>

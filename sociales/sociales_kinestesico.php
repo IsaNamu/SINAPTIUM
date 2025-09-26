@@ -2,6 +2,30 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 include_once HOME_PATH . 'cx/peticiones.php';
 
+// Obtener los contenidos para el método kinestésico de la materia Sociales
+$query = "SELECT mma.*, 
+                 m.nombre as materia_nombre,
+                 ma.nombre as metodo_aprendizaje_nombre,
+                 ma.descripcion as metodo_descripcion,
+                 (SELECT COUNT(*) 
+                  FROM materia_metodo_aprendizaje mma2 
+                  WHERE mma2.materia_id = mma.materia_id 
+                  AND mma2.metodo_aprendizaje_id = mma.metodo_aprendizaje_id 
+                  AND mma2.activo = TRUE) as total_contenidos
+          FROM materia_metodo_aprendizaje mma 
+          INNER JOIN materias m ON mma.materia_id = m.id 
+          INNER JOIN metodos_aprendizaje ma ON mma.metodo_aprendizaje_id = ma.id 
+          WHERE mma.activo = TRUE 
+          AND m.nombre LIKE '%Social%' 
+          AND ma.nombre LIKE '%Kinestésico%'
+          ORDER BY m.nombre, ma.nombre, mma.fecha_creacion DESC";
+
+$contenidos = peticionSQL($query, [], true);
+
+if (isset($contenidos['error'])) {
+    $contenidos = [];
+}
+
 include_once HOME_PATH . 'componentes/head_component.php';
 ?>
 <!doctype html>
@@ -11,7 +35,35 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/sociales.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ingles.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/biblioteca.css" >
 </head>
+<style>
+    .kinestesico-color {
+    color: #FF6B35; /* Color naranja para kinestésico */
+}
+
+.kinesthetic-card {
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid #FF6B35;
+    border-radius: 15px;
+    padding: 20px;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.kinesthetic-card:hover {
+    transform: translateY(-5px);
+}
+
+.badge-tipo {
+    background: #FF6B35;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+</style>
 <body>    
     <div class="neuronal-background"></div>
     <?php include HOME_PATH . 'componentes/navbar.php'; ?>
@@ -23,119 +75,108 @@ include_once HOME_PATH . 'componentes/head_component.php';
             <a href="sociales.php" class="btn btn-outline-light mt-3">Volver al Test de Sociales</a>
         </div>
     </header>
-    </section>
+
     <main class="container my-5">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Sección de contenidos dinámicos desde la base de datos -->
+        <div class="content-section">
+            <h2 class="text-center mb-4 kinestesico-color">Contenidos Disponibles</h2>
             
-            <!-- Tarjeta 1: Visitas a Museos y Sitios Históricos -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="100">
-                <div class="kinesthetic-card">
-                    <!-- Icono de ubicación, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Explora la Historia en Persona</h4>
-                        <p class="card-text">La experiencia física de visitar lugares históricos activa la memoria espacial. Tu cerebro asocia la información con el lugar, creando recuerdos más sólidos y fáciles de recordar.</p>
-                        <ul class="link-list">
-                            <li><a href="https://www.google.com/search?q=museos+cerca+de+mi" target="_blank">Buscador de Museos cercanos</a></li>
-                            <li><a href="https://www.nationalgeographic.com/travel/destinations/list-of-national-parks/" target="_blank">Parques Nacionales y Reservas Naturales</a></li>
-                            <li><a href="https://www.tripadvisor.es/" target="_blank">TripAdvisor (Atracciones Históricas)</a></li>
-                        </ul>
-                    </div>
+            <?php if (empty($contenidos)): ?>
+                <div class="text-center">
+                    <p>No hay contenidos disponibles para Sociales - Kinestésico en este momento.</p>
+                    <a href="<?php echo BASE_URL; ?>dashboard.php?seccion=aprendizaje" class="btn btn-primary">
+                        Agregar Contenido
+                    </a>
                 </div>
-            </div>
-
-            <!-- Tarjeta 2: Juegos de Mesa y Rol -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="200">
-                <div class="kinesthetic-card">
-                    <!-- Icono de juego, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2a10 10 0 0 0-9.2 13.5c.3.5.7 1.1 1.2 1.5l1.6 1.3c.5.4 1.2 1.5 2 2.7 1.2 1.7 2.6 3.3 4.4 3.3s3.2-1.6 4.4-3.3c.8-1.2 1.5-2.3 2-2.7l1.6-1.3c.5-.4.9-1 1.2-1.5A10 10 0 0 0 12 2z"></path>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Aprende Moviendo las Fichas</h4>
-                        <p class="card-text">La interacción física de mover fichas o actuar en un rol activa el cerebelo, una parte del cerebro asociada con la coordinación motora y el aprendizaje procedimental, haciendo que los conceptos se "peguen" mejor en tu mente.</p>
-                        <ul class="link-list">
-                            <li><a href="https://boardgamegeek.com/geeklist/172314/educational-history-games" target="_blank">Juegos de Mesa de Historia</a></li>
-                            <li><a href="https://www.dmsguild.com/browse.php?keywords=historical&x=0&y=0&author=&artist=&price=&filters=0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0&advanced=&src=fid&action=do_browse&andos=0" target="_blank">Juegos de Rol con Temática Histórica</a></li>
-                            <li><a href="https://www.edutopia.org/blog/game-based-learning-social-studies-matt-levinson" target="_blank">Ideas de Juegos para el Aula de Sociales</a></li>
-                        </ul>
-                    </div>
+            <?php else: ?>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <?php foreach ($contenidos as $index => $contenido): 
+                        // Determinar el tipo de contenido y el icono correspondiente
+                        $tipo = '';
+                        $icono = '';
+                        $clase_card = 'kinesthetic-card';
+                        $delay = ($index + 1) * 100;
+                        
+                        // Analizar el contenido para determinar el tipo (específico para kinestésico)
+                        if (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
+                            strpos(strtolower($contenido['contenido']), 'visita') !== false ||
+                            strpos(strtolower($contenido['contenido']), 'excursión') !== false) {
+                            $tipo = 'Visita';
+                            $icono = 'location';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'mesa') !== false ||
+                                 strpos(strtolower($contenido['contenido']), 'rol') !== false) {
+                            $tipo = 'Juego';
+                            $icono = 'game';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'maqueta') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'diorama') !== false ||
+                                 strpos(strtolower($contenido['contenido']), 'construcción') !== false) {
+                            $tipo = 'Construcción';
+                            $icono = 'build';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'campo') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'observación') !== false ||
+                                 strpos(strtolower($contenido['contenido']), 'práctica') !== false) {
+                            $tipo = 'Campo';
+                            $icono = 'observation';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'simulación') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'interactivo') !== false) {
+                            $tipo = 'Simulación';
+                            $icono = 'simulation';
+                            $clase_card = 'kinesthetic-card game-card';
+                        } else {
+                            $tipo = 'Actividad';
+                            $icono = 'activity';
+                        }
+                        
+                        // Usar la imagen del contenido o una por defecto
+                        $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
+                    ?>
+                        <div class="col" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
+                            <div class="<?php echo $clase_card; ?>">
+                                <!-- Mostrar la imagen del contenido -->
+                                <div class="card-image-container">
+                                    <img src="<?php echo htmlspecialchars($imagen); ?>" 
+                                         alt="<?php echo htmlspecialchars($contenido['contenido']); ?>" 
+                                         class="card-image">
+                                </div>
+                                
+                                <div class="card-body text-center">
+                                    <span class="badge badge-tipo"><?php echo $tipo; ?></span>
+                                    <h4 class="card-title"><?php echo htmlspecialchars($contenido['contenido']); ?></h4>
+                                    
+                                    <?php if (!empty($contenido['recursos'])): ?>
+                                        <div class="link-list">
+                                            <?php 
+                                            // Si hay múltiples recursos separados por |, mostrarlos como lista
+                                            $recursos = explode('|', $contenido['recursos']);
+                                            foreach ($recursos as $recurso):
+                                                if (!empty(trim($recurso))):
+                                            ?>
+                                                <a href="<?php echo htmlspecialchars(trim($recurso)); ?>" 
+                                                   target="_blank" 
+                                                   class="recurso-link">
+                                                    <?php echo htmlspecialchars(trim($recurso)); ?>
+                                                </a>
+                                            <?php 
+                                                endif;
+                                            endforeach; 
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <div class="card-meta">
+                                        <small class="text-muted">
+                                            Creado: <?php echo date('d/m/Y', strtotime($contenido['fecha_creacion'])); ?>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-
-            <!-- Tarjeta 3: Proyectos de Maquetas y Dioramas -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="300">
-                <div class="kinesthetic-card">
-                    <!-- Icono de construcción, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10.2 13.8L6.8 20.4"></path>
-                        <path d="M17.2 13.8L20.6 20.4"></path>
-                        <path d="M12 20.4V4.5"></path>
-                        <path d="M5.5 11.2V16.8"></path>
-                        <path d="M18.5 11.2V16.8"></path>
-                        <path d="M8 8V12"></path>
-                        <path d="M16 8V12"></path>
-                        <path d="M12 4.5L14 3h-4L12 4.5z"></path>
-                        <path d="M12 4.5L14 3h-4L12 4.5z"></path>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Construye tu Conocimiento</h4>
-                        <p class="card-text">La creación de maquetas utiliza la conexión mano-cerebro, un proceso crucial para los kinestésicos. Manipular materiales y construir modelos físicos de conceptos abstractos refuerza la comprensión y la retención a largo plazo.</p>
-                        <ul class="link-list">
-                            <li><a href="https://www.wikihow.com/Make-a-Diorama" target="_blank">Cómo hacer un Diorama</a></li>
-                            <li><a href="https://www.pinterest.es/search/pins/?q=maquetas%20historicas" target="_blank">Ideas de Maquetas Históricas en Pinterest</a></li>
-                            <li><a href="http://googleusercontent.com/youtube.com/16" target="_blank">Tutoriales de Maquetas Geográficas (YouTube)</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tarjeta 4: Trabajo de Campo y Observación Directa -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="400">
-                <div class="kinesthetic-card">
-                    <!-- Icono de observación, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M21 12H3"></path>
-                        <path d="M12 3v18"></path>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Aprender del Entorno Real</h4>
-                        <p class="card-text">El trabajo de campo estimula la memoria contextual. Al interactuar con el mundo real, tu cerebro forma conexiones ricas en detalles sensoriales, lo que facilita la recuperación de la información en el futuro.</p>
-                        <ul class="link-list">
-                            <li><a href="https://citizenscience.gov/" target="_blank">Proyectos de Ciencia Ciudadana</a></li>
-                            <li><a href="#">Entrevistas de Historia Oral</a></li>
-                            <li><a href="#">Observación de Comportamientos Sociales</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tarjeta 5: Juego Interactivo "Mundo Sináptico" -->
-            <div class="col" data-aos="zoom-in" data-aos-delay="500">
-                <div class="kinesthetic-card game-card">
-                    <!-- Icono de juego, simulado con SVG -->
-                    <svg class="card-icon mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <path d="M15 2H9a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path>
-                        <path d="M12 10v4"></path>
-                        <path d="M10 12h4"></path>
-                    </svg>
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Juego: Mundo Sináptico</h4>
-                        <p class="card-text">Una experiencia interactiva donde puedes construir, explorar y simular conceptos de ciencias sociales. El aprendizaje activo a través del juego crea "bucles de refuerzo" en el cerebro, consolidando la información de forma placentera y natural.</p>
-                        <a href="MundoSinaptico/game.html" target="_blank" class="btn btn-glow mt-auto">¡Explora y Crea!</a>
-                    </div>
-                </div>
-            </div>
-
+            <?php endif; ?>
         </div>
     </main>
-
 
     <footer class="text-center py-4 mt-5">
         <p class="text-white-50">© 2025 Sinaptium. Todos los derechos reservados.</p>
