@@ -132,7 +132,6 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                 <th>Método Aprendizaje</th>
                                 <th>Tipo</th>
                                 <th>Contenido</th>
-                                <th>Recursos</th>
                                 <th>Estado</th>
                                 <th>Fecha Creación</th>
                                 <th>Acciones</th>
@@ -179,18 +178,6 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                                 substr(htmlspecialchars($contenido['contenido']), 0, 100) . '...' : 
                                                 htmlspecialchars($contenido['contenido']); ?>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <?php if (!empty($contenido['recursos'])): ?>
-                                            <button class="btn btn-sm btn-outline-info" 
-                                                    data-bs-toggle="popover" 
-                                                    data-bs-title="Recursos" 
-                                                    data-bs-content="<?php echo htmlspecialchars($contenido['recursos']); ?>">
-                                                <i class="fas fa-eye"></i> Ver
-                                            </button>
-                                        <?php else: ?>
-                                            <span class="text-muted">Sin recursos</span>
-                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <span class="badge bg-<?php echo $contenido['activo'] ? 'success' : 'secondary'; ?>">
