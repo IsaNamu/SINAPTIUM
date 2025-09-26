@@ -124,6 +124,7 @@ foreach ($usuarios as $usuario) {
                             case 'roles': echo 'Gestión de Roles'; break;
                             case 'permisos': echo 'Gestión de Permisos'; break;
                             case 'biblioteca': echo 'Gestionar biblioteca'; break;
+                            case 'aprendizaje': echo 'Contenido aprendizaje'; break;
                             default: echo 'Dashboard de Administración';
                         }
                         ?>
@@ -152,8 +153,11 @@ foreach ($usuarios as $usuario) {
                     case 'biblioteca':
                         include './biblioteca/dashboard.php';
                         break;
+                    case 'aprendizaje':
+                        include './aprendizaje/dashboard.php';
+                        break;
                     default:
-                        include './data_dashboard.php';
+                        include './biblioteca/dashboard.php';
                 }
                 ?>
             </div>

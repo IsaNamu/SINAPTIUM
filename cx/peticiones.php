@@ -185,7 +185,7 @@ function eliminarRegistro($tabla, $id, $campo_id = 'id') {
 function validarTabla($tabla) {
     global $conexion;
     
-    $tablasPermitidas = ['usuario', 'roles', 'permisos', 'roles_x_permiso', 'categorias', 'biblioteca', 'autores', 'categorias']; // Agrega aquí todas tus tablas
+    $tablasPermitidas = ['usuario', 'roles', 'permisos', 'roles_x_permiso', 'categorias', 'biblioteca', 'autores', 'categorias', 'materias', 'materia_metodo_aprendizaje', 'metodos_aprendizaje']; // Agrega aquí todas tus tablas
     
     // Validación básica por seguridad
     if (!in_array($tabla, $tablasPermitidas)) {

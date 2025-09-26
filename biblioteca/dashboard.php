@@ -278,8 +278,6 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 const archivo_pdf = button.getAttribute('data-archivo_pdf') || '';
                 const autor_id = button.getAttribute('data-autor_id');
                 const categoria_id = button.getAttribute('data-categoria_id');
-                console.log('Editar libro ID:', id);
-                console.log('Datos:', { titulo, enlace, imagen, archivo_pdf, autor_id, categoria_id });
                 
                 // Llenar los campos del formulario
                 document.getElementById('libroId').value = id;

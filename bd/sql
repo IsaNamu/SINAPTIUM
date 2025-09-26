@@ -183,13 +183,14 @@ CREATE TABLE materia_metodo_aprendizaje (
     id INT AUTO_INCREMENT PRIMARY KEY,
     materia_id INT NOT NULL,
     metodo_aprendizaje_id INT NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
     contenido TEXT NOT NULL COMMENT 'Contenido adaptado al método de aprendizaje',
     recursos VARCHAR(500) COMMENT 'Enlaces o recursos específicos',
+    imagen VARCHAR(500) DEFAULT 'https://placehold.co/600x400?text=Sin+Imagen' COMMENT 'Imagen representativa del método de aprendizaje',
     activo BOOLEAN DEFAULT TRUE,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE,
-    FOREIGN KEY (metodo_aprendizaje_id) REFERENCES metodos_aprendizaje(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_materia_metodo (materia_id, metodo_aprendizaje_id)
+    FOREIGN KEY (metodo_aprendizaje_id) REFERENCES metodos_aprendizaje(id) ON DELETE CASCADE
 );
 
 -- Renombrar la columna para mayor claridad
