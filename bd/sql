@@ -22,25 +22,31 @@ CREATE TABLE roles_x_permiso (
     UNIQUE KEY unique_permiso_rol (permiso_id, rol_id)
 );
 
--- Tabla usuario
+-- Tabla de métodos de aprendizaje
+CREATE TABLE metodos_aprendizaje (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla usuario (completa desde el inicio)
 CREATE TABLE usuario (
     id INT PRIMARY KEY AUTO_INCREMENT,
     usuario VARCHAR(50) NOT NULL UNIQUE,
     correo VARCHAR(255) NOT NULL UNIQUE,
     passwd VARCHAR(255) NOT NULL,
+    metodo_aprendizaje_id INT NULL,
     rol_id INT NOT NULL,
+    estado ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Activo',
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE RESTRICT
+    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE RESTRICT,
+    FOREIGN KEY (metodo_aprendizaje_id) REFERENCES metodos_aprendizaje(id) ON DELETE SET NULL
 );
 
--- Índices adicionales para mejorar el rendimiento
-CREATE INDEX idx_usuario_correo ON usuario(correo);
-CREATE INDEX idx_roles_x_permiso_permiso ON roles_x_permiso(permiso_id);
-CREATE INDEX idx_roles_x_permiso_rol ON roles_x_permiso(rol_id);
-CREATE INDEX idx_usuario_rol ON usuario(rol_id);
-
 -- 1. Tabla de categorías (para normalizar el campo categoría)
-CREATE TABLE IF NOT EXISTS categorias (
+CREATE TABLE categorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE,
     descripcion TEXT,
@@ -48,7 +54,7 @@ CREATE TABLE IF NOT EXISTS categorias (
 );
 
 -- 2. Tabla de autores (para normalizar el campo autor)
-CREATE TABLE IF NOT EXISTS autores (
+CREATE TABLE autores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100),
@@ -57,12 +63,12 @@ CREATE TABLE IF NOT EXISTS autores (
 );
 
 -- 3. Tabla principal de biblioteca (simplificada)
-CREATE TABLE IF NOT EXISTS biblioteca (
+CREATE TABLE biblioteca (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
-    enlace VARCHAR(500) NOT NULL,
-    imagen VARCHAR(500) NULL,
-    archivo_pdf VARCHAR(500) NULL,
+    enlace VARCHAR(500) DEFAULT '',
+    imagen VARCHAR(500) DEFAULT '',
+    archivo_pdf VARCHAR(500) DEFAULT '',
     categoria_id INT,
     autor_id INT,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -70,102 +76,6 @@ CREATE TABLE IF NOT EXISTS biblioteca (
     FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL,
     FOREIGN KEY (autor_id) REFERENCES autores(id) ON DELETE SET NULL
 );
-
--- 4. Insertar categorías predefinidas
-INSERT IGNORE INTO categorias (nombre) VALUES 
-('Filosofía'),
-('Autoayuda'),
-('Literatura'),
-('Ciencia'),
-('Historia');
-
--- 5. Crear índices para mejor rendimiento
-CREATE INDEX IF NOT EXISTS idx_biblioteca_titulo ON biblioteca(titulo);
-CREATE INDEX IF NOT EXISTS idx_biblioteca_categoria ON biblioteca(categoria_id);
-CREATE INDEX IF NOT EXISTS idx_biblioteca_autor ON biblioteca(autor_id);
-CREATE INDEX IF NOT EXISTS idx_autores_nombre ON autores(nombre, apellido);
-
-ALTER TABLE biblioteca MODIFY COLUMN enlace VARCHAR(500) DEFAULT '';
-ALTER TABLE biblioteca MODIFY COLUMN imagen VARCHAR(500) DEFAULT '';
-ALTER TABLE biblioteca MODIFY COLUMN archivo_pdf VARCHAR(500) DEFAULT '';
-
-
--- Editar tabla usuario para agregar columna estado y fecha_modificacion
-ALTER TABLE usuario 
-ADD estado ENUM('Activo', 'Inactivo', 'Bloqueado') DEFAULT 'Activo',
-ADD fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
-
--- Insertar roles predeterminados
-INSERT INTO roles (nombre, descripcion) VALUES
-('Administrador', 'Usuario con todos los permisos'),
-('Editor', 'Usuario con permisos para editar contenido'),
-('Visualizador', 'Usuario con permisos solo para ver contenido');
-
--- Insertar permisos predeterminados
-INSERT INTO permisos (nombre, descripcion) VALUES
-('usuario:Actualiza', 'Permiso para editar usuarios existentes'),
-('usuario:Crea', 'Permiso para crear nuevos usuarios'),
-('usuario:Elimina', 'Permiso para eliminar usuarios'),
-('usuario:Lee', 'Permiso para ver detalles de usuarios'),
-('rol:Crea', 'Permiso para crear nuevos roles'),
-('rol:Actualiza', 'Permiso para editar roles existentes'),
-('rol:Elimina', 'Permiso para eliminar roles'),
-('rol:Lee', 'Permiso para ver detalles de roles'),
-('permiso:Actualiza', 'Permiso para editar permisos existentes'),
-('permiso:Crea', 'Permiso para crear nuevos permisos'),
-('permiso:Elimina', 'Permiso para eliminar permisos'),
-('permiso:Lee', 'Permiso para ver detalles de permisos'),
-('biblioteca:Crea', 'Permiso para crear nuevos biblioteca/libros'),
-('biblioteca:Actualiza', 'Permiso para editar biblioteca/libros existentes'),
-('biblioteca:Elimina', 'Permiso para eliminar biblioteca/libros'),
-('biblioteca:Lee', 'Permiso para ver detalles de biblioteca/libros'),
-('categoria:Crea', 'Permiso para crear nuevas categorías'),
-('categoria:Actualiza', 'Permiso para editar categorías existentes'),
-('categoria:Elimina', 'Permiso para eliminar categorías'),
-('categoria:Lee', 'Permiso para ver detalles de categorías'),
-('autor:Crea', 'Permiso para crear nuevos autores'),
-('autor:Actualiza', 'Permiso para editar autores existentes'),
-('autor:Elimina', 'Permiso para eliminar autores'),
-('autor:Lee', 'Permiso para ver detalles de autores'),
-('dashboard:Lee', 'Permiso para ver el dashboard');
-
--- Asignar permisos a roles
--- Administrador tiene todos los permisos
-INSERT INTO roles_x_permiso (permiso_id, rol_id)
-SELECT p.id, r.id
-FROM permisos p, roles r
-WHERE r.nombre = 'Administrador';
-
--- Editor tiene permisos de usuario:Lee, usuario:Actualiza, rol:Lee
-INSERT INTO roles_x_permiso (permiso_id, rol_id)
-SELECT p.id, r.id
-FROM permisos p, roles r
-WHERE r.nombre = 'Editor' AND p.nombre IN ('usuario:Lee', 'usuario:Actualiza', 'rol:Lee');
-
--- Visualizador tiene solo permiso de usuario:Lee
-INSERT INTO roles_x_permiso (permiso_id, rol_id)
-SELECT p.id, r.id
-FROM permisos p, roles r
-WHERE r.nombre = 'Visualizador' AND p.nombre = 'usuario:Lee';
-
--- Tabla de métodos de aprendizaje (para normalizar el campo aprendizaje)
-CREATE TABLE metodos_aprendizaje (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE,
-    descripcion TEXT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Insertar métodos de aprendizaje predefinidos
-INSERT IGNORE INTO metodos_aprendizaje (nombre, descripcion) VALUES 
-('kinestésico', 'Aprendizaje mediante movimiento y experiencia práctica'),
-('auditivo', 'Aprendizaje mediante escucha y sonidos'),
-('visual', 'Aprendizaje mediante imágenes, diagramas y observación');
-
--- Actualizar la tabla usuario para usar la FK en lugar de ENUM
-ALTER TABLE usuario 
-MODIFY COLUMN aprendizaje INT NULL AFTER passwd,
-ADD FOREIGN KEY (aprendizaje) REFERENCES metodos_aprendizaje(id) ON DELETE SET NULL;
 
 -- Tabla de materias (áreas de estudio)
 CREATE TABLE materias (
@@ -193,35 +103,108 @@ CREATE TABLE materia_metodo_aprendizaje (
     FOREIGN KEY (metodo_aprendizaje_id) REFERENCES metodos_aprendizaje(id) ON DELETE CASCADE
 );
 
--- Renombrar la columna para mayor claridad
-ALTER TABLE usuario CHANGE aprendizaje metodo_aprendizaje_id INT;
-
--- Crear índices para mejor rendimiento
+-- Índices adicionales para mejorar el rendimiento
+CREATE INDEX idx_usuario_correo ON usuario(correo);
+CREATE INDEX idx_roles_x_permiso_permiso ON roles_x_permiso(permiso_id);
+CREATE INDEX idx_roles_x_permiso_rol ON roles_x_permiso(rol_id);
+CREATE INDEX idx_usuario_rol ON usuario(rol_id);
+CREATE INDEX idx_biblioteca_titulo ON biblioteca(titulo);
+CREATE INDEX idx_biblioteca_categoria ON biblioteca(categoria_id);
+CREATE INDEX idx_biblioteca_autor ON biblioteca(autor_id);
+CREATE INDEX idx_autores_nombre ON autores(nombre, apellido);
 CREATE INDEX idx_materias_activo ON materias(activo);
-CREATE INDEX idx_materias_titulo ON materias(titulo);
 CREATE INDEX idx_materia_metodo_materia ON materia_metodo_aprendizaje(materia_id);
 CREATE INDEX idx_materia_metodo_metodo ON materia_metodo_aprendizaje(metodo_aprendizaje_id);
 CREATE INDEX idx_materia_metodo_activo ON materia_metodo_aprendizaje(activo);
 
--- Insertar permisos para la gestión de materias
-INSERT INTO permisos (nombre, descripcion) VALUES
+-- Insertar datos iniciales
+
+-- Insertar métodos de aprendizaje predefinidos
+INSERT IGNORE INTO metodos_aprendizaje (nombre, descripcion) VALUES 
+('kinestésico', 'Aprendizaje mediante movimiento y experiencia práctica'),
+('auditivo', 'Aprendizaje mediante escucha y sonidos'),
+('visual', 'Aprendizaje mediante imágenes, diagramas y observación');
+
+-- Insertar roles predeterminados
+INSERT IGNORE INTO roles (nombre, descripcion) VALUES
+('Administrador', 'Usuario con todos los permisos'),
+('Editor', 'Usuario con permisos para editar contenido'),
+('Visualizador', 'Usuario con permisos solo para ver contenido');
+
+-- Insertar permisos predeterminados
+INSERT IGNORE INTO permisos (nombre, descripcion) VALUES
+('usuario:Actualiza', 'Permiso para editar usuarios existentes'),
+('usuario:Crea', 'Permiso para crear nuevos usuarios'),
+('usuario:Elimina', 'Permiso para eliminar usuarios'),
+('usuario:Lee', 'Permiso para ver detalles de usuarios'),
+('rol:Crea', 'Permiso para crear nuevos roles'),
+('rol:Actualiza', 'Permiso para editar roles existentes'),
+('rol:Elimina', 'Permiso para eliminar roles'),
+('rol:Lee', 'Permiso para ver detalles de roles'),
+('permiso:Actualiza', 'Permiso para editar permisos existentes'),
+('permiso:Crea', 'Permiso para crear nuevos permisos'),
+('permiso:Elimina', 'Permiso para eliminar permisos'),
+('permiso:Lee', 'Permiso para ver detalles de permisos'),
+('biblioteca:Crea', 'Permiso para crear nuevos biblioteca/libros'),
+('biblioteca:Actualiza', 'Permiso para editar biblioteca/libros existentes'),
+('biblioteca:Elimina', 'Permiso para eliminar biblioteca/libros'),
+('biblioteca:Lee', 'Permiso para ver detalles de biblioteca/libros'),
+('categoria:Crea', 'Permiso para crear nuevas categorías'),
+('categoria:Actualiza', 'Permiso para editar categorías existentes'),
+('categoria:Elimina', 'Permiso para eliminar categorías'),
+('categoria:Lee', 'Permiso para ver detalles de categorías'),
+('autor:Crea', 'Permiso para crear nuevos autores'),
+('autor:Actualiza', 'Permiso para editar autores existentes'),
+('autor:Elimina', 'Permiso para eliminar autores'),
+('autor:Lee', 'Permiso para ver detalles de autores'),
 ('materia:Crea', 'Permiso para crear nuevas materias/contenidos'),
 ('materia:Actualiza', 'Permiso para editar materias existentes'),
 ('materia:Elimina', 'Permiso para eliminar materias'),
-('materia:Lee', 'Permiso para ver detalles de materias');
+('materia:Lee', 'Permiso para ver detalles de materias'),
+('dashboard:Lee', 'Permiso para ver el dashboard');
 
--- Asignar permisos de materias al rol Administrador
-INSERT INTO roles_x_permiso (permiso_id, rol_id)
+-- Asignar permisos a roles
+-- Administrador tiene todos los permisos
+INSERT IGNORE INTO roles_x_permiso (permiso_id, rol_id)
 SELECT p.id, r.id
 FROM permisos p, roles r
-WHERE r.nombre = 'Administrador' AND p.nombre LIKE 'materia:%';
+WHERE r.nombre = 'Administrador';
+
+-- Editor tiene permisos de usuario:Lee, usuario:Actualiza, rol:Lee
+INSERT IGNORE INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Editor' AND p.nombre IN (
+    'usuario:Lee', 'usuario:Actualiza', 'rol:Lee', 
+    'biblioteca:Lee', 'biblioteca:Actualiza', 'biblioteca:Crea',
+    'categoria:Lee', 'autor:Lee', 'materia:Lee'
+);
+
+-- Visualizador tiene solo permiso de usuario:Lee
+INSERT IGNORE INTO roles_x_permiso (permiso_id, rol_id)
+SELECT p.id, r.id
+FROM permisos p, roles r
+WHERE r.nombre = 'Visualizador' AND p.nombre IN (
+    'usuario:Lee', 'biblioteca:Lee', 'categoria:Lee', 
+    'autor:Lee', 'materia:Lee'
+);
+
+-- Insertar categorías predefinidas
+INSERT IGNORE INTO categorias (nombre) VALUES 
+('Filosofía'),
+('Autoayuda'),
+('Literatura'),
+('Ciencia'),
+('Historia');
 
 -- Insertar materias predefinidas
-INSERT IGNORE INTO materias (nombre, descripcion) VALUES  ('Soaciales', 'Estudio de la historia'), ('Ciencias', 'Estudio de la naturaleza y fenómenos naturales');
+INSERT IGNORE INTO materias (nombre, descripcion) VALUES  
+('Sociales', 'Estudio de la sociedad y relaciones humanas'),
+('Ciencias', 'Estudio de la naturaleza y fenómenos naturales'),
+('Matemáticas', 'Estudio de números, cantidades y formas'),
+('Lenguaje', 'Estudio de la comunicación y expresión');
 
 -- Insertar usuario administrador predeterminado (contraseña: ab)
-INSERT INTO usuario (usuario, correo, passwd, rol_id) VALUES
-('admin', 'admin@gmail.com', '$2y$10$H1qB1GSD.eWp1.vPv9WggOv5bVH/Y0ymf579jF/VbKDyl6Nk2mVS6', (SELECT id FROM roles WHERE nombre = 'Administrador'));
-
-ALTER TABLE usuario 
-ADD COLUMN aprendizaje ENUM('kinestésico', 'auditivo', 'visual') NULL AFTER passwd;
+INSERT IGNORE INTO usuario (usuario, correo, passwd, rol_id) VALUES
+('admin', 'admin@gmail.com', '$2y$10$H1qB1GSD.eWp1.vPv9WggOv5bVH/Y0ymf579jF/VbKDyl6Nk2mVS6', 
+ (SELECT id FROM roles WHERE nombre = 'Administrador'));
