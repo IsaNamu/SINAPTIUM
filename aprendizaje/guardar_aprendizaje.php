@@ -1,5 +1,15 @@
 <?php
-// guardar_contenido.php
+// PRIMERO: Configurar límites - esto debe ser lo ABSOLUTAMENTE PRIMERO
+ini_set('upload_max_filesize', '20M');
+ini_set('post_max_size', '22M');
+ini_set('max_execution_time', 300);
+ini_set('max_input_time', 300);
+ini_set('memory_limit', '256M');
+
+// SEGUNDO: Iniciar output buffering para evitar errores de headers
+ob_start();
+
+// TERCERO: Incluir archivos de configuración
 require_once $_SERVER['DOCUMENT_ROOT'] . '/Sinaptium/config.php';
 
 include_once HOME_PATH . 'verificar_sesion.php';
@@ -11,11 +21,6 @@ $upload_dir_archivos = HOME_PATH . 'contenidos/archivos/';
 $max_file_size_archivo = 10 * 1024 * 1024; // 10MB
 $max_file_size_imagen = 5 * 1024 * 1024; // 5MB
 
-// Aumentar límites de PHP para subida de archivos grandes
-ini_set('upload_max_filesize', '10M');
-ini_set('post_max_size', '12M');
-ini_set('max_execution_time', 300);
-
 // Crear directorios si no existen
 if (!file_exists($upload_dir_imagen)) {
     mkdir($upload_dir_imagen, 0777, true);
@@ -26,12 +31,23 @@ if (!file_exists($upload_dir_archivos)) {
 
 // Restricciones por método de aprendizaje
 $restriccionesMetodos = [
-    'kinestésico' => ['video', 'interactivo', 'enlace'], // No permite audio
-    'auditivo' => ['audio', 'documento', 'enlace'], // No permite imagen
-    'visual' => ['imagen', 'video', 'documento', 'enlace'] // Permite todos excepto audio
+    'kinestésico' => ['video', 'interactivo', 'enlace'],
+    'auditivo' => ['audio', 'documento', 'enlace'],
+    'visual' => ['imagen', 'video', 'documento', 'enlace']
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar si el POST está vacío (indicaría que excedió el límite)
+    if (empty($_POST) && empty($_FILES)) {
+        $_SESSION['mensaje'] = [
+            'tipo' => 'danger',
+            'texto' => 'El archivo es demasiado grande. Tamaño máximo: ' . ini_get('post_max_size')
+        ];
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        ob_end_flush();
+        exit;
+    }
+    
     $id = $_POST['id'] ?? null;
     $materia_id = $_POST['materia_id'] ?? null;
     $metodo_aprendizaje_id = $_POST['metodo_aprendizaje_id'] ?? null;
@@ -320,3 +336,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: ' . BASE_URL . 'dashboard.php');
     exit;
 }
+ob_end_flush();

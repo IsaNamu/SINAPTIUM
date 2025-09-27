@@ -38,31 +38,76 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/biblioteca.css" >
 </head>
 <style>
+    .book-cover img {
+        opacity: 1;
+    }
+    
     .kinestesico-color {
-    color: #FF6B35; /* Color naranja para kinestésico */
-}
+        color: #FF6B35; /* Color naranja para kinestésico */
+    }
 
-.kinesthetic-card {
-    background: rgba(255, 107, 53, 0.1);
-    border: 1px solid #FF6B35;
-    border-radius: 15px;
-    padding: 20px;
-    height: 100%;
-    transition: transform 0.3s ease;
-}
+    .kinesthetic-card {
+        background: rgba(255, 107, 53, 0.1);
+        border: 1px solid #FF6B35;
+        border-radius: 15px;
+        padding: 20px;
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
 
-.kinesthetic-card:hover {
-    transform: translateY(-5px);
-}
+    .kinesthetic-card:hover {
+        transform: translateY(-5px);
+    }
 
-.badge-tipo {
-    background: #FF6B35;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-}
+    .bg-kinestesico { background-color: #FF6B35; }
+    .bg-visita { background-color: #28a745; }
+    .bg-juego { background-color: #dc3545; }
+    .bg-construccion { background-color: #fd7e14; }
+    .bg-campo { background-color: #20c997; }
+    .bg-simulacion { background-color: #6f42c1; }
+    .bg-actividad { background-color: #6c757d; }
+
+    .activity-overlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 107, 53, 0.9);
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .book-cover {
+        position: relative;
+    }
+
+    .at-link_secondary.kinestesico {
+        background: #FF6B35;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .at-link_secondary.kinestesico:hover {
+        background: #e55a2b;
+        transform: translateY(-2px);
+    }
+
+    .icon-activity::before { content: '🏃'; }
+    .icon-visita::before { content: '📍'; }
+    .icon-juego::before { content: '🎮'; }
+    .icon-construccion::before { content: '🔨'; }
 </style>
 <body>    
     <div class="neuronal-background"></div>
@@ -76,86 +121,138 @@ include_once HOME_PATH . 'componentes/head_component.php';
         </div>
     </header>
 
-    <main class="container my-5">
-        <!-- Sección de contenidos dinámicos desde la base de datos -->
-        <div class="content-section">
-            <h2 class="text-center mb-4 kinestesico-color">Contenidos Disponibles</h2>
-            
-            <?php if (empty($contenidos)): ?>
-                <div class="text-center">
-                    <p>No hay contenidos disponibles para Sociales - Kinestésico en este momento.</p>
-                    <a href="<?php echo BASE_URL; ?>dashboard.php?seccion=aprendizaje" class="btn btn-primary">
-                        Agregar Contenido
-                    </a>
+    <section class="section-padding">
+        <div class="container">
+            <div class="content-card" data-aos="fade-up">
+                <h2 class="text-center mb-4 purple">Explora Nuestros Contenidos</h2>
+                
+                <div class="search-container">
+                    <input type="text" id="searchBooks" placeholder="Buscar contenidos por título..." class="search-input">
                 </div>
-            <?php else: ?>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    <?php foreach ($contenidos as $index => $contenido): 
-                        // Determinar el tipo de contenido y el icono correspondiente
-                        $tipo = '';
-                        $icono = '';
-                        $clase_card = 'kinesthetic-card';
-                        $delay = ($index + 1) * 100;
-                        
-                        // Analizar el contenido para determinar el tipo (específico para kinestésico)
-                        if (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
-                            strpos(strtolower($contenido['contenido']), 'visita') !== false ||
-                            strpos(strtolower($contenido['contenido']), 'excursión') !== false) {
-                            $tipo = 'Visita';
-                            $icono = 'location';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'mesa') !== false ||
-                                 strpos(strtolower($contenido['contenido']), 'rol') !== false) {
-                            $tipo = 'Juego';
-                            $icono = 'game';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'maqueta') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'diorama') !== false ||
-                                 strpos(strtolower($contenido['contenido']), 'construcción') !== false) {
-                            $tipo = 'Construcción';
-                            $icono = 'build';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'campo') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'observación') !== false ||
-                                 strpos(strtolower($contenido['contenido']), 'práctica') !== false) {
-                            $tipo = 'Campo';
-                            $icono = 'observation';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'simulación') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'interactivo') !== false) {
-                            $tipo = 'Simulación';
-                            $icono = 'simulation';
-                            $clase_card = 'kinesthetic-card game-card';
-                        } else {
-                            $tipo = 'Actividad';
-                            $icono = 'activity';
-                        }
-                        
-                        // Usar la imagen del contenido o una por defecto
-                        $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
-                    ?>
-                        <div class="col" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
-                            <div class="<?php echo $clase_card; ?>">
-                                <!-- Mostrar la imagen del contenido -->
-                                <div class="card-image-container">
+
+                <div class="book-grid" id="bookGrid">
+                    <?php if (empty($contenidos)): ?>
+                        <div class="col-12 text-center">
+                            <p>No hay contenidos disponibles en este momento.</p>
+                            <a href="<?php echo BASE_URL; ?>dashboard.php?seccion=aprendizaje" class="btn btn-primary">
+                                Agregar Contenido
+                            </a>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($contenidos as $index => $contenido): 
+                            // Determinar el tipo de contenido y la clase del badge
+                            $tipo = '';
+                            $badgeClass = 'bg-secondary';
+                            $esInteractivo = false;
+                            $icono = 'icon-activity';
+                            
+                            // Analizar el contenido para determinar el tipo (específico para kinestésico)
+                            if (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
+                                strpos(strtolower($contenido['contenido']), 'visita') !== false ||
+                                strpos(strtolower($contenido['contenido']), 'excursión') !== false ||
+                                strpos(strtolower($contenido['contenido']), 'tour') !== false) {
+                                $tipo = 'Visita';
+                                $badgeClass = 'bg-visita';
+                                $icono = 'icon-visita';
+                                $esInteractivo = true;
+                            } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
+                                     strpos(strtolower($contenido['contenido']), 'mesa') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'rol') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'quiz') !== false) {
+                                $tipo = 'Juego';
+                                $badgeClass = 'bg-juego';
+                                $icono = 'icon-juego';
+                                $esInteractivo = true;
+                            } elseif (strpos(strtolower($contenido['contenido']), 'maqueta') !== false || 
+                                     strpos(strtolower($contenido['contenido']), 'diorama') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'construcción') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'manualidad') !== false) {
+                                $tipo = 'Construcción';
+                                $badgeClass = 'bg-construccion';
+                                $icono = 'icon-construccion';
+                                $esInteractivo = true;
+                            } elseif (strpos(strtolower($contenido['contenido']), 'campo') !== false || 
+                                     strpos(strtolower($contenido['contenido']), 'observación') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'práctica') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'experimento') !== false) {
+                                $tipo = 'Campo';
+                                $badgeClass = 'bg-campo';
+                                $esInteractivo = true;
+                            } elseif (strpos(strtolower($contenido['contenido']), 'simulación') !== false || 
+                                     strpos(strtolower($contenido['contenido']), 'interactivo') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'realidad virtual') !== false) {
+                                $tipo = 'Simulación';
+                                $badgeClass = 'bg-simulacion';
+                                $esInteractivo = true;
+                            } else {
+                                $tipo = 'Actividad';
+                                $badgeClass = 'bg-actividad';
+                                $esInteractivo = true;
+                            }
+                            
+                            // Usar la imagen del contenido o una por defecto
+                            $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
+                        ?>
+                            <div class="book-card" data-category="<?php echo strtolower($tipo); ?>">
+                                <div class="book-cover">
                                     <img src="<?php echo htmlspecialchars($imagen); ?>" 
                                          alt="<?php echo htmlspecialchars($contenido['contenido']); ?>" 
-                                         class="card-image">
+                                         class="img-fluid">
+                                    <?php if ($esInteractivo): ?>
+                                        <div class="activity-overlay">
+                                            <i class="<?php echo $icono; ?>"></i>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
-                                
-                                <div class="card-body text-center">
-                                    <span class="badge badge-tipo"><?php echo $tipo; ?></span>
-                                    <h4 class="card-title"><?php echo htmlspecialchars($contenido['contenido']); ?></h4>
+                                <div class="book-info">
+                                    <h5>
+                                        <?php if (!empty($contenido['recursos'])): 
+                                            $primerRecurso = explode('|', $contenido['recursos'])[0];
+                                        ?>
+                                            <a href="<?php echo htmlspecialchars(trim($primerRecurso)); ?>" target="_blank">
+                                                <?php echo htmlspecialchars($contenido['contenido']); ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <?php echo htmlspecialchars($contenido['contenido']); ?>
+                                        <?php endif; ?>
+                                    </h5>
+                                    
+                                    <p class="book-author">
+                                        <?php if (!empty($contenido['titulo'])): ?>
+                                            <?php echo htmlspecialchars($contenido['titulo']); ?>
+                                        <?php else: ?>
+                                            <span class="text-muted">Sin descripción adicional</span>
+                                        <?php endif; ?>
+                                    </p>
+                                    
+                                    <span class="badge book-badge <?php echo $badgeClass; ?>">
+                                        <?php echo $tipo; ?>
+                                    </span>
+                                    
+                                    <!-- Botón de acción para actividades kinestésicas -->
+                                    <?php if ($esInteractivo && !empty($contenido['recursos'])): ?>
+                                        <div class="button-action mt-2">
+                                            <button class="at-link_secondary kinestesico activity-btn" 
+                                                    data-activity-url="<?php echo htmlspecialchars(trim(explode('|', $contenido['recursos'])[0])); ?>">
+                                                Participar <i class="<?php echo $icono; ?>"></i>
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
                                     
                                     <?php if (!empty($contenido['recursos'])): ?>
-                                        <div class="link-list">
+                                        <div class="link-list mt-2">
                                             <?php 
-                                            // Si hay múltiples recursos separados por |, mostrarlos como lista
                                             $recursos = explode('|', $contenido['recursos']);
                                             foreach ($recursos as $recurso):
                                                 if (!empty(trim($recurso))):
                                             ?>
                                                 <a href="<?php echo htmlspecialchars(trim($recurso)); ?>" 
                                                    target="_blank" 
-                                                   class="recurso-link">
-                                                    <?php echo htmlspecialchars(trim($recurso)); ?>
+                                                   class="recurso-link small">
+                                                    <?php 
+                                                    $dominio = parse_url(trim($recurso), PHP_URL_HOST);
+                                                    echo htmlspecialchars($dominio ?: 'Recurso');
+                                                    ?>
                                                 </a>
                                             <?php 
                                                 endif;
@@ -164,19 +261,19 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                         </div>
                                     <?php endif; ?>
                                     
-                                    <div class="card-meta">
+                                    <div class="card-meta mt-2">
                                         <small class="text-muted">
                                             Creado: <?php echo date('d/m/Y', strtotime($contenido['fecha_creacion'])); ?>
                                         </small>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
+            </div>    
         </div>
-    </main>
+    </section>
 
     <footer class="text-center py-4 mt-5">
         <p class="text-white-50">© 2025 Sinaptium. Todos los derechos reservados.</p>
@@ -184,10 +281,62 @@ include_once HOME_PATH . 'componentes/head_component.php';
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
     <script>
         AOS.init({
             duration: 800,
             once: true,
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchBooks');
+            const bookGrid = document.getElementById('bookGrid');
+            const bookCards = bookGrid ? bookGrid.querySelectorAll('.book-card') : [];
+
+            if (searchInput && bookGrid) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase().trim();
+                    
+                    bookCards.forEach(function(card) {
+                        const title = card.querySelector('h5').textContent.toLowerCase();
+                        const author = card.querySelector('.book-author').textContent.toLowerCase();
+                        const category = card.getAttribute('data-category');
+                        
+                        // Buscar en título, autor y categoría
+                        const matches = title.includes(searchTerm) || 
+                                       author.includes(searchTerm) || 
+                                       category.includes(searchTerm);
+                        
+                        if (matches || searchTerm === '') {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+
+            // Botones de actividad kinestésica
+            document.querySelectorAll('.activity-btn').forEach(function(boton) {
+                boton.addEventListener('click', function() {
+                    const activityUrl = this.getAttribute('data-activity-url');
+                    if (activityUrl) {
+                        window.open(activityUrl, '_blank');
+                    }
+                });
+            });
+
+            // Precarga de imágenes
+            const images = document.querySelectorAll('.book-cover img');
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                }
+            });
         });
     </script>
 </body>

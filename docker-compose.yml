@@ -5,13 +5,17 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./:/var/www/html/Sinaptium  # Monta tu código aquí
+      - ./:/var/www/html/Sinaptium
     environment:
       - DB_HOST=sql_ana
       - DB_NAME=sinaptium
       - DB_USER=root
       - DB_PASSWORD=1234
-
+      # Límites de PHP para subida de archivos
+      - PHP_UPLOAD_MAX_FILESIZE=20M
+      - PHP_POST_MAX_SIZE=22M
+      - PHP_MAX_EXECUTION_TIME=300
+      - PHP_MEMORY_LIMIT=256M
     networks:
       - app-network
 

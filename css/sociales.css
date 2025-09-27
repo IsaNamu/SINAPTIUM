@@ -747,3 +747,64 @@ footer {
     color: var(--neuro-purple);
     text-decoration: underline;
 }
+
+.audio-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-cover {
+    position: relative;
+}
+
+.button-action {
+    margin-top: 10px;
+}
+
+.at-link_secondary.emisora {
+    background: #6f42c1;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.at-link_secondary.emisora:hover {
+    background: #5a2d9c;
+    transform: translateY(-2px);
+}
+
+.at-link_secondary.emisora.playing {
+    background: #28a745;
+}
+
+.audio-player {
+    display: none;
+}
+
+.icon-onda::before {
+    content: '🔊';
+}
+
+.icon-pausa::before {
+    content: '⏸';
+}
+
+.icon-audio::before {
+    content: '🎵';
+}
