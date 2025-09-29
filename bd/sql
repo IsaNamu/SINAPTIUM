@@ -160,7 +160,10 @@ INSERT IGNORE INTO permisos (nombre, descripcion) VALUES
 ('materia:Crea', 'Permiso para crear nuevas materias/contenidos'),
 ('materia:Actualiza', 'Permiso para editar materias existentes'),
 ('materia:Elimina', 'Permiso para eliminar materias'),
-('materia:Lee', 'Permiso para ver detalles de materias'),
+('aprendizaje:Lee', 'Permiso para ver detalles de aprendizajes'),
+('aprendizaje:Crea', 'Permiso para crear nuevas aprendizajes/contenidos'),
+('aprendizaje:Actualiza', 'Permiso para editar aprendizajes existentes'),
+('aprendizaje:Elimina', 'Permiso para eliminar aprendizajes'),
 ('dashboard:Lee', 'Permiso para ver el dashboard');
 
 -- Asignar permisos a roles
@@ -200,7 +203,7 @@ INSERT IGNORE INTO categorias (nombre) VALUES
 -- Insertar materias predefinidas
 INSERT IGNORE INTO materias (nombre, descripcion) VALUES  
 ('Sociales', 'Estudio de la sociedad y relaciones humanas'),
-('Ciencias', 'Estudio de la naturaleza y fenómenos naturales'),
+('Ciencias Naturales', 'Estudio de la naturaleza y fenómenos naturales'),
 ('Matemáticas', 'Estudio de números, cantidades y formas'),
 ('Lenguaje', 'Estudio de la comunicación y expresión');
 

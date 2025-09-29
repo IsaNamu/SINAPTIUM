@@ -6,7 +6,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
 <html lang="es">
 <head>
     <?php renderHead('Sinaptium - Áreas Académicas'); ?>
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css">
 </head>
 <body>
     <div class="neuronal-background"></div>
@@ -26,17 +26,17 @@ include_once HOME_PATH . 'componentes/head_component.php';
     <section class="section-padding">
         <div class="container">
             <!-- Fila responsiva: 1 columna en móvil, 2 en tablet, 4 en escritorio -->
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                 
                 <!-- Inglés -->
-                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                <!-- <div class="col" data-aos="fade-up" data-aos-delay="100">
                     <div class="area-card text-center">
                         <div class="area-icon">🌎</div>
                         <h3 class="area-title">Inglés</h3>
                         <p class="mb-0">Perfecciona tus habilidades en el idioma global con métodos innovadores.</p>
                         <a href="ingles/ingles.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Sociales -->
                 <div class="col" data-aos="fade-up" data-aos-delay="200">
@@ -44,7 +44,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                         <div class="area-icon">🏛️</div>
                         <h3 class="area-title">Sociales</h3>
                         <p class="mb-0">Comprende la historia, geografía y sociedad a través de experiencias inmersivas.</p>
-                        <a href="sociales/sociales.php" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="<?php echo BASE_URL; ?>sociales" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                         <div class="area-icon">🍀</div>
                         <h3 class="area-title">Ciencias Naturales</h3>
                         <p class="mb-0">Explora y aprende sobre física, química y biología con enfoques neuroeducativos.</p>
-                        <a href="ciencias_naturales" class="btn btn-glow mt-3"><span>Explorar</span></a>
+                        <a href="<?php echo BASE_URL; ?>ciencias_naturales" class="btn btn-glow mt-3"><span>Explorar</span></a>
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                     </div>
                 </div>     
             </div>
-            <div class="col" data-aos="fade-up" data-aos-delay="400">
+            <div class="col mt-3" data-aos="fade-up" data-aos-delay="400">
                 <div class="area-card text-center">
                     <div class="area-icon">🏆</div>
                     <h3 class="area-title">Reconocimientos</h3>

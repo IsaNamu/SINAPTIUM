@@ -5,9 +5,9 @@ include_once HOME_PATH . 'cx/peticiones.php';
 if (!isset($_SESSION['usuario_id'])) {
     $_SESSION['mensaje'] = [
         'tipo' => 'warning',
-        'texto' => 'Debes iniciar sesión para acceder a los recursos personalizados de sociales.'
+        'texto' => 'Debes iniciar sesión para acceder a los recursos personalizados de Ciencias Naturales.'
     ];
-    header('Location: ' . BASE_URL . 'sociales');
+    header('Location: ' . BASE_URL . 'ciencias_naturales');
     exit();
 }
 
@@ -17,11 +17,11 @@ if ($estiloAprendizaje !== 'kinestésico') {
         'tipo' => 'info',
         'texto' => 'Tu estilo de aprendizaje detectado es ' . ucfirst($estiloAprendizaje) . '. Estos recursos están optimizados para el estilo auditivo.'
     ];
-    header('Location: ' . BASE_URL . 'sociales');
+    header('Location: ' . BASE_URL . 'ciencias_naturales');
     exit();
 }
 
-// Obtener los contenidos para el método kinestésico de la materia Sociales
+// Obtener los contenidos para el método kinestésico de la materia Ciencias Naturales
 $query = "SELECT mma.*, 
                  m.nombre as materia_nombre,
                  ma.nombre as metodo_aprendizaje_nombre,
@@ -35,7 +35,7 @@ $query = "SELECT mma.*,
           INNER JOIN materias m ON mma.materia_id = m.id 
           INNER JOIN metodos_aprendizaje ma ON mma.metodo_aprendizaje_id = ma.id 
           WHERE mma.activo = TRUE 
-          AND m.nombre LIKE '%Social%' 
+          AND m.nombre LIKE '%Ciencias Naturales%' 
           AND ma.nombre LIKE '%Kinestésico%'
           ORDER BY m.nombre, ma.nombre, mma.fecha_creacion DESC";
 
@@ -50,100 +50,102 @@ include_once HOME_PATH . 'componentes/head_component.php';
 <!doctype html>
 <html lang="es">
 <head>
-    <?php renderHead('Sinaptium - Sociales (Kinestésico)'); ?>
+    <?php renderHead('Sinaptium - Ciencias Naturales (Kinestésico)'); ?>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css" >
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/sociales.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ciencias_naturales.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ingles.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/biblioteca.css" >
+    <style>
+        .book-cover img {
+            opacity: 1;
+        }
+        
+        .kinestesico-color {
+            color: #FF6B35; /* Color naranja para kinestésico */
+        }
+
+        .kinesthetic-card {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid #FF6B35;
+            border-radius: 15px;
+            padding: 20px;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .kinesthetic-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bg-kinestesico { background-color: #FF6B35; }
+        .bg-laboratorio { background-color: #28a745; }
+        .bg-experimento { background-color: #dc3545; }
+        .bg-construccion { background-color: #fd7e14; }
+        .bg-campo { background-color: #20c997; }
+        .bg-simulacion { background-color: #6f42c1; }
+        .bg-actividad { background-color: #6c757d; }
+
+        .activity-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 107, 53, 0.9);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-cover {
+            position: relative;
+        }
+
+        .at-link_secondary.kinestesico {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .at-link_secondary.kinestesico:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .icon-laboratorio::before { content: '🧪'; }
+        .icon-experimento::before { content: '🔬'; }
+        .icon-construccion::before { content: '🔨'; }
+        .icon-campo::before { content: '🌿'; }
+        .icon-simulacion::before { content: '🖥️'; }
+        .icon-actividad::before { content: '🏃'; }
+    </style>
 </head>
-<style>
-    .book-cover img {
-        opacity: 1;
-    }
-    
-    .kinestesico-color {
-        color: #FF6B35; /* Color naranja para kinestésico */
-    }
-
-    .kinesthetic-card {
-        background: rgba(255, 107, 53, 0.1);
-        border: 1px solid #FF6B35;
-        border-radius: 15px;
-        padding: 20px;
-        height: 100%;
-        transition: transform 0.3s ease;
-    }
-
-    .kinesthetic-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .bg-kinestesico { background-color: #FF6B35; }
-    .bg-visita { background-color: #28a745; }
-    .bg-juego { background-color: #dc3545; }
-    .bg-construccion { background-color: #fd7e14; }
-    .bg-campo { background-color: #20c997; }
-    .bg-simulacion { background-color: #6f42c1; }
-    .bg-actividad { background-color: #6c757d; }
-
-    .activity-overlay {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255, 107, 53, 0.9);
-        color: white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .book-cover {
-        position: relative;
-    }
-
-    .at-link_secondary.kinestesico {
-        background: #FF6B35;
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-
-    .at-link_secondary.kinestesico:hover {
-        background: #e55a2b;
-        transform: translateY(-2px);
-    }
-
-    .icon-activity::before { content: '🏃'; }
-    .icon-visita::before { content: '📍'; }
-    .icon-juego::before { content: '🎮'; }
-    .icon-construccion::before { content: '🔨'; }
-</style>
 <body>    
     <div class="neuronal-background"></div>
     <?php include HOME_PATH . 'componentes/navbar.php'; ?>
 
     <header class="hero text-center text-white py-5">
         <div class="container" data-aos="fade-up">
-            <h1 class="kinestesico-color">Sociales: Recursos para Aprendices Kinestésicos</h1>
-            <p class="lead">Si aprendes haciendo y explorando, estas actividades te conectarán con el mundo social.</p>
-            <a href="sociales.php" class="btn btn-outline-light mt-3">Volver al Test de Sociales</a>
+            <h1 class="kinestesico-color">Ciencias Naturales: Recursos para Aprendices Kinestésicos</h1>
+            <p class="lead">Si aprendes haciendo y experimentando, estas actividades te conectarán con la biología, química, física y ecología.</p>
+            <a href="ciencias_naturales" class="btn btn-outline-light mt-3">Volver al Test de Ciencias Naturales</a>
         </div>
     </header>
 
     <section class="section-padding">
         <div class="container">
             <div class="content-card" data-aos="fade-up">
-                <h2 class="text-center mb-4 purple">Explora Nuestros Contenidos</h2>
+                <h2 class="text-center mb-4 kinestesico-color">Explora Nuestros Contenidos Interactivos</h2>
                 
                 <div class="search-container">
                     <input type="text" id="searchBooks" placeholder="Buscar contenidos por título..." class="search-input">
@@ -163,45 +165,46 @@ include_once HOME_PATH . 'componentes/head_component.php';
                             $tipo = '';
                             $badgeClass = 'bg-secondary';
                             $esInteractivo = false;
-                            $icono = 'icon-activity';
+                            $icono = 'icon-actividad';
                             
-                            // Analizar el contenido para determinar el tipo (específico para kinestésico)
-                            if (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
-                                strpos(strtolower($contenido['contenido']), 'visita') !== false ||
-                                strpos(strtolower($contenido['contenido']), 'excursión') !== false ||
-                                strpos(strtolower($contenido['contenido']), 'tour') !== false) {
-                                $tipo = 'Visita';
-                                $badgeClass = 'bg-visita';
-                                $icono = 'icon-visita';
+                            // Analizar el contenido para determinar el tipo (específico para ciencias naturales kinestésico)
+                            if (strpos(strtolower($contenido['contenido']), 'laboratorio') !== false || 
+                                strpos(strtolower($contenido['contenido']), 'experimento') !== false ||
+                                strpos(strtolower($contenido['recursos']), 'phet') !== false ||
+                                strpos(strtolower($contenido['recursos']), 'labster') !== false) {
+                                $tipo = 'Laboratorio';
+                                $badgeClass = 'bg-laboratorio';
+                                $icono = 'icon-laboratorio';
                                 $esInteractivo = true;
                             } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
-                                     strpos(strtolower($contenido['contenido']), 'mesa') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'rol') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'quiz') !== false) {
-                                $tipo = 'Juego';
-                                $badgeClass = 'bg-juego';
-                                $icono = 'icon-juego';
+                                     strpos(strtolower($contenido['contenido']), 'simulación') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'interactivo') !== false) {
+                                $tipo = 'Simulación';
+                                $badgeClass = 'bg-simulacion';
+                                $icono = 'icon-simulacion';
                                 $esInteractivo = true;
                             } elseif (strpos(strtolower($contenido['contenido']), 'maqueta') !== false || 
                                      strpos(strtolower($contenido['contenido']), 'diorama') !== false ||
                                      strpos(strtolower($contenido['contenido']), 'construcción') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'manualidad') !== false) {
+                                     strpos(strtolower($contenido['contenido']), 'proyecto') !== false) {
                                 $tipo = 'Construcción';
                                 $badgeClass = 'bg-construccion';
                                 $icono = 'icon-construccion';
                                 $esInteractivo = true;
                             } elseif (strpos(strtolower($contenido['contenido']), 'campo') !== false || 
                                      strpos(strtolower($contenido['contenido']), 'observación') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'práctica') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'experimento') !== false) {
+                                     strpos(strtolower($contenido['contenido']), 'naturaleza') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'excursión') !== false) {
                                 $tipo = 'Campo';
                                 $badgeClass = 'bg-campo';
+                                $icono = 'icon-campo';
                                 $esInteractivo = true;
-                            } elseif (strpos(strtolower($contenido['contenido']), 'simulación') !== false || 
-                                     strpos(strtolower($contenido['contenido']), 'interactivo') !== false ||
-                                     strpos(strtolower($contenido['contenido']), 'realidad virtual') !== false) {
-                                $tipo = 'Simulación';
-                                $badgeClass = 'bg-simulacion';
+                            } elseif (strpos(strtolower($contenido['contenido']), 'demostración') !== false || 
+                                     strpos(strtolower($contenido['contenido']), 'práctica') !== false ||
+                                     strpos(strtolower($contenido['contenido']), 'actividad') !== false) {
+                                $tipo = 'Experimento';
+                                $badgeClass = 'bg-experimento';
+                                $icono = 'icon-experimento';
                                 $esInteractivo = true;
                             } else {
                                 $tipo = 'Actividad';
@@ -210,7 +213,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                             }
                             
                             // Usar la imagen del contenido o una por defecto
-                            $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
+                            $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400/FF6B35/white?text=Ciencias+Kinestésico';
                         ?>
                             <div class="book-card" data-category="<?php echo strtolower($tipo); ?>">
                                 <div class="book-cover">
@@ -253,7 +256,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
                                         <div class="button-action mt-2">
                                             <button class="at-link_secondary kinestesico activity-btn" 
                                                     data-activity-url="<?php echo htmlspecialchars(trim(explode('|', $contenido['recursos'])[0])); ?>">
-                                                Participar <i class="<?php echo $icono; ?>"></i>
+                                                Experimentar <i class="<?php echo $icono; ?>"></i>
                                             </button>
                                         </div>
                                     <?php endif; ?>
@@ -293,6 +296,84 @@ include_once HOME_PATH . 'componentes/head_component.php';
             </div>    
         </div>
     </section>
+
+    <!-- Sección de recursos predeterminados (si no hay contenidos en BD) -->
+    <?php if (empty($contenidos)): ?>
+    <section class="container my-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" data-aos="zoom-in" data-aos-delay="100">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/600x400/FF6B35/white?text=Laboratorios" alt="Laboratorios" class="img-fluid">
+                        <div class="activity-overlay">
+                            <i class="icon-laboratorio"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5>Laboratorios Virtuales</h5>
+                        <p class="book-author">Realiza experimentos de física, química y biología en entornos digitales seguros</p>
+                        <span class="badge book-badge bg-laboratorio">Laboratorio</span>
+                        <div class="button-action mt-2">
+                            <button class="at-link_secondary kinestesico activity-btn" data-activity-url="https://phet.colorado.edu/es/">
+                                Experimentar <i class="icon-laboratorio"></i>
+                            </button>
+                        </div>
+                        <div class="link-list mt-2">
+                            <a href="https://phet.colorado.edu/es/" target="_blank" class="recurso-link small">Simulaciones PhET</a>
+                            <a href="https://labster.com/" target="_blank" class="recurso-link small">Laboratorios Labster</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" data-aos="zoom-in" data-aos-delay="200">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/600x400/FF6B35/white?text=Proyectos" alt="Proyectos" class="img-fluid">
+                        <div class="activity-overlay">
+                            <i class="icon-construccion"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5>Maquetas y Proyectos DIY</h5>
+                        <p class="book-author">Construye modelos del sistema solar, células o circuitos eléctricos</p>
+                        <span class="badge book-badge bg-construccion">Construcción</span>
+                        <div class="button-action mt-2">
+                            <button class="at-link_secondary kinestesico activity-btn" data-activity-url="https://science.nasa.gov/science-activation-programs/do-it-yourself-science/">
+                                Construir <i class="icon-construccion"></i>
+                            </button>
+                        </div>
+                        <div class="link-list mt-2">
+                            <a href="https://science.nasa.gov/science-activation-programs/do-it-yourself-science/" target="_blank" class="recurso-link small">Proyectos NASA</a>
+                            <a href="https://www.instructables.com/circuits/" target="_blank" class="recurso-link small">Proyectos Electrónicos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" data-aos="zoom-in" data-aos-delay="300">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/600x400/FF6B35/white?text=Juegos" alt="Juegos" class="img-fluid">
+                        <div class="activity-overlay">
+                            <i class="icon-simulacion"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5>Juego: Mundo Sináptico</h5>
+                        <p class="book-author">Experiencia interactiva para construir, explorar y simular conceptos científicos</p>
+                        <span class="badge book-badge bg-simulacion">Simulación</span>
+                        <div class="button-action mt-2">
+                            <button class="at-link_secondary kinestesico activity-btn" data-activity-url="MundoSinaptico/game.php">
+                                Jugar <i class="icon-simulacion"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <footer class="text-center py-4 mt-5">
         <p class="text-white-50">© 2025 Sinaptium. Todos los derechos reservados.</p>

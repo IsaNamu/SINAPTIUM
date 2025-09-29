@@ -74,6 +74,14 @@ foreach ($usuarios as $usuario) {
                             </a>
                         </li>
                     <?php endif; ?>
+                    <?php if (isset($_SESSION['permisos']) && in_array('aprendizaje:Lee', $_SESSION['permisos'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo $seccion == 'aprendizajes' ? 'active' : ''; ?>" href="?seccion=aprendizajes">
+                                <i class="fas fa-graduation-cap"></i> <!-- Icono sugerido para aprendizaje -->
+                                <span>Aprendizaje</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <?php if (isset($_SESSION['permisos']) && in_array('usuario:Lee', $_SESSION['permisos'])): ?>
                         <li class="nav-item">
                             <a class="nav-link <?php echo $seccion == 'usuarios' ? 'active' : ''; ?>" href="?seccion=usuarios">
@@ -120,11 +128,11 @@ foreach ($usuarios as $usuario) {
                         <?php 
                         switch($seccion) {
                             case 'dashboard': echo 'Dashboard de Administración'; break;
+                            case 'biblioteca': echo 'Gestionar biblioteca'; break;
                             case 'usuarios': echo 'Gestión de Usuarios'; break;
                             case 'roles': echo 'Gestión de Roles'; break;
                             case 'permisos': echo 'Gestión de Permisos'; break;
-                            case 'biblioteca': echo 'Gestionar biblioteca'; break;
-                            case 'aprendizaje': echo 'Contenido aprendizaje'; break;
+                            case 'aprendizajes': echo 'Contenido aprendizaje'; break;
                             default: echo 'Dashboard de Administración';
                         }
                         ?>
@@ -153,7 +161,7 @@ foreach ($usuarios as $usuario) {
                     case 'biblioteca':
                         include './biblioteca/dashboard.php';
                         break;
-                    case 'aprendizaje':
+                    case 'aprendizajes':
                         include './aprendizaje/dashboard.php';
                         break;
                     default:

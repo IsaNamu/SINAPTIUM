@@ -6,9 +6,9 @@ include_once HOME_PATH . 'cx/peticiones.php';
 if (!isset($_SESSION['usuario_id'])) {
     $_SESSION['mensaje'] = [
         'tipo' => 'warning',
-        'texto' => 'Debes iniciar sesión para acceder a los recursos personalizados de sociales.'
+        'texto' => 'Debes iniciar sesión para acceder a los recursos personalizados de Ciencias Naturales.'
     ];
-    header('Location: ' . BASE_URL . 'sociales');
+    header('Location: ' . BASE_URL . 'ciencias_naturales');
     exit();
 }
 
@@ -19,11 +19,11 @@ if ($estiloAprendizaje !== 'visual') {
         'tipo' => 'info',
         'texto' => 'Tu estilo de aprendizaje detectado es ' . ucfirst($estiloAprendizaje) . '. Estos recursos están optimizados para el estilo auditivo.'
     ];
-    header('Location: ' . BASE_URL . 'sociales');
+    header('Location: ' . BASE_URL . 'ciencias_naturales');
     exit();
 }
 
-// Obtener los contenidos para el método visual de la materia Sociales
+// Obtener los contenidos para el método visual de la materia Ciencias Naturales
 $query = "SELECT mma.*, 
                  m.nombre as materia_nombre,
                  ma.nombre as metodo_aprendizaje_nombre,
@@ -37,7 +37,7 @@ $query = "SELECT mma.*,
           INNER JOIN materias m ON mma.materia_id = m.id 
           INNER JOIN metodos_aprendizaje ma ON mma.metodo_aprendizaje_id = ma.id 
           WHERE mma.activo = TRUE 
-          AND m.nombre LIKE '%Social%' 
+          AND m.nombre LIKE '%Ciencias Naturales%' 
           AND ma.nombre LIKE '%Visual%'
           ORDER BY m.nombre, ma.nombre, mma.fecha_creacion DESC";
 
@@ -52,13 +52,12 @@ include_once HOME_PATH . 'componentes/head_component.php';
 <!doctype html>
 <html lang="es">
 <head>
-    <?php renderHead('Sinaptium - Sociales (Visual)'); ?>
+    <?php renderHead('Sinaptium - Ciencias Naturales (Visual)'); ?>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/estilos.css" >
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/sociales.css" >
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ciencias_naturales.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/ingles.css" >
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/biblioteca.css" >
-</head>
-<style>
+    <style>
         .visual-color {
             color: #4CAF50; /* Color verde para ciencias naturales visual */
         }
@@ -115,15 +114,16 @@ include_once HOME_PATH . 'componentes/head_component.php';
             margin: 15px 0;
         }
     </style>
+</head>
 <body>    
     <div class="neuronal-background"></div>
     <?php include HOME_PATH . 'componentes/navbar.php'; ?>
 
     <header class="hero text-center text-white py-5">
         <div class="container" data-aos="fade-up">
-            <h1 class="visual-color">Sociales: Recursos para Aprendices Visuales</h1>
-            <p class="lead">Si aprendes mejor viendo, estas herramientas visuales te ayudarán a comprender el mundo y su historia.</p>
-            <a href="sociales.php" class="btn btn-outline-light mt-3">Volver al Test de Sociales</a>
+            <h1 class="visual-color">Ciencias Naturales: Recursos para Aprendices Visuales</h1>
+            <p class="lead">Si aprendes mejor viendo, estas herramientas visuales te ayudarán a comprender la biología, química, física y ecología.</p>
+            <a href="ciencias_naturales.php" class="btn btn-outline-light mt-3">Volver al Test de Ciencias Naturales</a>
         </div>
     </header>
 
@@ -134,7 +134,7 @@ include_once HOME_PATH . 'componentes/head_component.php';
             
             <?php if (empty($contenidos)): ?>
                 <div class="text-center">
-                    <p>No hay contenidos disponibles para Sociales - Visual en este momento.</p>
+                    <p>No hay contenidos disponibles para Ciencias Naturales - Visual en este momento.</p>
                     <a href="<?php echo BASE_URL; ?>dashboard.php?seccion=aprendizaje" class="btn btn-primary">
                         Agregar Contenido
                     </a>
@@ -148,39 +148,38 @@ include_once HOME_PATH . 'componentes/head_component.php';
                         $clase_card = 'visual-card';
                         $delay = ($index + 1) * 100;
                         
-                        // Analizar el contenido para determinar el tipo (específico para visual)
-                        if (strpos(strtolower($contenido['contenido']), 'mapa') !== false || 
-                            strpos(strtolower($contenido['contenido']), 'geográfico') !== false ||
-                            strpos(strtolower($contenido['recursos']), 'google earth') !== false) {
-                            $tipo = 'Mapa';
-                            $icono = 'map';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'línea de tiempo') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'diagrama') !== false ||
-                                 strpos(strtolower($contenido['contenido']), 'infografía') !== false) {
+                        // Analizar el contenido para determinar el tipo (específico para ciencias naturales visual)
+                        if (strpos(strtolower($contenido['contenido']), 'diagrama') !== false || 
+                            strpos(strtolower($contenido['contenido']), 'gráfico') !== false ||
+                            strpos(strtolower($contenido['recursos']), 'canva') !== false) {
                             $tipo = 'Diagrama';
-                            $icono = 'timeline';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'documental') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'película') !== false ||
+                            $icono = 'chart';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'video') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'documental') !== false ||
                                  strpos(strtolower($contenido['recursos']), 'youtube') !== false) {
                             $tipo = 'Video';
                             $icono = 'video';
-                        } elseif (strpos(strtolower($contenido['contenido']), 'museo') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'virtual') !== false ||
-                                 strpos(strtolower($contenido['recursos']), 'arts') !== false) {
-                            $tipo = 'Museo Virtual';
-                            $icono = 'gallery';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'simulación') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'interactivo') !== false ||
+                                 strpos(strtolower($contenido['recursos']), 'phet') !== false) {
+                            $tipo = 'Simulación';
+                            $icono = 'science';
                         } elseif (strpos(strtolower($contenido['contenido']), 'juego') !== false || 
-                                 strpos(strtolower($contenido['contenido']), 'interactivo') !== false) {
+                                 strpos(strtolower($contenido['contenido']), 'explorador') !== false) {
                             $tipo = 'Juego';
                             $icono = 'game';
                             $clase_card = 'visual-card game-card';
+                        } elseif (strpos(strtolower($contenido['contenido']), 'infografía') !== false || 
+                                 strpos(strtolower($contenido['contenido']), 'esquema') !== false) {
+                            $tipo = 'Infografía';
+                            $icono = 'info';
                         } else {
                             $tipo = 'Recurso Visual';
                             $icono = 'visual';
                         }
                         
                         // Usar la imagen del contenido o una por defecto
-                        $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400?text=Sin+Imagen';
+                        $imagen = !empty($contenido['imagen']) ? $contenido['imagen'] : 'https://placehold.co/600x400/4CAF50/white?text=Ciencias+Naturales';
                     ?>
                         <div class="col" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
                             <div class="<?php echo $clase_card; ?>">
@@ -227,11 +226,65 @@ include_once HOME_PATH . 'componentes/head_component.php';
                 </div>
             <?php endif; ?>
         </div>
+
+        <!-- Sección de recursos predeterminados (si no hay contenidos en BD) -->
+        <?php if (empty($contenidos)): ?>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4">
+            <div class="col" data-aos="zoom-in" data-aos-delay="100">
+                <div class="visual-card">
+                    <div class="card-image-container">
+                        <img src="https://placehold.co/600x400/4CAF50/white?text=Diagramas" alt="Diagramas" class="card-image">
+                    </div>
+                    <div class="card-body text-center">
+                        <span class="badge badge-tipo">Diagrama</span>
+                        <h4 class="card-title">Diagramas y Gráficos Científicos</h4>
+                        <p class="card-text">Comprende ciclos biológicos, procesos químicos y estructuras atómicas a través de representaciones gráficas.</p>
+                        <div class="link-list">
+                            <a href="https://www.canva.com/es_co/graficos/diagramas-de-flujo/" target="_blank" class="recurso-link">Diagramas de Flujo en Canva</a>
+                            <a href="https://biointeractive.org/es" target="_blank" class="recurso-link">Recursos Visuales de BioInteractive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" data-aos="zoom-in" data-aos-delay="200">
+                <div class="visual-card">
+                    <div class="card-image-container">
+                        <img src="https://placehold.co/600x400/4CAF50/white?text=Videos" alt="Videos" class="card-image">
+                    </div>
+                    <div class="card-body text-center">
+                        <span class="badge badge-tipo">Video</span>
+                        <h4 class="card-title">Videos y Demostraciones Científicas</h4>
+                        <p class="card-text">Observa experimentos de laboratorio y el mundo natural a través de videos educativos.</p>
+                        <div class="link-list">
+                            <a href="https://www.youtube.com/user/kurzgesagt" target="_blank" class="recurso-link">Kurzgesagt – In a Nutshell</a>
+                            <a href="https://www.youtube.com/user/NatGeo" target="_blank" class="recurso-link">National Geographic</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" data-aos="zoom-in" data-aos-delay="300">
+                <div class="visual-card">
+                    <div class="card-image-container">
+                        <img src="https://placehold.co/600x400/4CAF50/white?text=Simulaciones" alt="Simulaciones" class="card-image">
+                    </div>
+                    <div class="card-body text-center">
+                        <span class="badge badge-tipo">Simulación</span>
+                        <h4 class="card-title">Simulaciones Interactivas</h4>
+                        <p class="card-text">Explora modelos 3D de células, ADN y fenómenos físicos mediante simulaciones visuales.</p>
+                        <div class="link-list">
+                            <a href="https://phet.colorado.edu/es/" target="_blank" class="recurso-link">Simulaciones de PhET</a>
+                            <a href="ScienceQuiz/game.php" target="_blank" class="recurso-link">Juego: Science Quest</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
     </main>
 
-    <footer class="text-center py-4 mt-5">
-        <p class="text-white-50">© 2025 Sinaptium. Todos los derechos reservados.</p>
-    </footer>
+    <?php include HOME_PATH . 'componentes/footer_component.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
